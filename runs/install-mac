@@ -2,6 +2,9 @@
 
 echo "install script - mac"
 
+# Prefetch installed casks outside the function
+readarray -t INSTALLED_CASKS < <(brew list --cask)
+
 function install_if_not_installed() {
   if ! command -v "$1" &>/dev/null; then
     echo "installing $2"
@@ -12,11 +15,11 @@ function install_if_not_installed() {
 }
 
 function install_cask_if_not_installed() {
-  local app_name="$1"  # The user-friendly name or command to check for (less reliable for casks)
-  local cask_name="$2" # The actual Homebrew cask name
+  local app_name="$1"
+  local cask_name="$2"
 
-  # Check if the cask is already installed
-  if brew list --cask "$cask_name" &>/dev/null; then
+  # Check if the cask is already in the prefetched list
+  if contains "$cask_name" "${INSTALLED_CASKS[@]}"; then
     echo "$cask_name already installed"
   else
     echo "installing $cask_name"
@@ -24,11 +27,22 @@ function install_cask_if_not_installed() {
   fi
 }
 
-# Boostrap homebrew if not installed
+# Helper function to check if an array contains a value
+function contains() {
+  local needle="$1"
+  local haystack=("${@:2}") # Get the array from the arguments
+  for element in "${haystack[@]}"; do
+    if [[ "$element" == "$needle" ]]; then
+      return 0 # Found
+    fi
+  done
+  return 1 # Not found
+}
+
+# Bootstrap homebrew if not installed
 if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo >>/Users/drew/.zprofile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>/Users/drew/.zprofile
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>"$HOME/.zprofile"
   eval "$(/opt/homebrew/bin/brew shellenv)"
 else
   echo "brew already installed"
@@ -44,6 +58,7 @@ install_cask_if_not_installed "karabiner-elements" "karabiner-elements"
 install_cask_if_not_installed "spotify" "spotify"
 install_cask_if_not_installed "ghostty" "ghostty"
 install_cask_if_not_installed "raycast" "raycast"
+install_cask_if_not_installed "aerospace" "nikitabobko/tap/aerospace"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
