@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+cd $DEV_ROOT/karabiner
+
+# if no node_modules
+# run `yarn`
+if [ ! -d "node_modules" ]; then
+  yarn
+fi
+
+yarn run build

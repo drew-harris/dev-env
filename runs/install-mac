@@ -38,3 +38,5 @@ install_if_not_installed "hx" "helix"
 install_if_not_installed "lazygit" "jesseduffield/lazygit/lazygit"
 install_if_not_installed "tmux" "tmux"
 install_if_not_installed "nvim" "neovim"
+
+install_cask_if_not_installed "karabiner-elements" "karabiner-elements"

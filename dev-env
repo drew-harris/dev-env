@@ -2,6 +2,10 @@
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
+dev_root=$script_dir
+
+export DEV_ROOT=$dev_root
+
 filter="$1"
 
 log() {
