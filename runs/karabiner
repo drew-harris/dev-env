@@ -4,6 +4,12 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
 cd $DEV_ROOT/karabiner
 
+# if no yarn command exit script
+if ! command -v yarn &>/dev/null; then
+  echo "Error: yarn command not found. Please install yarn."
+  exit 1
+fi
+
 # if no node_modules
 # run `yarn`
 if [ ! -d "node_modules" ]; then
