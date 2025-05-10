@@ -2,3 +2,6 @@
 
 mkdir -p $HOME/.config/ghostty
 cp $HOME/dev-env/config/ghostty/config $HOME/.config/ghostty/config
+
+mkdir -p $HOME/.config/aerospace
+cp $HOME/dev-env/config/aerospace/aerospace.toml $HOME/.config/aerospace/aerospace.toml
