@@ -42,5 +42,5 @@ install_if_not_installed "nvim" "neovim"
 install_cask_if_not_installed "karabiner-elements" "karabiner-elements"
 
 if ! command -v n &>/dev/null; then
-  curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | bash -s install lts
+  sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
 fi
