@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+filter="$1"
+
+log() {
+  if [[ $dry_run == "1" ]]; then
+    echo "[DRY_RUN]: $1"
+  else
+    echo "$1"
+  fi
+}
+
+grep=""
+dry_run="0"
+
+if [ -z "$DEV_PLAT" ]; then
+  if [ -f "$script_dir/dev_plat.txt" ]; then
+    DEV_PLAT=$(cat "$script_dir/dev_plat.txt")
+    export DEV_PLAT
+    log "DEV_PLAT read from dev_plat.txt: $DEV_PLAT"
+  else
+    echo "env var DEV_PLAT needs to be present"
+    exit 1
+  fi
+fi
+
+while [[ $# -gt 0 ]]; do
+  echo "ARG: \"$1\""
+  if [[ "$1" == "--dry" ]]; then
+    dry_run="1"
+  else
+    grep="$1"
+  fi
+  shift
+done
+
+log "RUN: env: $env -- grep: $grep"
+
+scripts=$(find $script_dir/runs -mindepth 1 -maxdepth 1)
+
+for s in $scripts; do
+  if basename $s | grep -vq "$grep"; then
+    log "grep \"$grep\" filtered out $s"
+    continue
+  fi
+
+  log "running script: $s"
+
+  if [[ $dry_run == "0" ]]; then
+    $s
+  fi
+done

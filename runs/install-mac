@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+echo "install script - mac"
+
+function install_if_not_installed() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "installing $2"
+    brew install "$2"
+  else
+    echo "$1 already installed"
+  fi
+}
+
+# Boostrap homebrew if not installed
+if ! command -v brew &>/dev/null; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  echo "brew already installed"
+fi
+
+install_if_not_installed "hx" "helix"
+install_if_not_installed "lazygit" "jesseduffield/lazygit/lazygit"
+install_if_not_installed "tmux" "tmux"
+install_if_not_installed "nvim" "neovim"

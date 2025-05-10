@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+echo "install script"
+
+if [[ "$DEV_PLAT" == "mac" ]]; then
+  source "$script_dir/install-mac"
+fi
+
+if [[ "$DEV_PLAT" == "arch" ]]; then
+  source "$script_dir/install-arch"
+fi
