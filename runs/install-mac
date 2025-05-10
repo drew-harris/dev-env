@@ -42,6 +42,7 @@ install_if_not_installed "jj" "jj"
 
 install_cask_if_not_installed "karabiner-elements" "karabiner-elements"
 install_cask_if_not_installed "spotify" "spotify"
+install_cask_if_not_installed "ghostty" "ghostty"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
