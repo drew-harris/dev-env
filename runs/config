@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+mkdir -p $HOME/.config/ghostty
+cp $HOME/dev-env/config/ghostty/config $HOME/.config/ghostty/config
