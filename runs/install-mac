@@ -27,6 +27,9 @@ function install_cask_if_not_installed() {
 # Boostrap homebrew if not installed
 if ! command -v brew &>/dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo >>/Users/drew/.zprofile
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>/Users/drew/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 else
   echo "brew already installed"
 fi
