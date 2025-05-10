@@ -1,58 +1,87 @@
 #!/usr/bin/env bash
 
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
-dev_root=$script_dir
+export DEV_ROOT=$script_dir
 
-export DEV_ROOT=$dev_root
+# Array to store the base names of the scripts to run, in order
+scripts_to_run=()
+dry_run="0"
 
-filter="$1"
-
+# Function for logging messages, includes dry run indicator
 log() {
-  if [[ $dry_run == "1" ]]; then
+  if [[ "$dry_run" == "1" ]]; then
     echo "[DRY_RUN]: $1"
   else
     echo "$1"
   fi
 }
 
-grep=""
-dry_run="0"
-
+# --- Environment Setup ---
+# Check for DEV_PLAT environment variable
 if [ -z "$DEV_PLAT" ]; then
   if [ -f "$script_dir/dev_plat.txt" ]; then
     DEV_PLAT=$(cat "$script_dir/dev_plat.txt")
     export DEV_PLAT
     log "DEV_PLAT read from dev_plat.txt: $DEV_PLAT"
   else
-    echo "env var DEV_PLAT needs to be present"
+    echo "Error: env var DEV_PLAT needs to be present or create $script_dir/dev_plat.txt with the platform name."
     exit 1
   fi
 fi
 
+# --- Argument Parsing ---
+echo "Parsing arguments..."
 while [[ $# -gt 0 ]]; do
-  echo "ARG: \"$1\""
-  if [[ "$1" == "--dry" ]]; then
+  arg="$1"
+  echo "ARG: \"$arg\""
+  case "$arg" in
+  "--dry")
     dry_run="1"
-  else
-    grep="$1"
-  fi
+    log "Dry run enabled."
+    ;;
+  *)
+    # Treat any other argument as a script name to run
+    scripts_to_run+=("$arg")
+    log "Added script to queue: \"$arg\""
+    ;;
+  esac
   shift
 done
 
-log "RUN: env: $env -- grep: $grep"
+# --- Script Execution in Order ---
+if [ ${#scripts_to_run[@]} -eq 0 ]; then
+  log "No specific scripts requested to run."
+  # Decide here if you want to exit or maybe list available scripts
+  # For now, we'll just exit if no scripts are named.
+  echo "Usage: $(basename "$0") [--dry] <script1> [<script2> ...]"
+  exit 0
+fi
 
-scripts=$(find $script_dir/runs -mindepth 1 -maxdepth 1)
+log "Attempting to run ${#scripts_to_run[@]} scripts in the specified order..."
 
-for s in $scripts; do
-  if basename $s | grep -vq "$grep"; then
-    log "grep \"$grep\" filtered out $s"
-    continue
-  fi
+for script_name in "${scripts_to_run[@]}"; do
+  script_path="$script_dir/runs/$script_name"
 
-  log "running script: $s"
+  log "Processing requested script: $script_name"
 
-  if [[ $dry_run == "0" ]]; then
-    $s
+  # Check if the file exists and is executable
+  if [ -f "$script_path" ] && [ -x "$script_path" ]; then
+    log "Found and verified executable script: $script_path"
+    if [[ "$dry_run" == "0" ]]; then
+      echo "--- Running $script_name ---"
+      "$script_path" # Execute the script
+      echo "--- Finished $script_name ---"
+    fi
+  else
+    echo "Warning: Could not find or execute requested script: $script_path"
+    # Decide here if you want to stop execution on a missing script (exit 1)
+    # or just skip it and continue with the next one.
+    # For now, it warns and continues.
   fi
 done
+
+log "Script execution sequence complete."
