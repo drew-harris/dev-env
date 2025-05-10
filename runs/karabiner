@@ -17,3 +17,6 @@ if [ ! -d "node_modules" ]; then
 fi
 
 yarn run build
+
+mkdir -p ~/.config/karabiner
+cp ./karabiner.json ~/.config/karabiner/karabiner.json
