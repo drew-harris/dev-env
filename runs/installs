@@ -5,9 +5,9 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 echo "install script"
 
 if [[ "$DEV_PLAT" == "mac" ]]; then
-  source "$script_dir/install-mac"
+  source "$script_dir/install-scripts/install-mac"
 fi
 
 if [[ "$DEV_PLAT" == "arch" ]]; then
-  source "$script_dir/install-arch"
+  source "$script_dir/install-scripts/install-arch"
 fi
