@@ -20,6 +20,10 @@ function contains() {
   done
   return 1 # Not found
 }
+
+# Prefetch installed casks
+INSTALLED_CASKS=($(brew list --cask))
+
 function install_cask_if_not_installed() {
   local app_name="$1"
   local cask_name="$2"
