@@ -6,7 +6,6 @@ import {
   open,
   generateUnsetForEveryKey,
   superPress,
-  shell,
 } from "./utils";
 
 const BROWSER = "Zen";
@@ -90,6 +89,7 @@ const rules: KarabinerRules[] = [
     w: app("Element"),
     a: app(BROWSER),
     m: app("Messages"),
+    z: app("Zed"),
 
     // b = "B"rowse
     b: {

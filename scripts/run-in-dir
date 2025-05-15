@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Set default directory to current directory
+DIR="."
+
+# Parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -d|--directory)
+      DIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)
+      break # End of option parsing
+      ;;
+  esac
+done
+
+# Check if directory exists
+if [ ! -d "$DIR" ]; then
+  echo "Error: Directory '$DIR' does not exist." >&2
+  exit 1
+fi
+
+# The command and its arguments
+COMMAND="$1"
+shift # past command
+
+# Check if a command was provided
+if [ -z "$COMMAND" ]; then
+  echo "Error: No command provided." >&2
+  exit 1
+fi
+
+# Change to the specified directory
+cd "$DIR" || {
+  echo "Error: Could not change directory to '$DIR'." >&2
+  exit 1
+}
+
+# Execute the command with all arguments
+exec "$COMMAND" "$@"
+
