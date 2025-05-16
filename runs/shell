@@ -8,7 +8,27 @@ if ! command -v starship &>/dev/null; then
   curl -sS https://starship.rs/install.sh | sh
 fi
 
-chsh -s $(which zsh)
+# Get the current shell
+current_shell=$(basename "$SHELL")
+
+# Check if the current shell is NOT zsh
+if [ "$current_shell" != "zsh" ]; then
+  echo "Current shell is not zsh. Changing to zsh..."
+  # Get the path to zsh
+  zsh_path=$(which zsh)
+
+  # Check if zsh is found
+  if [ -n "$zsh_path" ]; then
+    # Change the default shell
+    chsh -s "$zsh_path"
+    echo "Default shell changed to zsh. Please log out and back in for the change to take effect."
+  else
+    echo "Error: zsh not found. Cannot change shell."
+  fi
+else
+  echo "Current shell is already zsh. No change needed."
+fi
+
 
 ## Souce my repo zshrc
 if ! grep -q "source \$HOME/dev-env/zshrc" "$HOME/.zshrc"; then
@@ -16,4 +36,16 @@ if ! grep -q "source \$HOME/dev-env/zshrc" "$HOME/.zshrc"; then
   echo "Added 'source \$HOME/dev-env/zshrc' to .zshrc"
 else
   echo "'source \$HOME/dev-env/zshrc' already exists in .zshrc"
+fi
+
+if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+
+if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-vi-mode ]; then
+git clone https://github.com/jeffreytse/zsh-vi-mode $HOME/.oh-my-zsh/plugins/zsh-vi-mode
+fi
+
+if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
