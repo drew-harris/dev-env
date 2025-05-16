@@ -8,3 +8,8 @@ if [ "$DEV_PLAT" == "mac" ]; then
   mkdir -p $HOME/.config/aerospace/
   cp $HOME/dev-env/config/aerospace/aerospace.toml $HOME/.config/aerospace/aerospace.toml
 fi
+
+if [ "$DEV_PLAT" == "arch" ]; then
+  mkdir -p $HOME/.config/hypr/
+  cp $HOME/dev-env/config/hyprland/hyprland.conf $HOME/.config/hypr/hyprland.conf
+fi
