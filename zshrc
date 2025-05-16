@@ -53,8 +53,6 @@ export _ZO_MAXAGE=400
 eval "$(zoxide init zsh)"
 source <(fzf --zsh)
 
-# Rust setup
-. "$HOME/.cargo/env"
 
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
