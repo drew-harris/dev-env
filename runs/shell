@@ -42,8 +42,8 @@ if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions ]; then
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
-if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-vi-mode ]; then
-git clone https://github.com/jeffreytse/zsh-vi-mode $HOME/.oh-my-zsh/plugins/zsh-vi-mode
+if [ ! -d $HOME/.oh-my-zsh/plugins/zsh-vi-mode ]; then
+  git clone https://github.com/jeffreytse/zsh-vi-mode $HOME/.oh-my-zsh/plugins/zsh-vi-mode
 fi
 
 if [ ! -d $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
