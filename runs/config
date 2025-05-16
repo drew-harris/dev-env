@@ -14,6 +14,6 @@ if [ "$DEV_PLAT" == "arch" ]; then
   cp $HOME/dev-env/config/hyprland/hyprland.conf $HOME/.config/hypr/hyprland.conf
 fi
 
-rm -rf $HOME/.config/nvim/
+rm -rf $HOME/.config/nvim
 mkdir -p $HOME/.config/nvim/
-cp -r $HOME/dev-env/config/nvim/ $HOME/.config/nvim
+cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
