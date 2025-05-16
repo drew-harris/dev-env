@@ -54,6 +54,8 @@ eval "$(zoxide init zsh)"
 source <(fzf --zsh)
 
 
+autoload -Uz compinit && compinit
+
 # Carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'

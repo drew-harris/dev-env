@@ -77,5 +77,9 @@ echo -e "\n--- Checking AUR Packages ---"
 # The command provided by zen-browser-bin might be 'zen-browser' or just 'zen'
 # You'll need to check what executable it provides. Let's assume 'zen-browser'.
 install_aur_package_if_not_present "zen-browser" "zen-browser-bin"
+install_aur_package_if_not_present "sesh" "sesh-bin"
+install_aur_package_if_not_present "carapace" "carapace-bin"
+
 
 echo -e "\nInstallation script finished."
+
