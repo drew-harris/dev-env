@@ -40,6 +40,7 @@ install_if_not_installed "lazygit" "jesseduffield/lazygit/lazygit"
 install_if_not_installed "tmux" "tmux"
 install_if_not_installed "nvim" "neovim"
 install_if_not_installed "jj" "jj"
+install_if_not_installed "fzf" "fzf"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
