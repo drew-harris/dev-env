@@ -1,4 +1,18 @@
 #!/usr/bin/env bash
 echo "install script - arch"
 
-sudo pacman -S --noconfirm openssh
+function install_if_not_installed() {
+  if ! command -v "$1" &>/dev/null; then
+    echo "installing $2"
+    sudo pacman -S --noconfirm "$2"
+  else
+    echo "$1 already installed"
+  fi
+}
+
+install_if_not_installed "ghostty" "ghostty"
+install_if_not_installed "helix" "helix"
+install_if_not_installed "tmux" "tmux"
+install_if_not_installed "nvim" "neovim"
+install_if_not_installed "jj" "jujutsu"
+install_if_not_installed "lazygit" "lazygit"

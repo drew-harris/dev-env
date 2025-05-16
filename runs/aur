@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+echo "Install script - Arch Linux AUR Packages"
+
+# Function to install yay if it's not already installed
+install_yay_if_needed() {
+  if ! command -v yay &>/dev/null; then
+    echo "yay not found. Installing yay..."
+    # Ensure dependencies for building packages are present
+    sudo pacman -S --noconfirm --needed git base-devel
+    (
+      set -e # Exit subshell on error
+      echo "Cloning yay-bin from AUR..."
+      cd "$HOME"
+      if [ -d "yay-bin" ]; then
+        echo "yay-bin directory already exists, removing it."
+        rm -rf "yay-bin"
+      fi
+      git clone https://aur.archlinux.org/yay-bin.git
+      cd yay-bin
+      echo "Building and installing yay-bin..."
+      makepkg -si --noconfirm
+      echo "yay installation complete."
+      cd "$HOME"       # Go back to home
+      rm -rf "yay-bin" # Clean up
+    )
+    if ! command -v yay &>/dev/null; then
+      echo "ERROR: yay installation failed." >&2
+      exit 1
+    else
+      echo "yay successfully installed."
+    fi
+  else
+    echo "yay is already installed."
+  fi
+}
+
+install_aur_package_if_not_present() {
+  local cmd_to_check="$1"
+  local package_name="$2"
+
+  # Check if the package is already installed using pacman -Q
+  if pacman -Q "$package_name" &>/dev/null; then
+    echo "$package_name is already installed (via pacman or yay)."
+    return 0 # Package is already installed, so exit the function
+  fi
+
+  if ! command -v "$cmd_to_check" &>/dev/null; then
+    echo "Installing $package_name (using yay)..."
+
+    # Ensure yay is installed before trying to use it
+    install_yay_if_needed
+
+    # Check again in case yay installation failed or was already in progress
+    if command -v yay &>/dev/null; then
+      yay -S --noconfirm "$package_name"
+    else
+      echo "ERROR: Cannot install $package_name from AUR because yay is not available." >&2
+      return 1 # Indicate failure
+    fi
+
+    # Verify installation
+    if ! command -v "$cmd_to_check" &>/dev/null; then
+      echo "ERROR: Installation of $package_name seems to have failed." >&2
+    else
+      echo "$package_name installed successfully."
+    fi
+  else
+    echo "$cmd_to_check ($package_name) is already installed (command found but pacman doesn't know about it)."
+    # This is an edge case that *could* happen, but is unlikely, so this message might be overly verbose
+  fi
+}
+
+# --- AUR Packages ---
+echo -e "\n--- Checking AUR Packages ---"
+
+# Now install zen-browser-bin using yay
+# The command provided by zen-browser-bin might be 'zen-browser' or just 'zen'
+# You'll need to check what executable it provides. Let's assume 'zen-browser'.
+install_aur_package_if_not_present "zen-browser" "zen-browser-bin"
+
+echo -e "\nInstallation script finished."
