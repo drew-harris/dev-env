@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [ ! -d $HOME/.oh-my-zsh ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+if ! command -v starship &>/dev/null; then
+  curl -sS https://starship.rs/install.sh | sh
+fi
+
+chsh -s $(which zsh)
+
+## Souce my repo zshrc
+if ! grep -q "source \$HOME/dev-env/zshrc" "$HOME/.zshrc"; then
+  echo "source \$HOME/dev-env/zshrc" >>"$HOME/.zshrc"
+  echo "Added 'source \$HOME/dev-env/zshrc' to .zshrc"
+else
+  echo "'source \$HOME/dev-env/zshrc' already exists in .zshrc"
+fi
