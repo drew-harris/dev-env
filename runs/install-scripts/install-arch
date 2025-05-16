@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
+echo "install script - arch"
 
-echo "install script - mac"
+sudo pacman -S --noconfirm openssh
