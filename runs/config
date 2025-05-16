@@ -16,4 +16,4 @@ fi
 
 rm -rf $HOME/.config/nvim/
 mkdir -p $HOME/.config/nvim/
-cp -r $HOME/dev-env/config/nvim/ $HOME/.config/nvim/
+cp -r $HOME/dev-env/config/nvim/ $HOME/.config/nvim
