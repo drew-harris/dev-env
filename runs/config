@@ -17,3 +17,6 @@ fi
 rm -rf $HOME/.config/nvim
 mkdir -p $HOME/.config/nvim/
 cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
+
+# Tmux
+cp $HOME/dev-env/config/tmux/.tmux.conf $HOME/.tmux.conf
