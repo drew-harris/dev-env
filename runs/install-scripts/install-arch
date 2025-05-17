@@ -2,25 +2,27 @@
 echo "install script - arch"
 
 function install_if_not_installed() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "installing $2"
-    sudo pacman -S --noconfirm "$2"
+  if ! pacman -Q "$1" &>/dev/null; then
+    echo "installing $1"
+    sudo pacman -S --noconfirm "$1"
   else
     echo "$1 already installed"
   fi
 }
 
-install_if_not_installed "ghostty" "ghostty"
-install_if_not_installed "helix" "helix"
-install_if_not_installed "tmux" "tmux"
-install_if_not_installed "nvim" "neovim"
-install_if_not_installed "jj" "jujutsu"
-install_if_not_installed "lazygit" "lazygit"
-install_if_not_installed "fzf" "fzf"
-install_if_not_installed "zsh" "zsh"
-install_if_not_installed "eza" "eza"
-install_if_not_installed "jq" "jq"
-install_if_not_installed "hyprpaper" "hyprpaper"
-install_if_not_installed "waybar" "waybar"
-install_if_not_installed "yazi" "yazi"
-install_if_not_installed "inotify-tools" "inotify-tools"
+install_if_not_installed "ghostty"
+install_if_not_installed "helix"
+install_if_not_installed "tmux"
+install_if_not_installed "neovim"
+install_if_not_installed "jujutsu"
+install_if_not_installed "lazygit"
+install_if_not_installed "fzf"
+install_if_not_installed "zsh"
+install_if_not_installed "eza"
+install_if_not_installed "jq"
+install_if_not_installed "hyprpaper"
+install_if_not_installed "waybar"
+install_if_not_installed "yazi"
+install_if_not_installed "inotify-tools"
+install_if_not_installed "spotify-launcher"
+
