@@ -97,7 +97,7 @@ const rules: KarabinerRules[] = [
       r: open("https://reddit.com"),
       v: open("https://youtube.com"),
       c: open("https://smu.instructure.com/"),
-      a: open("https://t3.chat/chat"),
+      a: open("https://beta.t3.chat/chat"),
       l: open("https://librechat.drewh.net/c/new"),
     },
 
