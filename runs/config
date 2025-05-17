@@ -12,6 +12,9 @@ fi
 if [ "$DEV_PLAT" == "arch" ]; then
   mkdir -p $HOME/.config/hypr/
   cp $HOME/dev-env/config/hyprland/hyprland.conf $HOME/.config/hypr/hyprland.conf
+  cp $HOME/dev-env/config/hyprland/hyprpaper.conf $HOME/.config/hypr/hyprpaper.conf
+
+
 fi
 
 rm -rf $HOME/.config/nvim
