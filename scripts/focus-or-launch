@@ -14,18 +14,16 @@ PROGRAM_NAME="$2"
 CLIENTS=$(hyprctl clients -j)
 
 # Use jq to reverse the array and find the address of the FIRST window with the specified class
-# By reversing, 'first' will output the address of the window that appeared latest in the original list,
-# which should be the main window if it opened before the PiP window.
-WINDOW_ADDRESS=$(echo "$CLIENTS" | jq -r --arg class "$WINDOW_CLASS" 'reverse[] | select(.class == $class) | .address' | head -n 1)
-
+# while EXCLUDING windows with the title "Picture-in-Picture".
+WINDOW_ADDRESS=$(echo "$CLIENTS" | jq -r --arg class "$WINDOW_CLASS" 'reverse[] | select(.class == $class and .title != "Picture-in-Picture") | .address' | head -n 1)
 
 if [ -n "$WINDOW_ADDRESS" ]; then
     # Window found, focus it
-    echo "Window with class $WINDOW_CLASS found at address $WINDOW_ADDRESS. Focusing..."
+    echo "Window with class $WINDOW_CLASS (excluding Picture-in-Picture) found at address $WINDOW_ADDRESS. Focusing..."
     hyprctl dispatch focuswindow address:"$WINDOW_ADDRESS"
 else
     # Window not found
-    echo "Window with class $WINDOW_CLASS not found. Launching $PROGRAM_NAME..."
+    echo "Window with class $WINDOW_CLASS (excluding Picture-in-Picture) not found. Launching $PROGRAM_NAME..."
     $PROGRAM_NAME &
 fi
 
