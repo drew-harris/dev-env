@@ -13,9 +13,11 @@ PROGRAM_NAME="$2"
 # Get the list of clients in JSON format
 CLIENTS=$(hyprctl clients -j)
 
-# Use jq to find the address of the FIRST window with the specified class
-# 'first' will output the first matching address or nothing if no matches
-WINDOW_ADDRESS=$(echo "$CLIENTS" | jq -r --arg class "$WINDOW_CLASS" 'first(.[] | select(.class == $class) | .address)')
+# Use jq to reverse the array and find the address of the FIRST window with the specified class
+# By reversing, 'first' will output the address of the window that appeared latest in the original list,
+# which should be the main window if it opened before the PiP window.
+WINDOW_ADDRESS=$(echo "$CLIENTS" | jq -r --arg class "$WINDOW_CLASS" 'reverse[] | select(.class == $class) | .address' | head -n 1)
+
 
 if [ -n "$WINDOW_ADDRESS" ]; then
     # Window found, focus it
