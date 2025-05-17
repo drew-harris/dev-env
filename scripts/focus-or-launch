@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Check if both arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <window_class> <program_name>"
+    exit 1
+fi
+
+# Assign arguments to variables
+WINDOW_CLASS="$1"
+PROGRAM_NAME="$2"
+
+# Get the list of clients in JSON format
+CLIENTS=$(hyprctl clients -j)
+
+# Use jq to find the address of the FIRST window with the specified class
+# 'first' will output the first matching address or nothing if no matches
+WINDOW_ADDRESS=$(echo "$CLIENTS" | jq -r --arg class "$WINDOW_CLASS" 'first(.[] | select(.class == $class) | .address)')
+
+if [ -n "$WINDOW_ADDRESS" ]; then
+    # Window found, focus it
+    echo "Window with class $WINDOW_CLASS found at address $WINDOW_ADDRESS. Focusing..."
+    hyprctl dispatch focuswindow address:"$WINDOW_ADDRESS"
+else
+    # Window not found
+    echo "Window with class $WINDOW_CLASS not found. Launching $PROGRAM_NAME..."
+    $PROGRAM_NAME &
+fi
+

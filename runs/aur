@@ -79,6 +79,7 @@ echo -e "\n--- Checking AUR Packages ---"
 install_aur_package_if_not_present "zen-browser" "zen-browser-bin"
 install_aur_package_if_not_present "sesh" "sesh-bin"
 install_aur_package_if_not_present "carapace" "carapace-bin"
+install_aur_package_if_not_present "legcord" "legcord-bin"
 
 
 echo -e "\nInstallation script finished."
