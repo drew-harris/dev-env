@@ -3,3 +3,9 @@
 
 In /etc/udev/rules.d/99-bluetooth.rules
 
+# Surfing Keys Config
+```js
+api.map('h', '<Ctrl-6>');
+api.map('<Ctrl-i>', '<Alt-s>');
+```
+
