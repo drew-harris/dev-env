@@ -12,8 +12,8 @@ default_class="disconnected"
 off_class="off"
 
 # Glyphs (ensure these render correctly in your Waybar font)
-glyph_connected=" "
-glyph_paired=" 󰂯"
+glyph_connected="  "
+glyph_paired="  󰂯"
 glyph_disconnected=" " # Or a different one if you prefer
 glyph_off="⭘"
 

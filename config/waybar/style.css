@@ -70,7 +70,11 @@ button {
 }
 
 #custom-airpods.disconnected {
-  background-color: #101010;
+  color: #EA999C;
+}
+
+#custom-airpods.connected {
+  color: #9ED06C;
 }
 
 #clock {

@@ -29,4 +29,5 @@ install_if_not_installed "wev"
 install_if_not_installed "brightnessctl"
 install_if_not_installed "nushell"
 install_if_not_installed "tailscale"
+install_if_not_installed "hyprpicker"
 
