@@ -105,6 +105,11 @@
   },
 
   "custom/airpods": {
-    "format": "test"
-  }
+        "format": "{}", // Waybar expects a JSON object, this will be filled by the script
+        "exec": "$HOME/dev-env/scripts/airpods --status", // Path to your script
+        "on-click": "$HOME/dev-env/scripts/airpods --toggle",
+        "interval": 1, // How often to update in seconds
+        "return-type": "json",
+        "tooltip": true // Already handled by the script's JSON output
+    }
 }

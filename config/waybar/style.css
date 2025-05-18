@@ -69,6 +69,10 @@ button {
   border-radius: 5px;
 }
 
+#custom-airpods.disconnected {
+  background-color: #101010;
+}
+
 #clock {
   color: #8caaee;
   border-radius: 5px;

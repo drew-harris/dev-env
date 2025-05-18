@@ -25,4 +25,5 @@ install_if_not_installed "waybar"
 install_if_not_installed "yazi"
 install_if_not_installed "inotify-tools"
 install_if_not_installed "spotify-launcher"
+install_if_not_installed "wev"
 
