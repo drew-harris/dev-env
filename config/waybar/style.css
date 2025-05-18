@@ -53,10 +53,20 @@ button {
 #custom-power,
 #custom-weather,
 #custom-uptime,
+#custom-airpods,
 #custom-docker {
   background-color: #101010;
   padding: 0.4rem 0.8rem;
   margin: 5px 0;
+}
+
+#custom-music {
+  margin-left: 10px;
+}
+
+#custom-airpods {
+  margin-right: 10px;
+  border-radius: 5px;
 }
 
 #clock {
