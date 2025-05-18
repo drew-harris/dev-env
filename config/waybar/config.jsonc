@@ -42,9 +42,9 @@
   },
 
   "clock": {
-    "timezone": "America/Fortaleza",
+    "timezone": "America/Central",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format": "{:%d/%m/%Y - %H:%M:%S}",
+    "format": "{:%d/%m/%Y - %I:%M:%S %p}",
     "interval": 1
   },
 
