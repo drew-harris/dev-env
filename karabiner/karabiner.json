@@ -1362,10 +1362,10 @@
               {
                 "to": [
                   {
-                    "shell_command": "open https://t3.chat/chat"
+                    "shell_command": "open https://beta.t3.chat/chat"
                   }
                 ],
-                "description": "Open https://t3.chat/chat",
+                "description": "Open https://beta.t3.chat/chat",
                 "type": "basic",
                 "from": {
                   "key_code": "a",
