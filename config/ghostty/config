@@ -9,14 +9,13 @@ font-size=13
 # font-family=
 # font-family=TX-02-Trial
 font-family=Berkeley Mono
+# font-family=CommitMonoSecond
 # font-style=Bold
 # font-style-italic=Bold Italic
-font-feature = -calt
-font-thicken = true
+# font-feature = -calt
+# font-thicken = true
 # command=/bin/zsh -lic "tmux attach || tmux new -A -s home"
 # quit-after-last-window-closed=false
-adjust-cell-height=-2%
-adjust-cell-width=-1
 adjust-underline-thickness=-20%
 
 background-opacity=1
@@ -44,7 +43,7 @@ keybind = global:alt+t=toggle_quick_terminal
 #
 # # Create a new window
 # keybind = ctrl+a>c=new_tab
-# keybind = ctrl+a>r=reload_config
+keybind = ctrl+b>r=reload_config
 # keybind = ctrl+a>s=new_split:right
 #
 # # Create new splits:
