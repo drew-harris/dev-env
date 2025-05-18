@@ -31,4 +31,10 @@ install_if_not_installed "nushell"
 install_if_not_installed "tailscale"
 install_if_not_installed "hyprpicker"
 install_if_not_installed "man"
+install_if_not_installed "go"
+
+
+if ! command -v n &>/dev/null; then
+  curl -L https://bit.ly/n-install | bash
+fi
 

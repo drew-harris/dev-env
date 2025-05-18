@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+git config set --global user.name "Drew Harris"
+git config set --global user.email "drew@drewh.net"
+
+jj config set --user user.name "Drew Harris"
+jj config set --user user.email "drew@drewh.net"
+
+mkdir -p $HOME/clones/
+
+if [ ! -d $HOME/clones/jjui ]; then
+  (
+    cd $HOME/clones/
+    git clone git@github.com:drew-harris/jjui.git
+    git switch fast
+    go install ./...
+  )
+fi
