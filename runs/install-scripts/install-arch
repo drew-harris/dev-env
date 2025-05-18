@@ -32,9 +32,8 @@ install_if_not_installed "tailscale"
 install_if_not_installed "hyprpicker"
 install_if_not_installed "man"
 install_if_not_installed "go"
-
+install_if_not_installed "dbeaver"
 
 if ! command -v n &>/dev/null; then
   curl -L https://bit.ly/n-install | bash
 fi
-

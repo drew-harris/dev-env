@@ -21,7 +21,7 @@
 }
 
 #workspaces button {
-  color: #babbf1;
+  color: #ea999c;
   border-radius: 5px;
   padding: 0.4rem;
 }
@@ -74,7 +74,7 @@ button {
 }
 
 #custom-airpods.connected {
-  color: #9ED06C;
+  color: #a6d189;
 }
 
 #clock {
