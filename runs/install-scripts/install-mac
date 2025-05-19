@@ -47,6 +47,8 @@ install_if_not_installed "eza" "eza"
 install_if_not_installed "sesh" "sesh"
 install_if_not_installed "yazi" "yazi"
 install_if_not_installed "jq" "jq"
+install_if_not_installed "go" "go"
+install_if_not_installed "rg" "ripgrep"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
