@@ -2,16 +2,28 @@
 
 echo "install script - mac"
 
-# Prefetch installed casks outside the function
-readarray -t INSTALLED_CASKS < <(brew list --cask)
+# Bootstrap homebrew if not installed
+if ! command -v brew &>/dev/null; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>"$HOME/.zprofile"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  echo "brew already installed"
+fi
+
+# Get the list of installed formulae once
+readarray -t INSTALLED_FORMULAE < <(brew list --formula)
 
 function install_if_not_installed() {
-  if ! command -v "$1" &>/dev/null; then
-    echo "installing $2"
-    brew install "$2"
-  else
-    echo "$1 already installed"
-  fi
+  local pkg="$1"
+  for installed in "${INSTALLED_FORMULAE[@]}"; do
+    if [[ "$installed" == "$pkg" ]]; then
+      echo "$pkg already installed"
+      return
+    fi
+  done
+  echo "installing $pkg"
+  brew install "$pkg"
 }
 
 # Helper function to check if an array contains a value
@@ -26,29 +38,19 @@ function contains() {
   return 1 # Not found
 }
 
-# Bootstrap homebrew if not installed
-if ! command -v brew &>/dev/null; then
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>"$HOME/.zprofile"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-else
-  echo "brew already installed"
-fi
-
-install_if_not_installed "hx" "helix"
-install_if_not_installed "lazygit" "jesseduffield/lazygit/lazygit"
-install_if_not_installed "tmux" "tmux"
-install_if_not_installed "nvim" "neovim"
-install_if_not_installed "jj" "jj"
-install_if_not_installed "fzf" "fzf"
-install_if_not_installed "carapace" "carapace"
-install_if_not_installed "z" "zoxide"
-install_if_not_installed "eza" "eza"
-install_if_not_installed "sesh" "sesh"
-install_if_not_installed "yazi" "yazi"
-install_if_not_installed "jq" "jq"
-install_if_not_installed "go" "go"
-install_if_not_installed "rg" "ripgrep"
+install_if_not_installed "helix"
+install_if_not_installed "lazygit"
+install_if_not_installed "tmux"
+install_if_not_installed "neovim"
+install_if_not_installed "fzf"
+install_if_not_installed "carapace"
+install_if_not_installed "zoxide"
+install_if_not_installed "eza"
+install_if_not_installed "sesh"
+install_if_not_installed "yazi"
+install_if_not_installed "jq"
+install_if_not_installed "go"
+install_if_not_installed "ripgrep"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
