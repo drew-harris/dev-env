@@ -12,10 +12,14 @@ if [[ "$DEV_PLAT" == "arch" ]]; then
   source "$script_dir/install-scripts/install-arch"
 fi
 
-if ! command -v cargo &> /dev/null; then
+if ! command -v cargo &>/dev/null; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
-if ! command -v bun &> /dev/null; then
+if ! command -v bun &>/dev/null; then
   curl -fsSL https://bun.sh/install | bash
+fi
+
+if ! command -v atuin &>/dev/null; then
+  curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 fi

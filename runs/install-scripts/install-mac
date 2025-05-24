@@ -12,30 +12,16 @@ else
 fi
 
 # Get the list of installed formulae once
-readarray -t INSTALLED_FORMULAE < <(brew list --formula)
+INSTALLED_FORMULAE=$(brew list --formula)
 
 function install_if_not_installed() {
   local pkg="$1"
-  for installed in "${INSTALLED_FORMULAE[@]}"; do
-    if [[ "$installed" == "$pkg" ]]; then
-      echo "$pkg already installed"
-      return
-    fi
-  done
-  echo "installing $pkg"
-  brew install "$pkg"
-}
-
-# Helper function to check if an array contains a value
-function contains() {
-  local needle="$1"
-  local haystack=("${@:2}") # Get the array from the arguments
-  for element in "${haystack[@]}"; do
-    if [[ "$element" == "$needle" ]]; then
-      return 0 # Found
-    fi
-  done
-  return 1 # Not found
+  if echo "$INSTALLED_FORMULAE" | grep -q "^$pkg$"; then
+    echo "$pkg already installed"
+  else
+    echo "installing $pkg"
+    brew install "$pkg"
+  fi
 }
 
 install_if_not_installed "helix"
