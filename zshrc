@@ -18,7 +18,7 @@ function zvm_after_init() {
     bindkey '^]' vi-cmd-mode
     bindkey '^ ' end-of-line
     if command -v atuin &>/dev/null; then
-      eval "$(atuin init zsh --disable-up-arrow)"
+      eval "$(atuin init zsh)"
     else
       [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
       bindkey '^R' fzf-history-widget

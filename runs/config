@@ -25,3 +25,7 @@ cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
 
 # Tmux
 cp $HOME/dev-env/config/tmux/.tmux.conf $HOME/.tmux.conf
+
+rm -rf $HOME/.config/atuin
+mkdir -p $HOME/.config/atuin/
+cp -a $HOME/dev-env/config/atuin/. $HOME/.config/atuin/
