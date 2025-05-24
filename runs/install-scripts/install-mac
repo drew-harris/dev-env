@@ -51,6 +51,7 @@ install_if_not_installed "yazi"
 install_if_not_installed "jq"
 install_if_not_installed "go"
 install_if_not_installed "ripgrep"
+install_if_not_installed "openapi-tui"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts
