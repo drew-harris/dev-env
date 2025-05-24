@@ -14,11 +14,15 @@ source $ZSH/oh-my-zsh.sh
 
 
 function zvm_after_init() {
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-    bindkey '^R' fzf-history-widget
     bindkey -rM viins '^['
     bindkey '^]' vi-cmd-mode
     bindkey '^ ' end-of-line
+    if command -v atuin &>/dev/null; then
+      eval "$(atuin init zsh --disable-up-arrow)"
+    else
+      [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+      bindkey '^R' fzf-history-widget
+    fi
 }
 
 
