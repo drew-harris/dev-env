@@ -93,46 +93,46 @@ toggle_state() {
         sleep 0.5 # Give it a moment
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
-             bluetoothctl unblock "$device" && bluetoothctl connect "$device"
+            bluetoothctl unblock "$device" && bluetoothctl connect "$device"
         fi
     elif [[ $device_connected ]]; then
         bluetoothctl disconnect "$device" && bluetoothctl block "$device"
-    elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then # Paired but not connected, not blocked
+    elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
         bluetoothctl connect "$device" || bluetoothctl block "$device" # Try connect, if fails, block
-    elif [[ $device_paired ]] && [[ $device_blocked ]]; then # Paired and blocked
+    elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked
         bluetoothctl unblock "$device" && bluetoothctl connect "$device"
     else # Controller on, but device not paired (or some other state)
         # This case might need more specific handling depending on desired behavior
         # For now, if device is known, try to connect (assuming it might have been unpaired manually)
         if [[ $device ]]; then
-             bluetoothctl connect "$device"
+            bluetoothctl connect "$device"
         fi
     fi
 }
 
 # --- maybe_block function ---
 maybe_block() {
-    if [[ $controller_on ]] && [[ $device_paired ]] && [[ ! $device_connected ]] && [[ ! $device_blocked ]];then
+    if [[ $controller_on ]] && [[ $device_paired ]] && [[ ! $device_connected ]] && [[ ! $device_blocked ]]; then
         bluetoothctl block "$device"
     fi
 }
 
 # --- Main case statement ---
 case "$1" in
-    --toggle)
-        toggle_state
-        # Call status_json after toggle to reflect immediate change if possible,
-        # though Waybar will call it again on its interval.
-        # status_json
-        ;;
-    --status)
-        status_json
-        ;;
-    --block-if-not-connected)
-        maybe_block
-        # status_json
-        ;;
-    *)
-        status_json # Default action is to output status
-        ;;
+--toggle)
+    toggle_state
+    # Call status_json after toggle to reflect immediate change if possible,
+    # though Waybar will call it again on its interval.
+    # status_json
+    ;;
+--status)
+    status_json
+    ;;
+--block-if-not-connected)
+    maybe_block
+    # status_json
+    ;;
+*)
+    status_json # Default action is to output status
+    ;;
 esac
