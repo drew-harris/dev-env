@@ -35,6 +35,12 @@ return {
 				-- disable_tools = true, -- Open-source models often do not support tools.
 			},
 		},
+		selector = {
+			--- @alias avante.SelectorProvider "native" | "fzf_lua" | "mini_pick" | "snacks" | "telescope" | fun(selector: avante.ui.Selector): nil
+			provider = "fzf",
+			-- Options override for custom providers
+			provider_opts = {},
+		},
 	},
 	-- behaviour = {
 	-- 	auto_suggestions = true, -- Experimental stage

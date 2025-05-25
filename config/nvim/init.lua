@@ -32,6 +32,7 @@ require("user.autopairs")
 require("user.whichkey")
 require("user.autocommands")
 require("user.nushell").setup()
+require("user.vscode")
 -- require("user.copilot")
 
 vim.cmd("highlight! HarpoonInactive guibg=NONE guifg=#63698c")
