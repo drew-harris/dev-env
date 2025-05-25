@@ -9,7 +9,7 @@ import {
 } from "./utils";
 
 const BROWSER = "Zen";
-const THISISMYTERM = "Ghostty";
+const TERMINAL = "Ghostty";
 
 const rules: KarabinerRules[] = [
   {
