@@ -190,7 +190,7 @@ require("lazy").setup({
 		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
 		opts = {
 			disabled_filetypes = { "qf", "netrw", "NvimTree", "lazy", "mason", "oil", "avante", "nu" },
-			enabled = true,
+			enabled = false,
 			max_count = 5,
 		},
 	},
