@@ -28,8 +28,10 @@ local function open_all_buffers_in_cursor()
 				local file_with_line
 
 				if win_id ~= -1 then
-					local line_number = vim.api.nvim_win_get_cursor(win_id)[1]
-					file_with_line = string.format("-g %s:%d", vim.fn.shellescape(filepath), line_number)
+					local cursor = vim.api.nvim_win_get_cursor(win_id)
+					local line_number = cursor[1]
+					local char_number = cursor[2]
+					file_with_line = string.format("-g %s:%d:%d", vim.fn.shellescape(filepath), line_number, char_number)
 				else
 					file_with_line = vim.fn.shellescape(filepath)
 				end
@@ -62,8 +64,10 @@ Keymapper("ao", "<cmd>OpenBuffersInCursor<cr>", "Open all buffers in Cursor")
 local function open_current_buffer_in_cursor()
 	local current_buf_path = vim.fn.expand("%:p")
 	if current_buf_path and current_buf_path ~= "" then
-		local line_number = vim.api.nvim_win_get_cursor(0)[1]
-		local cmd = string.format("cursor -g %s:%d -a .", vim.fn.shellescape(current_buf_path), line_number)
+		local cursor = vim.api.nvim_win_get_cursor(0)
+		local line_number = cursor[1]
+		local char_number = cursor[2]
+		local cmd = string.format("cursor -g %s:%d:%d -a .", vim.fn.shellescape(current_buf_path), line_number, char_number)
 		vim.fn.system(cmd)
 	end
 end
