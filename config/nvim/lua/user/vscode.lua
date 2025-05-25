@@ -35,7 +35,7 @@ local function open_all_buffers_in_cursor()
 				if info.bufnr == current_buf then
 					current_file = vim.fn.shellescape(filepath)
 				else
-				table.insert(files_to_open, vim.fn.shellescape(filepath))
+					table.insert(files_to_open, vim.fn.shellescape(filepath))
 				end
 			end
 		end
@@ -56,6 +56,8 @@ vim.api.nvim_create_user_command("OpenBuffersInCursor", open_all_buffers_in_curs
 	desc = "Open all listed, file-associated buffers in Cursor (project context)",
 	nargs = 0,
 })
+
+Keymapper("ao", "<cmd>OpenBuffersInCursor<cr>", "Open all buffers in Cursor")
 
 -- The OpenCurrentInCursor function and its command definition remain the same
 local function open_current_buffer_in_cursor()
