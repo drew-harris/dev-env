@@ -29,3 +29,6 @@ cp $HOME/dev-env/config/tmux/.tmux.conf $HOME/.tmux.conf
 rm -rf $HOME/.config/atuin
 mkdir -p $HOME/.config/atuin/
 cp -a $HOME/dev-env/config/atuin/. $HOME/.config/atuin/
+
+mkdir -p $HOME/.config/helix/
+cp -a $HOME/dev-env/config/helix/. $HOME/.config/helix/

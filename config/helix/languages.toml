@@ -1,0 +1,32 @@
+[language-server]
+biome = { command = "bunx", args = ["biome", "lsp-proxy"] }
+tailwind = { command = "tailwindcss-language-server", args = ["--stdio"], required-root-patterns = ["tailwind.config.js"]}
+ty = { command = "ty", args = ["server"]}
+
+[[language]]
+name = "javascript"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "biome" ]
+auto-format = true
+
+[[language]]
+name = "typescript"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "biome", "tailwind" ]
+auto-format = true
+
+[[language]]
+name = "tsx"
+auto-format = true
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "biome", "tailwind"]
+
+[[language]]
+name = "jsx"
+auto-format = true
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "biome" ]
+
+[[language]]
+name = "json"
+language-servers = [ { name = "vscode-json-language-server", except-features = [ "format" ] }, "biome" ]
+
+[[language]]
+name = "python"
+language-servers = [ "ty"]

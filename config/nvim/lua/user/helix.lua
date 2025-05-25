@@ -59,7 +59,7 @@ vim.api.nvim_create_user_command("OpenBuffersInHelix", open_all_buffers_in_helix
 	nargs = 0,
 })
 
-Keymapper("aO", "<cmd>OpenBuffersInHelix<cr>", "Open all buffers in Helix")
+Keymapper("ap", "<cmd>OpenBuffersInHelix<cr>", "Open all buffers in Helix")
 
 local function open_current_buffer_in_helix()
 	local current_buf_path = vim.fn.expand("%:p")
@@ -67,7 +67,8 @@ local function open_current_buffer_in_helix()
 		local cursor = vim.api.nvim_win_get_cursor(0)
 		local line_number = cursor[1]
 		local char_number = cursor[2]
-		local cmd = string.format("tmux new-window hx %s:%d:%d", vim.fn.shellescape(current_buf_path), line_number, char_number)
+		local cmd =
+			string.format("tmux new-window hx %s:%d:%d", vim.fn.shellescape(current_buf_path), line_number, char_number)
 		vim.fn.system(cmd)
 	end
 end
@@ -75,4 +76,5 @@ end
 vim.api.nvim_create_user_command("OpenCurrentInHelix", open_current_buffer_in_helix, {
 	desc = "Open the current buffer in Helix (project context)",
 	nargs = 0,
-}) 
+})
+
