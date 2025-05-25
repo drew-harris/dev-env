@@ -80,7 +80,6 @@ require("lazy").setup({
 	{ "dmmulroy/tsc.nvim", opts = {} },
 
 	-- LSP FORMATTING
-
 	"stevearc/conform.nvim",
 	"zapling/mason-conform.nvim",
 
