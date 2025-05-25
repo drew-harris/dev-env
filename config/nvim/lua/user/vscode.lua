@@ -35,7 +35,7 @@ local function open_all_buffers_in_cursor()
 				if info.bufnr == current_buf then
 					current_file = vim.fn.shellescape(filepath)
 				else
-					table.insert(files_to_open, vim.fn.shellescape(filepath))
+				table.insert(files_to_open, vim.fn.shellescape(filepath))
 				end
 			end
 		end
