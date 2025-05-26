@@ -192,6 +192,7 @@ local mappings = {
 		n = { "<cmd>e pad.nu<cr>", "Open pad" },
 		s = { "<cmd>e website/.env<cr>", "Open Website env" },
 		w = { "<cmd>e worker/.env<cr>", "Open Worker env" },
+		m = { "<cmd>e mprocs.yaml<cr>", "Open Mprocs" },
 	},
 }
 

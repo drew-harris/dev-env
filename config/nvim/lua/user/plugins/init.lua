@@ -81,7 +81,7 @@ require("lazy").setup({
 
 	-- LSP FORMATTING
 	"stevearc/conform.nvim",
-	"zapling/mason-conform.nvim",
+	-- "zapling/mason-conform.nvim",
 
 	-- Language Specific
 	"vrischmann/tree-sitter-templ",

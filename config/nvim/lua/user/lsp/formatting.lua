@@ -20,7 +20,7 @@ require("conform").setup({
 		javascript = { "prettierd" },
 		javascriptreact = { "prettierd" },
 		typescript = { "prettierd" },
-		typescriptreact = {},
+		typescriptreact = { "prettierd" },
 		astro = { "prettierd" },
 		java = { "google-java-format" },
 		css = { "" },
