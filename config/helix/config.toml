@@ -1,4 +1,4 @@
-theme = "jetbrains_dark"
+theme = "drew"
 
 [editor]
 true-color = true
@@ -25,7 +25,7 @@ C-y = [
   ':redraw',
 ]
 
-space = { p = ":bp", g = { r = [":sh jj restore %{buffer_name}", ":reload"] } }
+space = { p = ":bp", g = { r = [":sh jj restore %{buffer_name}", ":reload"] }, r = ":reload-all" }
 
 esc = ["collapse_selection", "keep_primary_selection"]
 
