@@ -52,7 +52,7 @@ install_aur_package_if_not_present() {
 
     # Check again in case yay installation failed or was already in progress
     if command -v yay &>/dev/null; then
-      yay -S --noconfirm "$package_name"
+      yay -S --nocheck --noconfirm "$package_name"
     else
       echo "ERROR: Cannot install $package_name from AUR because yay is not available." >&2
       return 1 # Indicate failure
