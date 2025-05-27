@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+curl -o ~/Downloads/paper.jpeg https://files.drewh.net/api/public/dl/IKSPR0B-/paper.jpeg
