@@ -81,7 +81,6 @@ install_aur_package_if_not_present "sesh" "sesh-bin"
 install_aur_package_if_not_present "carapace" "carapace-bin"
 install_aur_package_if_not_present "legcord" "legcord-bin"
 install_aur_package_if_not_present "hyprshot" "hyprshot"
-
+install_aur_package_if_not_present "hx" "helix-git"
 
 echo -e "\nInstallation script finished."
-
