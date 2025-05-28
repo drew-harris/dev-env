@@ -1,5 +1,12 @@
 local do_autoformat = true
 
+-- Function to check if biome.json exists in root directory
+local function has_biome_config()
+	local root_dir = vim.fn.getcwd()
+	local biome_json = vim.fn.filereadable(root_dir .. "/biome.json")
+	return biome_json == 1
+end
+
 -- Create autoformat toggle
 vim.api.nvim_create_user_command("AutoformatToggle", function()
 	do_autoformat = not do_autoformat
@@ -17,10 +24,34 @@ require("conform").setup({
 		-- python = { "isort", "black" },
 		go = { "goimports", "gofmt" },
 		-- Use a sub-list to run only the first available formatter
-		javascript = { "biome", "prettierd"  },
-		javascriptreact = { "biome", "prettierd" },
-		typescript = { "biome", "prettierd" },
-		typescriptreact = { "biome", "prettierd" },
+		javascript = function(bufnr)
+			if has_biome_config() then
+				return { "biome" }
+			else
+				return { "prettierd" }
+			end
+		end,
+		javascriptreact = function(bufnr)
+			if has_biome_config() then
+				return { "biome" }
+			else
+				return { "prettierd" }
+			end
+		end,
+		typescript = function(bufnr)
+			if has_biome_config() then
+				return { "biome" }
+			else
+				return { "prettierd" }
+			end
+		end,
+		typescriptreact = function(bufnr)
+			if has_biome_config() then
+				return { "biome" }
+			else
+				return { "prettierd" }
+			end
+		end,
 		astro = { "prettierd" },
 		java = { "google-java-format" },
 	},
