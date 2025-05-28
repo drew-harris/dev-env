@@ -40,6 +40,8 @@ install_if_not_installed "ripgrep"
 install_if_not_installed "openapi-tui"
 install_if_not_installed "nushell"
 install_if_not_installed "mprocs"
+install_if_not_installed "prettierd"
+install_if_not_installed "lua-language-server"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts

@@ -17,13 +17,12 @@ require("conform").setup({
 		-- python = { "isort", "black" },
 		go = { "goimports", "gofmt" },
 		-- Use a sub-list to run only the first available formatter
-		javascript = { "prettierd" },
-		javascriptreact = { "prettierd" },
-		typescript = { "prettierd" },
-		typescriptreact = { "prettierd" },
+		javascript = { "biome", "prettierd"  },
+		javascriptreact = { "biome", "prettierd" },
+		typescript = { "biome", "prettierd" },
+		typescriptreact = { "biome", "prettierd" },
 		astro = { "prettierd" },
 		java = { "google-java-format" },
-		css = { "" },
 	},
 	format_on_save = function(bufnr)
 		if not do_autoformat then
