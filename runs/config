@@ -32,3 +32,5 @@ cp -a $HOME/dev-env/config/atuin/. $HOME/.config/atuin/
 
 mkdir -p $HOME/.config/helix/
 cp -a $HOME/dev-env/config/helix/. $HOME/.config/helix/
+
+ln -sfn $HOME/dev-env/config/mprocs $HOME/.config/mprocs
