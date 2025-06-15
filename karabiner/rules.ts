@@ -90,6 +90,7 @@ const rules: KarabinerRules[] = [
     w: app("Element"),
     a: app(BROWSER),
     m: app("Messages"),
+    x: app("Calendar"),
     z: app("Zed"),
 
     // b = "B"rowse
@@ -122,6 +123,7 @@ const rules: KarabinerRules[] = [
       s: app("Spotify"),
       c: app("Cursor"),
     },
+    t: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
 
     // spotify
     s: {
