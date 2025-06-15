@@ -32,7 +32,6 @@ require("user.autopairs")
 require("user.whichkey")
 require("user.autocommands")
 require("user.nushell").setup()
-require("user.vscode")
 require("user.helix")
 -- require("user.copilot")
 

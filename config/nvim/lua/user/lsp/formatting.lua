@@ -26,28 +26,28 @@ require("conform").setup({
 		-- Use a sub-list to run only the first available formatter
 		javascript = function(bufnr)
 			if has_biome_config() then
-				return { "biome" }
+				return { "biome", "biome-organize-imports" }
 			else
 				return { "prettierd" }
 			end
 		end,
 		javascriptreact = function(bufnr)
 			if has_biome_config() then
-				return { "biome" }
+				return { "biome", "biome-organize-imports" }
 			else
 				return { "prettierd" }
 			end
 		end,
 		typescript = function(bufnr)
 			if has_biome_config() then
-				return { "biome" }
+				return { "biome", "biome-organize-imports" }
 			else
 				return { "prettierd" }
 			end
 		end,
 		typescriptreact = function(bufnr)
 			if has_biome_config() then
-				return { "biome" }
+				return { "biome", "biome-organize-imports" }
 			else
 				return { "prettierd" }
 			end
