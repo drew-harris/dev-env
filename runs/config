@@ -16,7 +16,6 @@ if [ "$DEV_PLAT" == "arch" ]; then
 
   mkdir -p $HOME/.config/waybar/
   cp -a $HOME/dev-env/config/waybar/. $HOME/.config/waybar
-
 fi
 
 rm -rf $HOME/.config/nvim
