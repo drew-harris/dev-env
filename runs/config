@@ -33,3 +33,4 @@ mkdir -p $HOME/.config/helix/
 cp -a $HOME/dev-env/config/helix/. $HOME/.config/helix/
 
 ln -sfn $HOME/dev-env/config/mprocs $HOME/.config/mprocs
+ln -sfn $HOME/dev-env/config/yazi $HOME/.config/yazi
