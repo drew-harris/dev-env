@@ -44,6 +44,8 @@ alias ls="eza -a"
 alias ld="lazydocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
+# alias real-nvim='nvim'
+# alias nvim='hx'
 
 alias lemur='ssh -t -C lemur "/bin/zsh -il -c \"tmux attach || tmux new-session -A -s home\""'
 

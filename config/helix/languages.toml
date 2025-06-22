@@ -1,5 +1,5 @@
 [language-server]
-biome = { command = "bunx", args = ["biome", "lsp-proxy"] }
+biome = { command = "bunx", args = ["biome", "lsp-proxy"], required-root-patterns = ["biome.json"] }
 tailwind = { command = "tailwindcss-language-server", args = ["--stdio"], required-root-patterns = ["tailwind.config.js"]}
 ty = { command = "ty", args = ["server"]}
 
