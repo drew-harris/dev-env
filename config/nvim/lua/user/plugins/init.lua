@@ -99,7 +99,6 @@ require("lazy").setup({
 	-- Rust
 	require("user.plugins.rust"),
 	require("user.plugins.crates"),
-	require("user.plugins.bacon"),
 
 	require("user.plugins.quickfix"),
 
