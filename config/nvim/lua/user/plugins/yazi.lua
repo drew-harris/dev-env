@@ -27,6 +27,18 @@ return {
 		-- 	"<cmd>Yazi cwd<cr>",
 		-- 	desc = "Open yazi at the current file",
 		-- },
+		-- {
+		-- 	"-",
+		-- 	mode = { "n", "v" },
+		-- 	"<cmd>Yazi<cr>",
+		-- 	desc = "Open yazi at the current file",
+		-- },
+		-- {
+		-- 	"_",
+		-- 	mode = { "n", "v" },
+		-- 	"<cmd>Yazi cwd<cr>",
+		-- 	desc = "Open yazi at the current file",
+		-- },
 		{
 			-- Open in the current working directory
 			"<leader>E",

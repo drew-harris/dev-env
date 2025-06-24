@@ -26,4 +26,3 @@ else
     echo "Window with class $WINDOW_CLASS (excluding Picture-in-Picture) not found. Launching $PROGRAM_NAME..."
     $PROGRAM_NAME &
 fi
-

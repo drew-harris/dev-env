@@ -14,6 +14,19 @@ fi
 # Get the list of installed formulae once
 INSTALLED_FORMULAE=$(brew list --formula)
 
+# Get the list of tapped repositories once
+TAPPED_REPOS=$(brew tap)
+
+function tap_if_not_tapped() {
+  local repo="$1"
+  if echo "$TAPPED_REPOS" | grep -q "^$repo$"; then
+    echo "$repo already tapped"
+  else
+    echo "tapping $repo"
+    brew tap "$repo"
+  fi
+}
+
 function install_if_not_installed() {
   local pkg="$1"
   if echo "$INSTALLED_FORMULAE" | grep -q "^$pkg$"; then
@@ -24,6 +37,10 @@ function install_if_not_installed() {
   fi
 }
 
+# Tap necessary repositories
+tap_if_not_tapped "dbcli/tap"
+
+# Install formulae
 install_if_not_installed "helix"
 install_if_not_installed "lazygit"
 install_if_not_installed "tmux"
@@ -46,6 +63,7 @@ install_if_not_installed "lua-language-server"
 install_if_not_installed "clojure/tools/clojure"
 install_if_not_installed "sst/tap/opencode"
 install_if_not_installed "pueue"
+install_if_not_installed "litecli"
 
 if ! command -v node &>/dev/null; then
   sudo curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | sudo bash -s install lts

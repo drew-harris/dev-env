@@ -196,17 +196,17 @@ require("lazy").setup({
 		"folke/twilight.nvim",
 		opts = {},
 	},
-	{
-		"Eutrius/Otree.nvim",
-		lazy = false,
-		dependencies = {
-			"stevearc/oil.nvim",
-			-- { "echasnovski/mini.icons", opts = {} },
-			-- "nvim-tree/nvim-web-devicons",
-		},
-		config = function()
-			require("Otree").setup()
-		end,
-	},
+	-- {
+	-- 	"Eutrius/Otree.nvim",
+	-- 	lazy = false,
+	-- 	dependencies = {
+	-- 		"stevearc/oil.nvim",
+	-- 		-- { "echasnovski/mini.icons", opts = {} },
+	-- 		-- "nvim-tree/nvim-web-devicons",
+	-- 	},
+	-- 	config = function()
+	-- 		require("Otree").setup()
+	-- 	end,
+	-- },
 	{ "nvim-tree/nvim-tree.lua", opts = {} },
 })
