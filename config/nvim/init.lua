@@ -32,6 +32,13 @@ require("user.autocommands")
 require("user.nushell").setup()
 require("user.helix")
 
+local unwrap = require("user.tsutils")
+
+vim.api.nvim_create_user_command("Unwrap", unwrap.wrap_with_unwrap, {})
+
+-- Create keymap
+vim.keymap.set("n", "<leader>te", unwrap.wrap_with_unwrap, { desc = "Wrap with unwrap()" })
+
 vim.cmd("highlight! HarpoonInactive guibg=NONE guifg=#63698c")
 vim.cmd("highlight! link HarpoonActive IncSearch")
 vim.cmd("highlight! link HarpoonNumberActive IncSearch")
