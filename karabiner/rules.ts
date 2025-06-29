@@ -112,7 +112,7 @@ const rules: KarabinerRules[] = [
       f: app("Finder"),
       i: app(TERMINAL),
       w: app("Element"),
-      a: app("Arc"),
+      a: app(BROWSER),
       m: app("Messages"),
       1: app("1Password"),
       n: app("Notes"),

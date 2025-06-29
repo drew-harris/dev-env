@@ -42,6 +42,7 @@ alias v="nvim"
 alias ll="eza --icons=always -l -a"
 alias ls="eza -a"
 alias ld="lazydocker"
+alias b="blocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 # alias real-nvim='nvim'

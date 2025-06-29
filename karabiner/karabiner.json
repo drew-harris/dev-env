@@ -1999,10 +1999,10 @@
               {
                 "to": [
                   {
-                    "shell_command": "open -a 'Arc.app'"
+                    "shell_command": "open -a 'Zen.app'"
                   }
                 ],
-                "description": "Open -a 'Arc.app'",
+                "description": "Open -a 'Zen.app'",
                 "type": "basic",
                 "from": {
                   "key_code": "a",

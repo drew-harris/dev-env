@@ -47,6 +47,10 @@ lspconfig.rust_analyzer.setup({
 	on_attach = require("user.lsp.handlers").on_attach,
 })
 
+lspconfig.clojure_lsp.setup({
+	on_attach = require("user.lsp.handlers").on_attach,
+})
+
 lspconfig.nushell.setup({})
 
 require("mason-lspconfig").setup_handlers({
@@ -71,7 +75,6 @@ require("mason-lspconfig").setup_handlers({
 
 		if server == "jdtls" then
 			opts.root_dir = lspconfig.util.root_pattern("pom.xml", "gradle.build", ".git")
-
 		end
 
 		if server == "tsserver" then

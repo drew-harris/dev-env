@@ -23,6 +23,7 @@ mkdir -p $HOME/.config/nvim/
 cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
 
 # Tmux
+rm -rf $HOME/.tmux.conf
 cp $HOME/dev-env/config/tmux/.tmux.conf $HOME/.tmux.conf
 
 rm -rf $HOME/.config/atuin
@@ -31,6 +32,12 @@ cp -a $HOME/dev-env/config/atuin/. $HOME/.config/atuin/
 
 mkdir -p $HOME/.config/helix/
 cp -a $HOME/dev-env/config/helix/. $HOME/.config/helix/
+
+mkdir -p $HOME/.config/fish/
+cp -a $HOME/dev-env/config/fish/. $HOME/.config/fish/
+
+mkdir -p $HOME/.config/opencode/
+cp -a $HOME/dev-env/config/opencode/. $HOME/.config/opencode/
 
 ln -sfn $HOME/dev-env/config/mprocs $HOME/.config/mprocs
 ln -sfn $HOME/dev-env/config/yazi $HOME/.config/yazi

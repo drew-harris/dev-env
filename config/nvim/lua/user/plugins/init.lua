@@ -88,14 +88,6 @@ require("lazy").setup({
 	"joerdav/templ.vim",
 	"mfussenegger/nvim-jdtls",
 
-	-- require("user.plugins.neotest"),
-
-	-- Debugging
-	-- "mfussenegger/nvim-dap",
-	-- "leoluz/nvim-dap-go",
-	-- { "rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap" } },
-	-- "jayp0521/mason-nvim-dap.nvim",
-
 	-- Rust
 	require("user.plugins.rust"),
 	require("user.plugins.crates"),
