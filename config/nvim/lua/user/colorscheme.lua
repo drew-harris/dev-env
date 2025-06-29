@@ -1,5 +1,7 @@
 -- local colorscheme = "catppuccin-mocha"
-local colorscheme = "sonokai"
+-- local colorscheme = "jellybeans-nvim"
+local colorscheme = "jellybeans"
+-- local colorscheme = "sonokai"
 -- local colorscheme = "kanagawa-dragon"
 -- local colorscheme = "tokyonight"
 -- local colorscheme = "github_dark"

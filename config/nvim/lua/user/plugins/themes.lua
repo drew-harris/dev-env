@@ -36,6 +36,12 @@ return {
 		transparent_mode = true,
 	} },
 	{
+		"wtfox/jellybeans.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {}, -- Optional
+	},
+	{
 		"folke/tokyonight.nvim",
 		lazy = false,
 		priority = 1000,

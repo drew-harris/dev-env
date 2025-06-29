@@ -44,6 +44,9 @@ vim.cmd("highlight! link HarpoonActive IncSearch")
 vim.cmd("highlight! link HarpoonNumberActive IncSearch")
 vim.cmd("highlight! HarpoonNumberInactive guibg=NONE guifg=#7aa2f7")
 
+vim.cmd("highlight! WinBar guibg=NONE guifg=#7aa2f7")
+vim.cmd("highlight! WinBarNC guibg=NONE guifg=#7aa2f7")
+
 vim.cmd("autocmd TermOpen * setlocal nonumber norelativenumber")
 
 vim.cmd("highlight! link YankyPut Visual")
