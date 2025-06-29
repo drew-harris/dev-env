@@ -1,7 +1,7 @@
 return {
 	"luiscassih/AniMotion.nvim",
 	event = "VeryLazy",
-	enabled = true,
+	enabled = false,
 	opts = {
 		color = "Visual",
 	},
