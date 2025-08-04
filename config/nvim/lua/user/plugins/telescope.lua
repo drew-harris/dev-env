@@ -4,6 +4,7 @@ return {
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"debugloop/telescope-undo.nvim",
 		"molecule-man/telescope-menufacture",
+		"nvim-tree/nvim-web-devicons",
 		"ThePrimeagen/harpoon",
 		"nvim-telescope/telescope-file-browser.nvim",
 	},
@@ -129,6 +130,12 @@ return {
 			})
 		end, { desc = "Find Files" })
 
+		vim.keymap.set("n", "<leader>ks", function()
+			require("telescope.builtin").find_files({
+				cwd = "~/programs/testing-instant/",
+			})
+		end, { desc = "Sandbox" })
+
 		vim.keymap.set("n", "<leader>F", "<cmd>Telescope live_grep theme=ivy<cr>", { desc = "Search in files" })
 
 		Keymapper("b", function()
@@ -138,31 +145,9 @@ return {
 		local fb = telescope.extensions.file_browser
 		local picker = fb.file_browser
 
-		Keymapper("sf", function()
-			require("telescope.builtin").find_files({ cwd = "~/programs/trieve/frontends/analytics" })
-		end, "Search analytics files")
-
 		Keymapper("gf", function()
 			require("telescope.builtin").git_status()
 		end, "Search changed files")
-
-		vim.keymap.set("v", "<leader>fs", function()
-			-- Yank the selected text into register v
-			vim.cmd('normal! "vy')
-			-- Get the content of register v
-			local selected_text = vim.fn.getreg("v")
-			-- Clean up the text (remove newlines and extra spaces)
-			selected_text = selected_text:gsub("\n", "")
-
-			-- Create a new vertical split
-			vim.cmd("vsplit")
-
-			-- Use Telescope with ripgrep to search for the selected text in .tsx files
-			require("telescope.builtin").grep_string({
-				search = selected_text,
-				glob_pattern = "*.tsx",
-			})
-		end, { noremap = true, silent = true })
 
 		--
 		-- vim.keymap.set("v", "<leader>fs", function()

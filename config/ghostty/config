@@ -1,10 +1,11 @@
 # theme=GruvboxDarkHard
 # theme=Monokai Soda
 # theme=Hopscotch
-theme=Jellybeans
+# theme=Jellybeans
+# theme = BluLocoLight
 
 
-font-size=13
+font-size=14
 # font-family=Inconsolata
 # font-family=InputMono
 # font-family=Bitstream Vera Sans Mono
@@ -12,10 +13,10 @@ font-size=13
 # font-family=TX-02-Trial
 font-family=Berkeley Mono
 # font-family=CommitMonoSecond
-font-style=Bold
+# font-style=Bold
 font-style-italic=Bold Italic
 # font-feature = -calt
-# font-thicken = true
+font-thicken = true
 # command=/bin/zsh -lic "tmux attach || tmux new -A -s home"
 # quit-after-last-window-closed=false
 adjust-underline-thickness=-20%
@@ -45,7 +46,7 @@ keybind = global:alt+t=toggle_quick_terminal
 #
 # # Create a new window
 # keybind = ctrl+a>c=new_tab
-# keybind = ctrl+b>r=reload_config
+keybind = super+r=reload_config
 keybind = super+t=new_tab
 # keybind = ctrl+a>s=new_split:right
 #
@@ -71,21 +72,21 @@ keybind = super+t=new_tab
 # keybind = ctrl+a>n=next_tab
 # keybind = ctrl+a>p=previous_tab
 # theme
-# background =#1f2024
-# foreground =#f8f8f2
-# palette = 0=#272822
-# palette = 1=#f92672
-# palette = 2=#a6e22e
-# palette = 3=#f4bf75
-# palette = 4=#66d9ef
-# palette = 5=#ae81ff
-# palette = 6=#a1efe4
-# palette = 7=#f8f8f2
-# palette = 8=#75715e
-# palette = 9=#f92672
-# palette = 10=#a6e22e
-# palette = 11=#f4bf75
-# palette = 12=#66d9ef
-# palette = 13=#ae81ff
-# palette = 14=#a1efe4
-# palette = 15=#f9f8f5
+background =#121212
+foreground =#f8f8f2
+palette = 0=#272822
+palette = 1=#f92672
+palette = 2=#a6e22e
+palette = 3=#f4bf75
+palette = 4=#66d9ef
+palette = 5=#ae81ff
+palette = 6=#a1efe4
+palette = 7=#f8f8f2
+palette = 8=#75715e
+palette = 9=#f92672
+palette = 10=#a6e22e
+palette = 11=#f4bf75
+palette = 12=#66d9ef
+palette = 13=#ae81ff
+palette = 14=#a1efe4
+palette = 15=#f9f8f5

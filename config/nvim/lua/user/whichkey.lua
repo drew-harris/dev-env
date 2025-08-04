@@ -190,7 +190,6 @@ local mappings = {
 		d = { "<cmd>e .dockerignore<cr>", "Open dockerignore" },
 		j = { "<cmd>e .justfile<cr>", "Open justfile" },
 		n = { "<cmd>e pad.nu<cr>", "Open pad" },
-		s = { "<cmd>e website/.env<cr>", "Open Website env" },
 		w = { "<cmd>e worker/.env<cr>", "Open Worker env" },
 		m = { "<cmd>e mprocs.yaml<cr>", "Open Mprocs" },
 	},

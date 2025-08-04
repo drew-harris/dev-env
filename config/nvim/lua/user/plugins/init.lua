@@ -49,6 +49,7 @@ require("lazy").setup({
 	{ "norcalli/nvim-colorizer.lua", opts = {} },
 	{ "themaxmarchuk/tailwindcss-colors.nvim", opts = {} },
 	require("user.plugins.tw-values"),
+	require("user.plugins.distant"),
 
 	-- require("user.plugins.cmp"),
 	require("user.plugins.blink"),
@@ -59,11 +60,14 @@ require("lazy").setup({
 	"neovim/nvim-lspconfig",
 	{ "williamboman/mason.nvim", version = "1.*" },
 	{ "williamboman/mason-lspconfig.nvim", version = "1.*" },
+	require("user.plugins.docsview"),
 
 	-- replace with: https://github.com/aznhe21/actions-preview.nvim
 	"weilbith/nvim-code-action-menu",
 
 	require("user.plugins.trouble"),
+
+	require("user.plugins.neotest"),
 
 	-- Used for peek
 	require("user.lsp.saga"),
@@ -91,6 +95,9 @@ require("lazy").setup({
 	-- Rust
 	require("user.plugins.rust"),
 	require("user.plugins.crates"),
+
+	-- clojure
+	require("user.plugins.clojure"),
 
 	require("user.plugins.quickfix"),
 

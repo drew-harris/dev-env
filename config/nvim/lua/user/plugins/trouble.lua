@@ -9,7 +9,7 @@ return {
 		})
 
 		vim.keymap.set("n", "<leader>lt", function()
-			require("trouble").toggle("workspace_diagnostics")
+			require("trouble").toggle("diagnostics")
 		end, { desc = "Trouble" })
 	end,
 }

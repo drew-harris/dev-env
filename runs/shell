@@ -29,7 +29,6 @@ else
   echo "Current shell is already zsh. No change needed."
 fi
 
-
 ## Souce my repo zshrc
 if ! grep -q "source \$HOME/dev-env/zshrc" "$HOME/.zshrc"; then
   echo "source \$HOME/dev-env/zshrc" >>"$HOME/.zshrc"

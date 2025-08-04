@@ -1,0 +1,5 @@
+require("config.options")
+require("config.keymap")
+require("core.lazy")
+require("core.lsp")
+require("custom.splitargs")

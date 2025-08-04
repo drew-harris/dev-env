@@ -87,7 +87,7 @@ const rules: KarabinerRules[] = [
     q: app("Legcord"),
     c: app("Cursor"),
     i: app(TERMINAL),
-    w: app("Element"),
+    w: app("Slack"),
     a: app(BROWSER),
     m: app("Messages"),
     x: app("Calendar"),
@@ -108,10 +108,10 @@ const rules: KarabinerRules[] = [
     // o = "Open" applications
     o: {
       q: app("Legcord"),
-      p: app("Firefox"),
+      p: app("Claude"),
       f: app("Finder"),
       i: app(TERMINAL),
-      w: app("Element"),
+      w: app("Slack"),
       a: app(BROWSER),
       m: app("Messages"),
       1: app("1Password"),

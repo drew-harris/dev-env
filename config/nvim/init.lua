@@ -31,6 +31,7 @@ require("user.whichkey")
 require("user.autocommands")
 require("user.nushell").setup()
 require("user.helix")
+require("user.splitargs")
 
 local unwrap = require("user.tsutils")
 

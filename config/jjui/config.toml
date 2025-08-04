@@ -1,0 +1,30 @@
+[ui.colors]
+"selected" = { bg = "#333333" }
+
+[ui.tracer]
+enabled = true
+
+[preview]
+  show_at_start = true
+
+[custom_commands]
+"pick commit" = { args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
+"rebase all prs" = { args = ["rebase", "-r",'mutable() & mine()', "-d", "main"] }
+"new main" = { args = ["new", "main"] }
+
+[custom_commands.edit]
+key = ["E"]
+args = ["util", "exec", "--", "bash", "-c", 'nvim "$(jj file list "$1")"', "", "$file"]
+show = "interactive"
+
+[leader.e]
+context = [ "$file", "$change_id" ]
+help = "Edit file in @"
+send = [ "$", "$EDITOR $file", "enter" ]
+
+[leader.E]
+context = [ "$file", "$change_id" ]
+help = "Edit file in change"
+send = [ "$", "jj edit $change_id && $EDITOR $file", "enter" ]
+
+

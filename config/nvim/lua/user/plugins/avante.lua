@@ -2,6 +2,7 @@ return {
 	"yetone/avante.nvim",
 	event = "VeryLazy",
 	lazy = false,
+	enabled = false,
 	build = "make",
 	opts = {
 		-- add any opts here

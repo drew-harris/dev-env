@@ -18,9 +18,9 @@ if [ "$DEV_PLAT" == "arch" ]; then
   cp -a $HOME/dev-env/config/waybar/. $HOME/.config/waybar
 fi
 
-rm -rf $HOME/.config/nvim
-mkdir -p $HOME/.config/nvim/
-cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
+# rm -rf $HOME/.config/nvim
+# mkdir -p $HOME/.config/nvim/
+# cp -a $HOME/dev-env/config/nvim/. $HOME/.config/nvim/
 
 # Tmux
 rm -rf $HOME/.tmux.conf
@@ -41,3 +41,6 @@ cp -a $HOME/dev-env/config/opencode/. $HOME/.config/opencode/
 
 ln -sfn $HOME/dev-env/config/mprocs $HOME/.config/mprocs
 ln -sfn $HOME/dev-env/config/yazi $HOME/.config/yazi
+ln -sfn $HOME/dev-env/config/jjui $HOME/.config/jjui
+ln -sfn $HOME/dev-env/config/new-nvim/ $HOME/.config/nvim
+ln -sfn $HOME/dev-env/config/nvim/ $HOME/.config/old-nvim

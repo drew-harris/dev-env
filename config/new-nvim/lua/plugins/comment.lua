@@ -4,7 +4,6 @@ return {
 
 	config = function()
 		local comment = require("Comment")
-		---@diagnostic disable-next-line: missing-fields
 		comment.setup({
 			toggler = {
 				---Line-comment toggle keymap
