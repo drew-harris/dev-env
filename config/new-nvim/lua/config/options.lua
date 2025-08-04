@@ -22,4 +22,5 @@ vim.opt.winborder = "solid"
 vim.opt.expandtab = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
-vim.opt.cursorline = false;
+vim.opt.cursorline = false
+vim.opt.swapfile = false

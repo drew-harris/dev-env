@@ -1,8 +1,8 @@
 [ui.colors]
 "selected" = { bg = "#333333" }
 
-[ui.tracer]
-enabled = true
+# [ui.tracer]
+# enabled = true
 
 [preview]
   show_at_start = true
