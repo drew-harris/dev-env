@@ -1,7 +1,7 @@
 return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.8",
-	dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
+	dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "ThePrimeagen/harpoon" },
 	config = function()
 		local telescope = require("telescope")
 		local builtin = require('telescope.builtin')
@@ -16,6 +16,7 @@ return {
 				}
 			}
 		})
+		telescope.load_extension("harpoon")
 		vim.keymap.set('n', '<leader>f', builtin.find_files, { desc = 'Telescope find files' })
 	end,
 }
