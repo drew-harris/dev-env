@@ -1,11 +1,11 @@
 [ui.colors]
-"selected" = { bg = "#333333" }
+"selected" = { bg = "#444444" }
 
 # [ui.tracer]
 # enabled = true
 
 [preview]
-  show_at_start = true
+  show_at_start = false
 
 [custom_commands]
 "pick commit" = { args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }

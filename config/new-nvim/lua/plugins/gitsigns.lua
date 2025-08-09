@@ -9,5 +9,6 @@ return {
 		vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Reset git buffer" })
 		vim.keymap.set("n", "<leader>gj", gitsigns.next_hunk, { desc = "Next git hunk" })
 		vim.keymap.set("n", "<leader>gk", gitsigns.prev_hunk, { desc = "Previous git hunk" })
+		vim.keymap.set("n", "<leader>gl", gitsigns.blame_line, { desc = "Git line blame" })
 	end,
 }

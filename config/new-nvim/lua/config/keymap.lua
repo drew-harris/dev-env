@@ -52,3 +52,8 @@ keymap("v", "ga", "<cmd>:EasyAlign<cr>", opts)
 keymap("i", "<C-f>", "@file<C-y>", opts)
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- Editor integration
+keymap("n", "<leader>ao", "<cmd>OpenBuffersInCursor<cr>", { desc = "Open all buffers in Cursor" })
+keymap("n", "<leader>ap", "<cmd>OpenBuffersInHelix<cr>", { desc = "Open all buffers in Helix" })
+keymap("n", "<leader>az", "<cmd>OpenBuffersInZed<cr>", { desc = "Open all buffers in Zed" })

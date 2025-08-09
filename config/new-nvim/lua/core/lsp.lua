@@ -2,13 +2,14 @@ vim.lsp.enable({
     "gopls",
     "lua_ls",
     "typescript_ls",
+    "rust_analyzer",
 })
 
 vim.diagnostic.config({
     --virtual_lines = false,
     virtual_text = true,
     underline = true,
-    update_in_insert = false,
+    update_in_insert = true,
     severity_sort = true,
     float = {
         --border = "rounded",
@@ -55,5 +56,5 @@ keymap("n", "<leader>lw", function()
 end, { desc = "Workspace Diagnostics" })
 
 keymap("n", "<leader>lp", function()
-    vim.diagnostic.open_float({ focusable = true })
+    vim.diagnostic.open_float({ focusable = true, max_width = 400, zindex = 1000 })
 end)

@@ -13,7 +13,8 @@ return {
 						["<C-j>"] = actions.move_selection_next,
 						["<C-k>"] = actions.move_selection_previous,
 					}
-				}
+				},
+				border = false
 			}
 		})
 		telescope.load_extension("harpoon")
@@ -23,13 +24,17 @@ return {
 		-- Instant
 		vim.keymap.set("n", "<leader>ks", function()
 			require("telescope.builtin").find_files({
+				border = false,
 				cwd = "~/programs/testing-instant/",
 			})
 		end, { desc = "Sandbox" })
 
-		local dropdown = require("telescope.themes").get_dropdown()
+		local dropdown = require("telescope.themes").get_dropdown({ border = false })
 		vim.keymap.set("n", "<leader>b", function()
 			require("telescope.builtin").buffers(dropdown)
 		end, { desc = "Search buffers" })
+
+		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Search help" })
+		vim.keymap.set("n", "<leader>sr", builtin.oldfiles, { desc = "Search recent files" })
 	end,
 }

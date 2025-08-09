@@ -72,7 +72,7 @@ keybind = super+t=new_tab
 # keybind = ctrl+a>n=next_tab
 # keybind = ctrl+a>p=previous_tab
 # theme
-background =#121212
+background =#242424
 foreground =#f8f8f2
 palette = 0=#272822
 palette = 1=#f92672

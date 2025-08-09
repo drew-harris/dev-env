@@ -3,6 +3,7 @@ require("config.keymap")
 require("core.lazy")
 require("core.lsp")
 require("custom.splitargs")
+require("custom.editors")
 
 vim.cmd("highlight! HarpoonInactive guibg=NONE guifg=#63698c")
 vim.cmd("highlight! link HarpoonActive IncSearch")
@@ -10,3 +11,5 @@ vim.cmd("highlight! link HarpoonNumberActive IncSearch")
 vim.cmd("highlight! HarpoonNumberInactive guibg=NONE guifg=#7aa2f7")
 vim.cmd("highlight! WinBar guibg=NONE guifg=#7aa2f7")
 vim.cmd("highlight! WinBarNC guibg=NONE guifg=#7aa2f7")
+
+-- vim.api.nvim_set_hl(0, 'FloatBorder', { bg = '#3b3b3b' })

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Get the list of changed files
+files=$(jj diff --name-only --from main)
+
+# Check if package.json is in the list
+if echo "$files" | grep -q "package.json"; then
+    # Print red if package.json is found
+    printf '\033[0;31m%s\033[0m\n' "████████████████████████████████████████"
+    printf '\033[0;31m%s\033[0m\n' "█ WARNING: package.json was modified! █"
+    printf '\033[0;31m%s\033[0m\n' "████████████████████████████████████████"
+    echo ""
+    echo "Changed files:"
+    echo "$files"
+else
+    # Print green if package.json is not found
+    printf '\033[0;32m%s\033[0m\n' "████████████████████████████████████████"
+    printf '\033[0;32m%s\033[0m\n' "█ OK: package.json was not modified   █"
+    printf '\033[0;32m%s\033[0m\n' "████████████████████████████████████████"
+    echo ""
+    echo "Changed files:"
+    echo "$files"
+fi

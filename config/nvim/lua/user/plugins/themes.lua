@@ -6,11 +6,14 @@ return {
 			disable_background = true,
 		},
 	},
-	{ "EdenEast/nightfox.nvim", opts = {
-		options = {
-			transparent = true,
-		},
-	} },
+	{
+		"EdenEast/nightfox.nvim",
+		opts = {
+			options = {
+				transparent = true,
+			},
+		}
+	},
 	{
 		"loctvl842/monokai-pro.nvim",
 		opts = {
@@ -32,9 +35,14 @@ return {
 		"metalelf0/jellybeans-nvim",
 		dependencies = "rktjmp/lush.nvim",
 	},
-	{ "ellisonleao/gruvbox.nvim", priority = 1000, config = true, opts = {
-		transparent_mode = true,
-	} },
+	{
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
+		config = true,
+		opts = {
+			transparent_mode = true,
+		}
+	},
 	{
 		"wtfox/jellybeans.nvim",
 		lazy = false,
@@ -96,11 +104,16 @@ return {
 	-- { "Mofiqul/dracula.nvim" },
 	-- "RRethy/nvim-base16",
 
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000, opts = {
-		transparent_background = true,
-	} },
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		opts = {
+			transparent_background = true,
+		}
+	},
 
-	{ "kepano/flexoki-neovim", name = "flexoki" },
+	{ "kepano/flexoki-neovim",    name = "flexoki" },
 
 	{
 		"sainnhe/sonokai",

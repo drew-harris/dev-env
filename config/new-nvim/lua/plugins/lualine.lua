@@ -4,6 +4,21 @@ return {
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
+				component_separators = { left = "", right = "" },
+				section_separators = { left = "", right = "" },
+				disabled_filetypes = {
+					statusline = {},
+					winbar = {
+						"neo-tree",
+					},
+				},
+				globalstatus = true,
+				always_divide_middle = true,
+				refresh = {
+					statusline = 100,
+					tabline = 100,
+					winbar = 100,
+				},
 			},
 			sections = {
 				lualine_a = { "tabs" },
@@ -21,17 +36,34 @@ return {
 				lualine_z = {},
 			},
 			tabline = {},
-			winbar = {
-				lualine_c = {
-					{ "filename", path = 1 },
-				},
+	winbar = {
+		lualine_c = {
+			{ 
+				"filename", 
+				path = 1,
+				shorting_target = 40,
+				symbols = {
+					modified = '[+]',
+					readonly = '[-]',
+					unnamed = '[No Name]',
+				}
 			},
-			inactive_winbar = {
-				lualine_c = {
-					{ "filename", path = 1 },
-				},
+		},
+	},
+	inactive_winbar = {
+		lualine_c = {
+			{ 
+				"filename", 
+				path = 1,
+				shorting_target = 40,
+				symbols = {
+					modified = '[+]',
+					readonly = '[-]',
+					unnamed = '[No Name]',
+				}
 			},
-			extensions = {
+		},
+	},			extensions = {
 			},
 		})
 	end,
