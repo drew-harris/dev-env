@@ -2,6 +2,8 @@ vim.lsp.enable({
     "gopls",
     "lua_ls",
     "typescript_ls",
+    "yamlls",
+    "jsonls",
     "rust_analyzer",
 })
 

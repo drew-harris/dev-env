@@ -36,5 +36,7 @@ return {
 
 		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Search help" })
 		vim.keymap.set("n", "<leader>sr", builtin.oldfiles, { desc = "Search recent files" })
+		vim.keymap.set("n", "<leader>ss", builtin.lsp_document_symbols, { desc = "Search document symbols" })
+		vim.keymap.set("n", "<leader>sS", builtin.lsp_dynamic_workspace_symbols, { desc = "Search workspace symbols" })
 	end,
 }
