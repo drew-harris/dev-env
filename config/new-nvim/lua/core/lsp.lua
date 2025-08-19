@@ -5,6 +5,7 @@ vim.lsp.enable({
     "yamlls",
     "jsonls",
     "rust_analyzer",
+    "tailwindcss",
 })
 
 vim.diagnostic.config({

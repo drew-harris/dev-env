@@ -7,6 +7,11 @@
 [preview]
   show_at_start = false
 
+[revisions]
+  log_batching = true
+  # template = 'builtin_log_oneline' # overrides jj's templates.log
+  # template = 'builtin_log_comfortable' # overrides jj's templates.log
+
 [custom_commands]
 "pick commit" = { args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
 "rebase all prs" = { args = ["rebase", "-r",'mutable() & mine()', "-d", "main"] }

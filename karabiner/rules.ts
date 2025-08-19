@@ -92,6 +92,7 @@ const rules: KarabinerRules[] = [
     m: app("Messages"),
     x: app("Calendar"),
     z: app("Zed"),
+    v: app("FreeTube"),
 
     // b = "B"rowse
     b: {
@@ -115,6 +116,7 @@ const rules: KarabinerRules[] = [
       a: app(BROWSER),
       m: app("Messages"),
       1: app("1Password"),
+      v: app("FreeTube"),
       n: app("Notes"),
       r: app("AI"),
       // Open todo list managed via *H*ypersonic
@@ -209,23 +211,6 @@ const rules: KarabinerRules[] = [
             modifiers: ["left_option"],
           },
         ],
-      },
-    },
-
-    // v = "moVe" which isn't "m" because we want it to be on the left hand
-    // so that hjkl work like they do in vim
-    v: {
-      h: {
-        to: [{ key_code: "left_arrow" }],
-      },
-      j: {
-        to: [{ key_code: "down_arrow" }],
-      },
-      k: {
-        to: [{ key_code: "up_arrow" }],
-      },
-      l: {
-        to: [{ key_code: "right_arrow" }],
       },
     },
 
