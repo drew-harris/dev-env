@@ -36,34 +36,35 @@ return {
 				lualine_z = {},
 			},
 			tabline = {},
-	winbar = {
-		lualine_c = {
-			{ 
-				"filename", 
-				path = 1,
-				shorting_target = 40,
-				symbols = {
-					modified = '[+]',
-					readonly = '[-]',
-					unnamed = '[No Name]',
-				}
+			winbar = {
+				lualine_c = {
+					{
+						"filename",
+						path = 1,
+						shorting_target = 40,
+						symbols = {
+							modified = '[+]',
+							readonly = '[-]',
+							unnamed = '[No Name]',
+						}
+					},
+				},
 			},
-		},
-	},
-	inactive_winbar = {
-		lualine_c = {
-			{ 
-				"filename", 
-				path = 1,
-				shorting_target = 40,
-				symbols = {
-					modified = '[+]',
-					readonly = '[-]',
-					unnamed = '[No Name]',
-				}
+			inactive_winbar = {
+				lualine_c = {
+					{
+						"filename",
+						path = 1,
+						shorting_target = 40,
+						symbols = {
+							modified = '[+]',
+							readonly = '[-]',
+							unnamed = '[No Name]',
+						}
+					},
+				},
 			},
-		},
-	},			extensions = {
+			extensions = {
 			},
 		})
 	end,
