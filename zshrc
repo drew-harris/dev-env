@@ -46,6 +46,7 @@ alias b="blocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
+alias j='jjui'
 
 alias lemur='ssh -t -C lemur "/bin/zsh -il -c \"tmux attach || tmux new-session -A -s home\""'
 
@@ -55,6 +56,8 @@ alias sqlite='/opt/homebrew/opt/sqlite/bin/sqlite3'
 eval "$(starship init zsh)"
 
 path+=("$HOME/.config/scripts/")
+
+path+=("/opt/homebrew/bin/")
 
 export _ZO_MAXAGE=400
 eval "$(zoxide init zsh)"
