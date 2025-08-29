@@ -5,6 +5,8 @@ vim.lsp.enable({
     "yamlls",
     "jsonls",
     "rust_analyzer",
+    "clojure_lsp",
+    "tombi",
     "tailwindcss",
 })
 

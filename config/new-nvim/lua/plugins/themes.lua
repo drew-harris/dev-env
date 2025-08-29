@@ -17,5 +17,15 @@ return {
                 },
             })
         end
+    },
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {
+            transparent = true,
+            style = "night",
+            light_style = "day",       -- The theme is used when the background is set to light,
+        },
     }
 }
