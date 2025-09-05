@@ -12,7 +12,7 @@ return {
 				navbuddy.setup({
 					lsp = { auto_attach = true }
 				})
-				vim.keymap.set("n", "<leader>n", navbuddy.open, { desc = "Navbuddy" })
+				vim.keymap.set("n", "<leader>ln", navbuddy.open, { desc = "Navbuddy" })
 			end
 		}
 	},

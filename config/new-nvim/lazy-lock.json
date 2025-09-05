@@ -17,6 +17,7 @@
   "lualine.nvim": { "branch": "master", "commit": "b8c23159c0161f4b89196f74ee3a6d02cdc3a955" },
   "mini.icons": { "branch": "main", "commit": "b8f6fa6f5a3fd0c56936252edcd691184e5aac0c" },
   "mini.pick": { "branch": "main", "commit": "82ec629ca108c7b96b8b9bb733d235b39e137690" },
+  "neominimap.nvim": { "branch": "main", "commit": "7a4884007e62194fd4df111219d322d409cc2ce0" },
   "neotest": { "branch": "master", "commit": "35a59c1f59dbb954d92b74ab64a966a668cea495" },
   "neotest-vitest": { "branch": "main", "commit": "a6099e1fb55a2c2851da3dd0f4d510af9a234c92" },
   "no-neck-pain.nvim": { "branch": "main", "commit": "ecdfe60f23134089fac92659e688b65fdd8b5cc0" },

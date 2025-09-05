@@ -4,6 +4,8 @@ vim.lsp.enable({
     "typescript_ls",
     "yamlls",
     "jsonls",
+    "nushell",
+    "biome",
     "rust_analyzer",
     "clojure_lsp",
     "tombi",
@@ -11,13 +13,20 @@ vim.lsp.enable({
 })
 
 vim.diagnostic.config({
-    --virtual_lines = false,
-    virtual_text = true,
+    -- virtual_lines = {
+    --     -- current_line = true,
+    --     -- severity = { vim.diagnostic.severity.WARN,
+    --     --     vim.diagnostic.severity.ERROR,
+    --     -- }
+    -- },
+    virtual_lines = false,
+    virtual_text = {
+        spacing = 8
+    },
     underline = true,
     update_in_insert = true,
     severity_sort = true,
     float = {
-        --border = "rounded",
         source = true,
     },
     signs = {
@@ -33,6 +42,20 @@ vim.diagnostic.config({
         },
     },
 })
+
+local virt_lines_ns = vim.api.nvim_create_namespace 'on_diagnostic_jump'
+--- @param diagnostic? vim.Diagnostic
+--- @param bufnr integer
+local function on_jump(diagnostic, bufnr)
+    if not diagnostic then return end
+    vim.diagnostic.show(
+        virt_lines_ns,
+        bufnr,
+        { diagnostic },
+        { virtual_lines = { current_line = true }, virtual_text = false }
+    )
+end
+vim.diagnostic.config({ jump = { on_jump = on_jump } })
 
 local opts = { noremap = true, silent = true }
 local keymap = vim.keymap.set

@@ -5,32 +5,46 @@
 # enabled = true
 
 [preview]
-  show_at_start = false
+show_at_start = false
 
 [revisions]
-  log_batching = true
-  # template = 'builtin_log_oneline' # overrides jj's templates.log
-  # template = 'builtin_log_comfortable' # overrides jj's templates.log
+log_batching = true
+# template = 'builtin_log_oneline' # overrides jj's templates.log
+# template = 'builtin_log_comfortable' # overrides jj's templates.log
+# revset = "here"
 
 [custom_commands]
 "pick commit" = { args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
-"rebase all prs" = { args = ["rebase", "-r",'mutable() & mine()', "-d", "main"] }
+"rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
 "new main" = { args = ["new", "main"] }
-"new after selected" = {key = ["N"],  args = ["new", "-A", "$change_id", "--no-edit"] }
+"new after selected" = { key = ["N"], args = [
+  "new",
+  "-A",
+  "$change_id",
+  "--no-edit",
+] }
 
 [custom_commands.edit]
 key = ["E"]
-args = ["util", "exec", "--", "bash", "-c", 'nvim "$(jj file list "$1")"', "", "$file"]
+args = [
+  "util",
+  "exec",
+  "--",
+  "bash",
+  "-c",
+  'nvim "$(jj file list "$1")"',
+  "",
+  "$file",
+]
 show = "interactive"
 
 [leader.e]
-context = [ "$file", "$change_id" ]
+context = ["$file", "$change_id"]
 help = "Edit file in @"
-send = [ "$", "$EDITOR $file", "enter" ]
+send = ["$", "$EDITOR $file", "enter"]
 
 [leader.E]
-context = [ "$file", "$change_id" ]
+context = ["$file", "$change_id"]
 help = "Edit file in change"
-send = [ "$", "jj edit $change_id && $EDITOR $file", "enter" ]
-
+send = ["$", "jj edit $change_id && $EDITOR $file", "enter"]
 

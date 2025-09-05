@@ -9,6 +9,11 @@ return {
 			move_up = { '<Up>', '<C-p>', "<C-k>" },
 			move_down = { '<Down>', '<C-n>', "<C-j>" },
 		},
+		layout = {
+			prompt_position = 'top',
+
+		},
+		title = 'Files',
 	},
 	keys = {
 		{

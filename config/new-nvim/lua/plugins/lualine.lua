@@ -1,8 +1,11 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	config = function()
+		local custom_theme = require('lualine.themes.base16')
+
 		require("lualine").setup({
 			options = {
+				-- theme = custom_theme,
 				icons_enabled = true,
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
@@ -21,8 +24,8 @@ return {
 				},
 			},
 			sections = {
-				lualine_a = { "tabs" },
-				lualine_b = { "diff" },
+				lualine_a = {},
+				lualine_b = { "tabs", "diff" },
 				lualine_x = { { "diagnostics", sources = { "nvim_lsp" } } },
 				lualine_y = { "progress" },
 				lualine_z = { "location" },

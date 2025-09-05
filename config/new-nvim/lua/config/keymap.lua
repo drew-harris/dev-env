@@ -22,6 +22,7 @@ keymap("v", "<leader>y", '"+y', opts)
 
 -- Buffer navigation
 keymap("n", "<leader>p", "<cmd>b#<cr>", opts)
+keymap("n", "<leader>x", "<cmd>bw<cr>", opts)
 
 keymap("n", "<leader>z", "<cmd>nohl<cr>", opts)
 
@@ -46,9 +47,6 @@ keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Easy align
-keymap("n", "ga", "<cmd>:EasyAlign<cr>", opts)
-keymap("v", "ga", "<cmd>:EasyAlign<cr>", opts)
-
 keymap("i", "<C-f>", "@file<C-y>", opts)
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
