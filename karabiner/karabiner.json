@@ -328,7 +328,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -447,7 +447,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -566,7 +566,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -644,18 +644,18 @@
             ]
           },
           {
-            "description": "Hyper Key + i",
+            "description": "Hyper Key + e",
             "manipulators": [
               {
                 "to": [
                   {
-                    "shell_command": "open -a 'Ghostty.app'"
+                    "shell_command": "open -a 'Zed.app'"
                   }
                 ],
-                "description": "Open -a 'Ghostty.app'",
+                "description": "Open -a 'Zed.app'",
                 "type": "basic",
                 "from": {
-                  "key_code": "i",
+                  "key_code": "e",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -685,7 +685,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -804,7 +804,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -923,7 +923,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1042,7 +1042,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1161,7 +1161,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1280,7 +1280,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1399,7 +1399,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1516,7 +1516,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1779,7 +1779,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -1896,7 +1896,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -2053,30 +2053,6 @@
                 "type": "basic",
                 "from": {
                   "key_code": "f",
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "conditions": [
-                  {
-                    "type": "variable_if",
-                    "name": "hyper_sublayer_o",
-                    "value": 1
-                  }
-                ]
-              },
-              {
-                "to": [
-                  {
-                    "shell_command": "open -a 'Ghostty.app'"
-                  }
-                ],
-                "description": "Open -a 'Ghostty.app'",
-                "type": "basic",
-                "from": {
-                  "key_code": "i",
                   "modifiers": {
                     "optional": [
                       "any"
@@ -2375,7 +2351,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -2492,7 +2468,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -2711,7 +2687,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -3114,7 +3090,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
@@ -3424,7 +3400,7 @@
                   },
                   {
                     "type": "variable_if",
-                    "name": "hyper_sublayer_i",
+                    "name": "hyper_sublayer_e",
                     "value": 0
                   },
                   {
