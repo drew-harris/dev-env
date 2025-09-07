@@ -87,12 +87,11 @@ const rules: KarabinerRules[] = [
     q: app("Legcord"),
     c: app("Cursor"),
     // i: app(TERMINAL),
-    e: app("Zed"),
     w: app("Slack"),
     a: app(BROWSER),
     m: app("Messages"),
     x: app("Calendar"),
-    z: app("Zed"),
+    z: app("Zed Preview"),
     v: app("FreeTube"),
 
     // b = "B"rowse
