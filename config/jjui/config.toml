@@ -32,7 +32,7 @@ args = [
   "--",
   "bash",
   "-c",
-  'nvim "$(jj file list "$1")"',
+  'zed "$(jj file list "$1")"',
   "",
   "$file",
 ]
@@ -47,4 +47,3 @@ send = ["$", "$EDITOR $file", "enter"]
 context = ["$file", "$change_id"]
 help = "Edit file in change"
 send = ["$", "jj edit $change_id && $EDITOR $file", "enter"]
-

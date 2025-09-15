@@ -85,8 +85,8 @@ const rules: KarabinerRules[] = [
     ),
 
     q: app("Legcord"),
-    c: app("Cursor"),
-    // i: app(TERMINAL),
+    c: app("Zed Preview"),
+    i: app("Zed Preview"),
     w: app("Slack"),
     a: app(BROWSER),
     m: app("Messages"),
@@ -123,7 +123,7 @@ const rules: KarabinerRules[] = [
       z: app("zoom.us"),
       d: app("Figma"),
       s: app("Spotify"),
-      c: app("Cursor"),
+      c: app("Zed Preview"),
     },
     t: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
 

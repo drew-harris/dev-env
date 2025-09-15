@@ -1,0 +1,12 @@
+#!/bin/bash
+# Save as ~/.local/bin/zed-yazi
+TEMP_FILE="/tmp/zed-yazi-$(date +%s)"
+EDITOR="zed"
+yazi $ZED_FILE --chooser-file="$TEMP_FILE"
+if [ -f "$TEMP_FILE" ]; then
+    CHOSEN_FILE=$(cat "$TEMP_FILE")
+    rm "$TEMP_FILE"
+    if [ -n "$CHOSEN_FILE" ]; then
+        zed "$CHOSEN_FILE"
+    fi
+fi

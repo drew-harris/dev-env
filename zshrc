@@ -5,8 +5,8 @@ export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
 
-path+=($HOME/dev-env/scripts) 
-path+=($HOME/go/bin) 
+path+=($HOME/dev-env/scripts)
+path+=($HOME/go/bin)
 
 plugins=(zsh-autosuggestions zsh-syntax-highlighting tmux zsh-vi-mode)
 
@@ -30,7 +30,7 @@ function zvm_after_init() {
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='nvim'
+  export EDITOR='zed'
 fi
 # Compilation flags
 

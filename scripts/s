@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Function to get the current directory or git repo name
+get_default_session_name() {
+    # Try to get git repo name first
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        # Get the repository name (basename of the git root directory)
+        git_root=$(git rev-parse --show-toplevel)
+        basename "$git_root"
+    else
+        # Fall back to current directory name
+        basename "$PWD"
+    fi
+}
+
+# Get session name from argument or use default
+if [ -n "$1" ]; then
+    session_name="$1"
+else
+    session_name=$(get_default_session_name)
+fi
+
+# Try to attach to existing session
+if zellij attach "$session_name" 2>/dev/null; then
+    # Successfully attached to existing session
+    exit 0
+else
+    # Failed to attach, create new session
+    echo "Session '$session_name' not found. Creating new session..."
+    zellij -s "$session_name"
+fi
