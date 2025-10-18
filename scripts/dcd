@@ -1,0 +1,4 @@
+#!/usr/bin/env nu
+docker compose ls --format=json | from json | par-each {|proj|
+  docker compose -f $proj.ConfigFiles down
+}

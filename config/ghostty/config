@@ -41,7 +41,7 @@ resize-overlay=never
 quick-terminal-animation-duration=0.1
 
 # # Keybinds
-keybind = global:alt+t=toggle_quick_terminal
+# keybind = global:alt+t=toggle_quick_terminal
 # # Tmux-like keybindings with prefix ctrl+b:
 #
 # # Create a new window

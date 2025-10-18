@@ -1,0 +1,18 @@
+#!/bin/bash
+config_file="$HOME/.config/aerospace/aerospace.toml"
+new_value=${1:-20}  # if no arg, default to 20
+
+# find the valid accordion-padding line that isn’t commented out
+padding_line=$(grep '^accordion-padding' "$config_file")
+
+# extract padding value
+padding=$(echo "$padding_line" | grep -o '[0-9]\+')
+
+# if current value isn't 0, switch it to new_value, otherwise set it to 0
+if [[ $padding -eq 0 ]]; then
+  sed -i '' "s/^accordion-padding = 0/accordion-padding = $new_value/" "$config_file"
+else
+  sed -i '' "s/^accordion-padding = $padding/accordion-padding = 0/" "$config_file"
+fi
+
+aerospace reload-config

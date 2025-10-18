@@ -9,8 +9,7 @@ import {
   superPress,
 } from "./utils";
 
-const BROWSER = "Zen";
-const TERMINAL = "Ghostty";
+const BROWSER = "Helium";
 
 const rules: KarabinerRules[] = [
   {
@@ -39,7 +38,7 @@ const rules: KarabinerRules[] = [
       //   type: "basic",
       // },
       {
-        description: "Right_CMd -> Hyper Key",
+        description: "Right_Cmd -> Hyper Key",
         from: {
           key_code: "right_command",
           modifiers: {
@@ -80,19 +79,30 @@ const rules: KarabinerRules[] = [
     ],
   },
   ...createHyperSubLayers({
-    spacebar: open(
-      "raycast://extensions/stellate/mxstbr-commands/create-notion-todo"
-    ),
+    spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 
     q: app("Legcord"),
-    c: app("Zed Preview"),
     i: app("Zed Preview"),
     w: app("Slack"),
     a: app(BROWSER),
-    m: app("Messages"),
+    g: app("Ghostty"),
+    n: app("Notion"),
+    m: open("raycast://extensions/iamyeizi/toggle-menu-bar/toggle"),
     x: app("Calendar"),
     z: app("Zed Preview"),
     v: app("FreeTube"),
+
+    c: {
+      p: {
+        to: [{ key_code: "play_or_pause" }],
+      },
+      n: {
+        to: [{ key_code: "fastforward" }],
+      },
+      b: {
+        to: [{ key_code: "rewind" }],
+      },
+    },
 
     // b = "B"rowse
     b: {
@@ -113,11 +123,9 @@ const rules: KarabinerRules[] = [
       f: app("Finder"),
       // i: app(TERMINAL),
       w: app("Slack"),
-      a: app(BROWSER),
+      a: app("Zen"),
       m: app("Messages"),
-      1: app("1Password"),
-      v: app("FreeTube"),
-      n: app("Notes"),
+      n: app("Notion"),
       r: app("AI"),
       // Open todo list managed via *H*ypersonic
       z: app("zoom.us"),

@@ -48,6 +48,8 @@ alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
 alias j='jjui'
 
+export GH_PAGER=
+
 alias lemur='ssh -t -C lemur "/bin/zsh -il -c \"tmux attach || tmux new-session -A -s home\""'
 
 alias sqlite='/opt/homebrew/opt/sqlite/bin/sqlite3'
@@ -70,6 +72,8 @@ autoload -Uz compinit && compinit
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
 zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
 source <(carapace _carapace)
+
+export HELIX_RUNTIME=/Users/drew/clones/helix/runtime
 
 fwd() {
   if [ "$#" -ne 3 ]; then

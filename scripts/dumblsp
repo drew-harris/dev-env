@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "testing123"
+
+clojure-lsp -p server --verbose

@@ -1,5 +1,5 @@
 [ui.colors]
-"selected" = { bg = "#444444" }
+"selected" = { bg = "#cccccc" }
 
 # [ui.tracer]
 # enabled = true
@@ -23,27 +23,4 @@ log_batching = true
   "$change_id",
   "--no-edit",
 ] }
-
-[custom_commands.edit]
-key = ["E"]
-args = [
-  "util",
-  "exec",
-  "--",
-  "bash",
-  "-c",
-  'zed "$(jj file list "$1")"',
-  "",
-  "$file",
-]
-show = "interactive"
-
-[leader.e]
-context = ["$file", "$change_id"]
-help = "Edit file in @"
-send = ["$", "$EDITOR $file", "enter"]
-
-[leader.E]
-context = ["$file", "$change_id"]
-help = "Edit file in change"
-send = ["$", "jj edit $change_id && $EDITOR $file", "enter"]
+"edit file" = { key = ["e"], args = [ "util", "exec", "open-in-zed", "$file" ] }

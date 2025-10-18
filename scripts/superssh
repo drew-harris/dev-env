@@ -1,0 +1,379 @@
+#!/bin/bash
+
+# --- Configuration ---
+DEFAULT_PORT_FILE="forward_ports.list" # Default file to read ports from
+CLEANUP_RETRIES=3     # Number of cleanup cycles to catch respawning processes
+CLEANUP_WAIT=1        # Seconds to wait between cleanup cycles
+# --- End Configuration ---
+
+# --- Global Variables ---
+declare -a local_ports=() # Array to store the local ports being forwarded
+ssh_destination=""    # Will hold the user@hostname target
+remote_host=""        # Will hold just the hostname/IP for socat
+port_file=""          # Will hold the path to the port file
+
+# --- Functions ---
+
+# Function to display usage instructions
+usage() {
+  echo "Usage: $0 [-f port_file] <user@hostname>"
+  echo "  Connects via SSH for an interactive session, setting up INDIVIDUAL"
+  echo "  background 'socat' processes for each port forward defined in a file."
+  echo "  Uses an aggressive cleanup strategy to ensure all forwarders are terminated."
+  echo "  Requires 'socat' and 'ssh' to be installed locally."
+  echo
+  echo "  Arguments:"
+  echo "    user@hostname : The SSH destination (required for main session)."
+  echo "                    The 'hostname' part is used as the target for socat."
+  echo
+  echo "  Options:"
+  echo "    -f port_file  : Specify the file containing 'local:remote' port pairs."
+  echo "                    (Default: ${DEFAULT_PORT_FILE})"
+  echo
+  echo "  Port File Format:"
+  echo "    Each line should be 'local_port:remote_port'."
+  echo "    Empty lines and lines starting with '#' are ignored."
+  exit 1
+}
+
+# Get the PIDs of processes listening on a given port
+get_pids_for_port() {
+    local port="$1"
+    local pids
+    
+    # Try lsof first (common on macOS, Linux)
+    if command -v lsof &> /dev/null; then
+        # Get PIDs listening on this port (LISTEN state)
+        pids=$(lsof -i :"$port" -s TCP:LISTEN -t 2>/dev/null)
+        if [[ -n "$pids" ]]; then
+            echo "$pids"
+            return
+        fi
+    fi
+    
+    # Fallback to netstat if lsof didn't work or find anything
+    if command -v netstat &> /dev/null; then
+        # Extract PIDs of processes listening on the port (format varies by OS)
+        # Linux format
+        pids=$(netstat -tuln 2>/dev/null | grep ":$port " | grep LISTEN | awk '{print $7}' | cut -d/ -f1)
+        if [[ -z "$pids" ]]; then
+            # Try BSD/macOS format 
+            pids=$(netstat -anv 2>/dev/null | grep "\.${port} " | grep LISTEN | awk '{print $9}')
+        fi
+        if [[ -n "$pids" ]]; then
+            echo "$pids"
+            return
+        fi
+    fi
+    
+    # No PIDs found
+    echo ""
+}
+
+# Get all socat PIDs regardless of what they're doing
+get_all_socat_pids() {
+    # pgrep is most reliable if available
+    if command -v pgrep &> /dev/null; then
+        pgrep socat 2>/dev/null || echo ""
+        return
+    fi
+    
+    # Fallback to ps | grep
+    if command -v ps &> /dev/null; then
+        ps aux | grep "[s]ocat" | awk '{print $2}' || echo ""
+        return
+    fi
+    
+    # No PIDs found
+    echo ""
+}
+
+# Very aggressive cleanup function
+cleanup() {
+  echo # Newline for cleaner output
+  echo "--- Beginning AGGRESSIVE port forwarder cleanup ---"
+  
+  # Multiple cleanup cycles to catch respawning processes
+  for (( cycle=1; cycle<=CLEANUP_RETRIES; cycle++ )); do
+    echo "Cleanup Cycle $cycle/$CLEANUP_RETRIES"
+    
+    # 1. Kill processes listening on specific ports
+    if [[ ${#local_ports[@]} -gt 0 ]]; then
+      echo "Step 1: Killing processes by port..."
+      for port in "${local_ports[@]}"; do
+        echo "  Processing port: $port"
+        
+        # Get PIDs listening on this port
+        local pids
+        pids=$(get_pids_for_port "$port")
+        
+        if [[ -z "$pids" ]]; then
+          echo "    No processes found listening on port $port."
+          continue
+        fi
+        
+        # Convert the output to an array (split on newlines)
+        local pid_array=()
+        while IFS= read -r pid; do
+          # Only add non-empty PIDs
+          if [[ -n "$pid" ]]; then
+            pid_array+=("$pid")
+          fi
+        done <<< "$pids"
+        
+        if [[ ${#pid_array[@]} -eq 0 ]]; then
+          echo "    No processes found listening on port $port."
+          continue
+        fi
+        
+        echo "    Found process(es) on port $port: ${pid_array[*]}"
+        echo "    Sending TERM signal..."
+        
+        # Try graceful termination first
+        kill "${pid_array[@]}" 2>/dev/null
+        
+        # Brief wait
+        sleep 0.5
+        
+        # Force kill any that remain
+        for pid in "${pid_array[@]}"; do
+          if kill -0 "$pid" 2>/dev/null; then
+            echo "    Sending KILL signal to stubborn process $pid"
+            kill -9 "$pid" 2>/dev/null
+          fi
+        done
+      done
+    else
+      echo "Step 1: No specific ports to clean up."
+    fi
+    
+    # 2. Kill ALL socat processes regardless of what they're doing
+    echo "Step 2: Killing ALL socat processes system-wide..."
+    local all_socat_pids
+    all_socat_pids=$(get_all_socat_pids)
+    
+    if [[ -z "$all_socat_pids" ]]; then
+      echo "  No socat processes found."
+    else
+      # Convert to array
+      local socat_pid_array=()
+      while IFS= read -r pid; do
+        if [[ -n "$pid" ]]; then
+          socat_pid_array+=("$pid")
+        fi
+      done <<< "$all_socat_pids"
+      
+      if [[ ${#socat_pid_array[@]} -gt 0 ]]; then
+        echo "  Found socat processes: ${socat_pid_array[*]}"
+        echo "  Sending TERM signal..."
+        
+        # Try graceful termination first
+        kill "${socat_pid_array[@]}" 2>/dev/null
+        
+        # Brief wait
+        sleep 0.5
+        
+        # Force kill any that remain
+        for pid in "${socat_pid_array[@]}"; do
+          if kill -0 "$pid" 2>/dev/null; then
+            echo "  Sending KILL signal to stubborn socat process $pid"
+            kill -9 "$pid" 2>/dev/null
+          fi
+        done
+      fi
+    fi
+    
+    # 3. Verify all target ports are free
+    echo "Step 3: Verifying ports are free..."
+    local ports_still_in_use=0
+    
+    for port in "${local_ports[@]}"; do
+      if pids=$(get_pids_for_port "$port"); then
+        if [[ -n "$pids" ]]; then
+          echo "  WARNING: Port $port still in use by process(es): $pids"
+          ports_still_in_use=$((ports_still_in_use + 1))
+        else
+          echo "  Port $port is free."
+        fi
+      fi
+    done
+    
+    # 4. Verify no socat processes remain
+    echo "Step 4: Verifying no socat processes remain..."
+    if remaining_pids=$(get_all_socat_pids); then
+      if [[ -n "$remaining_pids" ]]; then
+        echo "  WARNING: Socat processes still running: $remaining_pids"
+        echo "  Forcefully terminating them..."
+        kill -9 $remaining_pids 2>/dev/null
+      else
+        echo "  No socat processes detected."
+      fi
+    fi
+    
+    # If all ports are free and no socat processes remain, we can exit early
+    if [[ $ports_still_in_use -eq 0 ]] && [[ -z "$(get_all_socat_pids)" ]]; then
+      echo "All ports freed and no socat processes remain. Cleanup successful."
+      break
+    fi
+    
+    # If this isn't the last cycle, wait before retrying
+    if [[ $cycle -lt $CLEANUP_RETRIES ]]; then
+      echo "Waiting ${CLEANUP_WAIT}s before next cleanup cycle..."
+      sleep "$CLEANUP_WAIT"
+    fi
+  done
+  
+  # Final verification
+  if [[ -n "$(get_all_socat_pids)" ]]; then
+    echo "WARNING: Some socat processes could not be terminated after $CLEANUP_RETRIES attempts."
+  elif [[ ${#local_ports[@]} -gt 0 ]]; then
+    local any_ports_in_use=false
+    for port in "${local_ports[@]}"; do
+      if [[ -n "$(get_pids_for_port "$port")" ]]; then
+        any_ports_in_use=true
+        break
+      fi
+    done
+    
+    if [[ "$any_ports_in_use" = true ]]; then
+      echo "WARNING: Some ports could not be freed after $CLEANUP_RETRIES attempts."
+    else
+      echo "All target ports successfully freed."
+    fi
+  fi
+  
+  echo "Cleanup complete."
+  
+  # Final wait before exiting script to catch any last-second respawns
+  echo "Pausing briefly to ensure no processes respawn..."
+  sleep 1.5
+  
+  # One last kill sweep for any socat processes that appeared during the wait
+  if remaining_pids=$(get_all_socat_pids); then
+    if [[ -n "$remaining_pids" ]]; then
+      echo "Found respawned socat processes! Killing: $remaining_pids"
+      kill -9 $remaining_pids 2>/dev/null
+    fi
+  fi
+}
+
+# --- Check Dependencies ---
+if ! command -v socat &> /dev/null; then
+    echo "Error: 'socat' command not found. Please install socat."
+    exit 1
+fi
+if ! command -v ssh &> /dev/null; then
+    echo "Error: 'ssh' command not found. Please install an SSH client."
+    exit 1
+fi
+if ! command -v lsof &> /dev/null && ! command -v netstat &> /dev/null; then
+    echo "Warning: Neither 'lsof' nor 'netstat' found. Port cleanup may be unreliable."
+fi
+
+# --- Argument Parsing ---
+port_file="${DEFAULT_PORT_FILE}"
+
+while getopts ":f:" opt; do
+  case ${opt} in
+    f )
+      port_file=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: -$OPTARG" 1>&2
+      usage
+      ;;
+    : )
+      echo "Invalid option: -$OPTARG requires an argument" 1>&2
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND -1)) # Remove parsed options
+
+if [[ $# -ne 1 ]]; then
+  echo "Error: SSH destination (user@hostname) is required."
+  usage
+fi
+ssh_destination=$1
+
+# Extract hostname for socat target
+if [[ "$ssh_destination" == *"@"* ]]; then
+    remote_host="${ssh_destination##*@}"
+else
+    remote_host="$ssh_destination"
+fi
+echo "Using SSH destination: $ssh_destination"
+echo "Using socat target host: $remote_host"
+
+
+# --- Validate Port File ---
+if [[ ! -f "$port_file" ]]; then
+  echo "Error: Port file not found: $port_file"
+  exit 1
+fi
+if [[ ! -r "$port_file" ]]; then
+  echo "Error: Cannot read port file: $port_file"
+  exit 1
+fi
+
+# --- Setup Trap ---
+trap cleanup INT TERM EXIT
+
+# --- Start Background Forwarders ---
+echo "Reading port forwards from: $port_file"
+echo "Starting background socat forwarders..."
+
+while IFS= read -r line || [[ -n "$line" ]]; do
+  # Trim whitespace
+  line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+  # Skip empty lines and comments
+  if [[ -z "$line" || "$line" == \#* ]]; then
+    continue
+  fi
+
+  # Validate format
+  if [[ ! "$line" =~ ^[0-9]+:[0-9]+$ ]]; then
+    echo "Warning: Skipping invalid line in $port_file: '$line'. Expected format: local_port:remote_port"
+    continue
+  fi
+
+  # Extract ports
+  local_port="${line%%:*}"
+  remote_port="${line##*:}"
+
+  # Basic port number validation
+  if ! (( local_port > 0 && local_port < 65536 && remote_port > 0 && remote_port < 65536 )); then
+     echo "Warning: Skipping invalid port number in line: '$line'. Ports must be between 1 and 65535."
+     continue
+  fi
+
+  # Store the local port for cleanup
+  local_ports+=("$local_port")
+
+  # Launch socat in the background
+  echo "  Starting forward: local $local_port -> $remote_host:$remote_port..."
+  socat TCP-LISTEN:"${local_port}",fork,reuseaddr TCP:"${remote_host}":"${remote_port}" &
+  sleep 0.2 # Small delay to let socat establish itself
+done < "$port_file"
+
+# --- Start Main Interactive Session ---
+if [[ ${#local_ports[@]} -eq 0 ]]; then
+  echo "Warning: No valid port forwards were started via socat."
+fi
+
+echo "---"
+echo "Background socat forwarders are running."
+echo "Starting main interactive SSH session to $ssh_destination..."
+echo "(Closing this session or pressing Ctrl+C will terminate background forwarders)"
+echo "---"
+
+# Start the main interactive SSH session
+ssh "$ssh_destination"
+
+# --- Script End ---
+# The 'trap cleanup EXIT' will automatically run here.
+echo "Main SSH session ended."
+
+exit 0
+

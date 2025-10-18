@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Check if a repository URL is provided
+if [ $# -eq 0 ]; then
+    echo "Please provide a git repository URL as an argument."
+    exit 1
+fi
+
+# Extract the repository URL from the first argument
+repo_url=$1
+
+# Extract the repository name from the URL
+repo_name=$(basename -s .git "$repo_url")
+
+# Set the clone directory
+clone_dir="$HOME/clones/$repo_name"
+
+# Clone the repository
+git clone "$repo_url" "$clone_dir"
+
+# Check if the clone was successful
+if [ $? -ne 0 ]; then
+    echo "Failed to clone the repository."
+    exit 1
+fi
+
+echo "Repository cloned to $clone_dir"
+
+# Check if we're in a tmux session
+if [ -z "$TMUX" ]; then
+    echo "This script is designed to be run from within a tmux session."
+    exit 1
+fi
+
+# Create a new tmux session without attaching to it
+tmux new-session -d -s "$repo_name" -c "$clone_dir"
+
+# Switch to the new session
+tmux switch-client -t "$repo_name"
+
+echo "Switched to new tmux session '$repo_name'"

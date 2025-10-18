@@ -1,0 +1,18 @@
+#!/bin/bash
+config_file="$HOME/.config/aerospace/aerospace.toml"
+big_number=${1:-250}  # Use the first argument, default to 200 if not provided
+
+# Find the outer.bottom line with monitor.secondary
+bottom_line=$(grep '^outer.bottom.*monitor.secondary' "$config_file")
+
+# Extract the current value
+current_value=$(echo "$bottom_line" | grep -o 'secondary = [0-9]\+' | awk '{print $3}')
+
+# Toggle between the big number and 20
+if [[ $current_value -eq $big_number ]]; then
+    sed -i '' "s/^outer.bottom.*monitor.secondary = $big_number.*/outer.bottom =    [{monitor.secondary = 20 }, 10]/" "$config_file"
+else
+    sed -i '' "s/^outer.bottom.*monitor.secondary = 20.*/outer.bottom =    [{monitor.secondary = $big_number }, 10]/" "$config_file"
+fi
+
+aerospace reload-config

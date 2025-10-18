@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "$1" = "files" ]; then
+    files=$(tv files); [ -n \"$files\" ] && zed $files || echo 'No files selected'
+fi
+
+if [ "$1" = "changed" ]; then
+    jj diff --name-only --from main | tv | xargs -r zed
+fi

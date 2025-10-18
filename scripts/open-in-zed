@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Take the first argument
+input="$1"
+
+# Remove 'file:' prefix and quotes
+filepath="${input#file:\"}"
+filepath="${filepath%\"}"
+
+# Open in zed
+zed "$filepath"

@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Usage: ./sync-remote.sh [ssh_host]
+# If ssh_host is not provided, it will read it from host.txt
+
+# Determine SSH host
+if [ $# -eq 0 ]; then
+  if [ -f "host.txt" ]; then
+    SSH_HOST=$(head -n 1 host.txt)
+    SSH_HOST=$(echo "$SSH_HOST" | tr -d '\r') # Remove potential carriage return
+    if [ -z "$SSH_HOST" ]; then
+      echo "host.txt is empty.  Please provide an SSH host as an argument or populate host.txt."
+      exit 1
+    fi
+    echo "Using SSH host from host.txt: $SSH_HOST"
+  else
+    echo "No SSH host provided and host.txt not found.  Please provide an SSH host as an argument or create a host.txt file."
+    exit 1
+  fi
+elif [ $# -eq 1 ]; then
+  SSH_HOST="$1"
+else
+  echo "Usage: $0 [ssh_host]"
+  exit 1
+fi
+
+# Find the git root directory or use the current directory
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$GIT_ROOT" ]; then
+  SOURCE_DIR="$(pwd)"
+  echo "No git repository found. Using current directory: $SOURCE_DIR"
+else
+  SOURCE_DIR="$GIT_ROOT"
+  echo "Using git root directory: $SOURCE_DIR"
+fi
+
+# Get the project name from the directory name
+PROJECT_NAME=$(basename "$SOURCE_DIR")
+
+# Determine the remote home directory
+REMOTE_HOME=$(ssh "$SSH_HOST" pwd)
+
+# Destination path on the server
+DEST_PATH="$REMOTE_HOME/$PROJECT_NAME"
+
+# Create the rsync filter to respect .gitignore
+FILTER_FILE=$(mktemp)
+if [ -f "$SOURCE_DIR/.gitignore" ]; then
+  echo "Using .gitignore for filtering"
+  grep -v "^#" "$SOURCE_DIR/.gitignore" | grep -v "^\s*$" | sed 's/^/- /' >> "$FILTER_FILE"
+else
+  echo "No .gitignore found"
+fi
+
+# Create the destination directory if it doesn't exist
+ssh "$SSH_HOST" "mkdir -p \"$DEST_PATH\""
+
+# Run rsync with the following options:
+# -a: archive mode (preserves permissions, timestamps, etc.)
+# -v: verbose
+# -z: compress data during transfer
+# -F: use per-directory filter files
+# --filter=. "$FILTER_FILE": use our generated filter file
+# --update: skip files that are newer on the receiver
+echo "Syncing $SOURCE_DIR to $SSH_HOST:$DEST_PATH"
+
+rsync -avz \
+  --filter=". $FILTER_FILE" \
+  --exclude=".git/" \
+  --update \
+  "$SOURCE_DIR/" \
+  "$SSH_HOST:$DEST_PATH/"
+
+# Clean up the temporary filter file
+rm "$FILTER_FILE"
+
+echo "Sync completed!"
+

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Usage: ./run [ssh_host] command args...
+# If ssh_host is not provided, it will read it from host.txt
+
+# Determine SSH host and command
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 [ssh_host] command args..."
+  exit 1
+fi
+
+# Use cached SSH host if available
+if [ -f "host.txt" ] && [ -s "host.txt" ]; then
+  SSH_HOST=$(head -n 1 host.txt | tr -d '\r')
+  # Use all arguments as the command
+  COMMAND="$*"
+else
+  # First argument is the SSH host, rest is the command
+  SSH_HOST="$1"
+  shift
+  COMMAND="$*"
+fi
+
+# If no command was provided
+if [ -z "$COMMAND" ]; then
+  echo "No command provided. Usage: $0 [ssh_host] command args..."
+  exit 1
+fi
+
+# Find the git root directory or use the current directory
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
+SOURCE_DIR=${GIT_ROOT:-$(pwd)}
+PROJECT_NAME=$(basename "$SOURCE_DIR")
+
+# Generate a unique key for this specific project/host combination
+# This ensures each project has its own cached path
+CACHE_KEY="REMOTE_PATH_${SSH_HOST}_${PROJECT_NAME}"
+CACHE_KEY=$(echo "$CACHE_KEY" | tr '.-/' '_')  # Make the key shell-safe
+
+# Use cached project path if available in environment for THIS project
+if [ -n "${!CACHE_KEY}" ]; then
+  DEST_PATH="${!CACHE_KEY}"
+else
+  # Determine the remote home directory for this specific project
+  REMOTE_HOME=$(ssh -o ControlMaster=auto -o ControlPath=~/.ssh/control-%r@%h:%p -o ControlPersist=10m "$SSH_HOST" "bash -l -c 'pwd'")
+  DEST_PATH="$REMOTE_HOME/$PROJECT_NAME"
+  
+  # Export the path to the environment for future use in THIS session only
+  eval "export $CACHE_KEY=\"$DEST_PATH\""
+  
+  # We're not adding to .bashrc/.zshrc anymore to avoid cross-project contamination
+fi
+
+# Execute the command through the login shell to access aliases and user commands
+ssh -o ControlMaster=auto -o ControlPath=~/.ssh/control-%r@%h:%p -o ControlPersist=10m "$SSH_HOST" "bash -l -c 'cd \"$DEST_PATH\" 2>/dev/null && $COMMAND'"
+

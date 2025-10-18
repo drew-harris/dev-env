@@ -1,0 +1,202 @@
+#!/bin/bash
+
+# Function to find git root directory
+find_git_root() {
+    local current_dir="$PWD"
+    while [[ "$current_dir" != "/" ]]; do
+        if [[ -d "$current_dir/.git" ]]; then
+            echo "$current_dir"
+            return 0
+        fi
+        current_dir="$(dirname "$current_dir")"
+    done
+    return 1
+}
+
+# Function to find nearest pad.nu file up to git root
+find_pad_file() {
+    local current_dir="$PWD"
+    local git_root="$1"
+
+    while [[ "$current_dir" != "/" && "$current_dir" != "$git_root" ]]; do
+        if [[ -f "$current_dir/pad.nu" ]]; then
+            echo "$current_dir/pad.nu"
+            return 0
+        fi
+        current_dir="$(dirname "$current_dir")"
+    done
+
+    # Check git root as last resort
+    if [[ -f "$git_root/pad.nu" ]]; then
+        echo "$git_root/pad.nu"
+        return 0
+    fi
+
+    return 1
+}
+
+# Find git root and pad file
+if ! GIT_ROOT="$(find_git_root)"; then
+    echo "Not in a git repository"
+    # If not in git repo, just look for pad.nu in current directory
+    PAD_FILE="pad.nu"
+else
+    # Search for pad.nu file up to git root
+    if ! PAD_FILE="$(find_pad_file "$GIT_ROOT")"; then
+        # If no pad.nu found, default to git root
+        PAD_FILE="$GIT_ROOT/pad.nu"
+    fi
+fi
+
+EDITOR="${EDITOR:-nvim}"
+LAST_RUN_FILE="/tmp/nu_script_last.txt"
+
+# Handle path argument if provided
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -p|--path)
+            if [[ -f "$2" ]]; then
+                PAD_FILE="$2"
+            else
+                echo "Error: File '$2' does not exist"
+                exit 1
+            fi
+            shift 2
+            ;;
+        -r|--repeat)
+            if [[ ! -f "$LAST_RUN_FILE" ]]; then
+                echo "No previous run found"
+                exit 1
+            fi
+            # Read the last run details
+            source "$LAST_RUN_FILE"
+            if [[ -z "$LAST_BLOCK" || -z "$LAST_KEY" ]]; then
+                echo "Invalid last run data"
+                exit 1
+            fi
+            SELECTED_BLOCK="$LAST_BLOCK"
+            KEY="$LAST_KEY"
+            # Skip to execution
+            goto_execution=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [-p|--path <path/to/pad.nu>] [-r|--repeat]"
+            exit 1
+            ;;
+    esac
+done
+
+read -r -d '' FRONTMATTER <<'EOF'
+def "from env" []: string -> record {
+lines
+| split column '#' # remove comments
+| get column1
+| parse "{key}={value}"
+| str trim value -c '"' # unquote values
+| transpose -r -d
+}
+source $nu.config-path
+source $nu.env-path
+if ($"($env.PWD)/.env" | path exists) { open .env | load-env }
+EOF
+
+# Extract the frontmatter from pad.nu (everything before "###")
+PAD_FRONTMATTER=$(awk '/^###/ {exit} {print}' "$PAD_FILE" | sed '/^$/d')
+
+# Combine frontmatter from file and predefined frontmatter
+COMBINED_FRONTMATTER=$(printf "%s\n%s\n" "$FRONTMATTER" "$PAD_FRONTMATTER")
+
+
+if [[ "$goto_execution" != "true" ]]; then
+    # Extract block names marked with #@ <name>
+    BLOCK_NAMES=$(grep -E '^#@ ' "$PAD_FILE" | sed 's/#@ //')
+
+    # Select a block using fzf with keybindings
+    SELECTED_OUTPUT=$(echo "$BLOCK_NAMES" | fzf \
+        --header ' <cr>: window, <c-p> pane (unfocused), <c-f> pane (focused), <c-s> shell, <c-e> edit, or type command to run' \
+        --prompt="Select block or enter command: " \
+        --expect=ctrl-p,ctrl-s,ctrl-e,ctrl-f \
+        --bind='ctrl-p:accept' \
+        --bind='ctrl-s:accept' \
+        --bind='ctrl-e:accept' \
+        --bind='ctrl-f:accept' \
+        --reverse \
+        --print-query)
+
+    # Split the output into query, key press, and selection
+    # First line is the query, second line is the key, third line is the selection
+    QUERY=$(echo "$SELECTED_OUTPUT" | sed -n '1p')
+    KEY=$(echo "$SELECTED_OUTPUT" | sed -n '2p')
+    SELECTED_BLOCK=$(echo "$SELECTED_OUTPUT" | sed -n '3p')
+
+    if [[ -z "$SELECTED_BLOCK" ]]; then
+        # No block selected, but query might be present
+        if [[ -n "$QUERY" ]]; then
+            echo "Running command: $QUERY"
+
+            # Execute the query and add the "Press Enter to close" prompt
+            eval "$QUERY"
+            echo -e "\nPress Enter to close"
+            read -r
+            exit 0
+        else
+            echo "No block selected or command entered."
+            exit 1
+        fi
+    fi
+
+    # Save the selection for future repeat
+    echo "LAST_BLOCK='$SELECTED_BLOCK'" > "$LAST_RUN_FILE"
+    echo "LAST_KEY='$KEY'" >> "$LAST_RUN_FILE"
+fi
+
+# Extract the content of the selected block
+BLOCK_CONTENT=$(awk -v block="#@ $SELECTED_BLOCK" '
+$0 == block {
+    flag = 1
+    next
+}
+/^$/ {
+    if (flag) flag = 0
+}
+flag {
+    print
+}
+' "$PAD_FILE")
+
+if [[ -z "$BLOCK_CONTENT" ]]; then
+    echo "No content found for block: $SELECTED_BLOCK"
+    exit 1
+fi
+
+# Check if the last non-empty line is exactly 'exit'
+if echo "$BLOCK_CONTENT" | awk '/^[[:space:]]*$/ {next} {last=$0} END{if(last=="exit") exit 0; exit 1}'; then
+    QUICK_EXIT=true
+else
+    QUICK_EXIT=false
+fi
+
+# Combine frontmatter with block content
+FINAL_CONTENT=$(printf "%s\n\n%s\n" "$COMBINED_FRONTMATTER" "$BLOCK_CONTENT")
+
+# Create a temporary file for the combined script
+TEMP_FILE="/tmp/nu_script.nu"
+echo "$FINAL_CONTENT" > "$TEMP_FILE"
+
+if [[ ! -f "$TEMP_FILE" ]]; then
+    echo "Error: Temporary file creation failed."
+    exit 1
+fi
+
+# Prepare the command to run
+if [ "$QUICK_EXIT" = true ]; then
+    CMD="nu $TEMP_FILE"
+else
+    CMD="nu $TEMP_FILE; echo \"Press Enter to close\"; read -r"
+fi
+
+eval "$CMD"
+
+tmux refresh-client -S
