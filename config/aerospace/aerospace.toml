@@ -19,7 +19,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 0
+accordion-padding = 20
 # Possible values: tiles|accordion
 default-root-container-layout = "accordion"
 # Possible values: horizontal|vertical|auto
@@ -56,12 +56,12 @@ preset = "qwerty"
 3 = "secondary"  # Main monitor
 
 [gaps]
-inner.horizontal = [{ monitor.secondary = 10 }, 0]
-inner.vertical = [{ monitor.secondary = 10 }, 0]
-outer.left = [{ monitor.secondary = 10 }, 0]
-outer.bottom = [{ monitor.secondary = 10 }, 0]
-outer.top = [{ monitor.secondary = 10 }, 0]
-outer.right = [{ monitor.secondary = 10 }, 0]
+inner.horizontal = [10]
+inner.vertical = [10]
+outer.left = [10]
+outer.bottom = [10]
+outer.top = [10]
+outer.right = [10]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

@@ -8,6 +8,18 @@ language-servers = [ { name = "typescript-language-server", except-features = [ 
 formatter = {command = "prettierd", args = ["%{buffer_name}"]}
 auto-format = true
 
+[[language]]
+name = "tsx"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+formatter = {command = "prettierd", args = ["%{buffer_name}"]}
+auto-format = true
+
+[[language]]
+name = "javascript"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+formatter = {command = "prettierd", args = ["%{buffer_name}"]}
+auto-format = true
+
 # [language-server]
 # tailwind = { command = "tailwindcss-language-server", args = ["--stdio"], required-root-patterns = ["tailwind.config.js"]}
 # ty = { command = "ty", args = ["server"]}
