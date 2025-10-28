@@ -1,0 +1,19 @@
+#!/bin/bash
+# Track selections to ~/.file_frecency
+selected=$(
+  { jj diff --name-only --from main | awk '{print $0 " *"}'; 
+    [ -f ~/.file_frecency ] && sort -rn -k2 ~/.file_frecency | cut -f1;
+    fd --type f; 
+  } | awk '!seen[$1]++' | fzf --reverse --tiebreak=index
+)
+
+# Update frecency score
+if [ -n "$selected" ]; then
+  file=$(echo "$selected" | sed 's/ \*$//')
+  awk -v f="$file" -v t="$(date +%s)" '
+    $1 == f { print $1, $2+1, t; found=1; next }
+    { print }
+    END { if (!found) print f, 1, t }
+  ' ~/.file_frecency > ~/.file_frecency.tmp && mv ~/.file_frecency.tmp ~/.file_frecency
+  echo "$file"
+fi

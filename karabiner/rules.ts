@@ -82,7 +82,7 @@ const rules: KarabinerRules[] = [
     spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 
     q: app("Legcord"),
-    i: app("Ghostty"),
+    i: app("Zed Preview"),
     w: app("Slack"),
     a: app(BROWSER),
     g: app("Ghostty"),

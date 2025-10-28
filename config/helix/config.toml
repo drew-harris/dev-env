@@ -24,8 +24,15 @@ render = true
   ":open %sh{cat /tmp/unique-file}",
   ":redraw",
 ]
-space = { g = { r = [":reset-diff-change"] }, r = ":reload-all", l = { r = "rename_symbol", a = "code_action" }, a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" } }
+space = { s = { f = [
+  ":sh rm -f /tmp/unique-file",
+  ":insert-output sh -c 'zask find_files > /tmp/unique-file 2>&1' > /dev/null",
+  ':insert-output echo "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ":open %sh{cat /tmp/unique-file}",
+  ":redraw",
+] }, g = { r = [":reset-diff-change"] }, r = ":reload-all", l = { r = "rename_symbol", a = "code_action" }, a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" } }
 esc = ["collapse_selection", "keep_primary_selection"]
+
 # Search for word under cursor
 "*" = [
   "move_char_right",
