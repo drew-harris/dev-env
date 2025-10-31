@@ -96,7 +96,9 @@ toggle_state() {
             bluetoothctl unblock "$device" && bluetoothctl connect "$device"
         fi
     elif [[ $device_connected ]]; then
-        bluetoothctl disconnect "$device" && bluetoothctl block "$device"
+        bluetoothctl disconnect "$device"
+        sleep 0.5
+        bluetoothctl block "$device"
     elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
         bluetoothctl connect "$device" || bluetoothctl block "$device" # Try connect, if fails, block
     elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked

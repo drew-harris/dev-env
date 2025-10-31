@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Check if both arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <app_id> <program_name>"
+    exit 1
+fi
+
+# Assign arguments to variables
+APP_ID="$1"
+PROGRAM_NAME="$2"
+
+# Get the list of windows in JSON format
+WINDOWS=$(niri msg --json windows)
+
+# Use jq to find the first window with the specified app_id
+# while EXCLUDING windows with the title "Picture-in-Picture"
+WINDOW_ID=$(echo "$WINDOWS" | jq -r --arg app_id "$APP_ID" \
+    '.[] | select(.app_id == $app_id and .title != "Picture-in-Picture") | .id' | head -n 1)
+
+if [ -n "$WINDOW_ID" ]; then
+    # Window found, focus it
+    echo "Window with app_id $APP_ID (excluding Picture-in-Picture) found with ID $WINDOW_ID. Focusing..."
+    niri msg action focus-window --id "$WINDOW_ID"
+else
+    # Window not found
+    echo "Window with app_id $APP_ID (excluding Picture-in-Picture) not found. Launching $PROGRAM_NAME..."
+    $PROGRAM_NAME &
+fi

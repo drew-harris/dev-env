@@ -55,7 +55,7 @@ button {
 #custom-uptime,
 #custom-airpods,
 #custom-docker {
-  background-color: #101010;
+  background-color: #242424;
   padding: 0.4rem 0.8rem;
   margin: 5px 0;
 }
@@ -78,7 +78,7 @@ button {
 }
 
 #clock {
-  color: #8caaee;
+  color: #76CCE0;
   border-radius: 5px;
 }
 

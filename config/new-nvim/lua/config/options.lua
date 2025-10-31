@@ -18,7 +18,7 @@ vim.opt.wrap = true
 vim.opt.list = false
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 5
 vim.opt.winborder = "solid"
 vim.opt.expandtab = true
 vim.opt.tabstop = 2

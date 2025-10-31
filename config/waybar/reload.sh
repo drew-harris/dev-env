@@ -15,7 +15,7 @@ fi
 
 echo "Monitoring Waybar config and style files for changes..."
 
-inotifywait -m "$CONFIG_FILE" "$STYLE_FILE" -e modify |
+inotifywait -m -e modify "$CONFIG_FILE" "$STYLE_FILE" |
 while read -r path _; do
   echo "Change detected in $path. Reloading Waybar..."
   pkill -x waybar

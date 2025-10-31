@@ -1,5 +1,0 @@
-inherits = "sonokai"
-# inherits = "base16_default_dark"
-
-"ui.background" = { fg = "foreground" }
-"ui.comment.line" = { fg = "foreground", modifiers = ["italic"] }

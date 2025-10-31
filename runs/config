@@ -43,4 +43,9 @@ ln -sfn $HOME/dev-env/config/new-nvim/ $HOME/.config/nvim
 ln -sfn $HOME/dev-env/config/nvim/ $HOME/.config/old-nvim
 ln -sfn $HOME/dev-env/config/opencode/ $HOME/.config/opencode
 ln -sfn $HOME/dev-env/config/helix/ $HOME/.config/helix
+ln -sfn $HOME/dev-env/config/niri/ $HOME/.config
+ln -sfn $HOME/dev-env/config/mako/ $HOME/.config/mako
+ln -sfn $HOME/dev-env/config/fuzzel/ $HOME/.config/fuzzel
+ln -sfn $HOME/dev-env/config/quickshell/ $HOME/.config/quickshell
+
 ln -sfn $HOME/dev-env/config/zellij/ $HOME/.config/zellij

@@ -47,6 +47,7 @@ alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
 alias j='jjui'
+alias hx='helix'
 
 export GH_PAGER=
 
