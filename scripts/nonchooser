@@ -1,0 +1,4 @@
+#!/bin/bash
+# Save as ~/.local/bin/zed-yazi
+EDITOR="zed"
+yazi $ZED_FILE

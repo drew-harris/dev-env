@@ -82,13 +82,14 @@ const rules: KarabinerRules[] = [
     spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 
     q: app("Legcord"),
-    i: app("Zed Preview"),
+    i: app("Zed Previ"),
     w: app("Slack"),
     a: app(BROWSER),
     g: app("Ghostty"),
     n: app("Notion"),
     m: open("raycast://extensions/iamyeizi/toggle-menu-bar/toggle"),
     x: app("Calendar"),
+    s: app("Spotify"),
     z: app("Zed Preview"),
     v: app("FreeTube"),
 
@@ -127,24 +128,12 @@ const rules: KarabinerRules[] = [
       m: app("Messages"),
       n: app("Notion"),
       r: app("AI"),
-      // Open todo list managed via *H*ypersonic
       z: app("zoom.us"),
       d: app("Figma"),
       s: app("Spotify"),
       c: app("Zed Preview"),
     },
     t: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
-
-    // spotify
-    s: {
-      l: superPress("l"),
-      c: open(
-        "https://open.spotify.com/album/1GG6U2SSJPHO6XsFiBzxYv?si=sAfC6AtNRFO8cavhPXTYBA"
-      ),
-      f: open("raycast://extensions/mattisssa/spotify-player/search"),
-      n: open("raycast://extensions/mattisssa/spotify-player/nowPlaying"),
-    },
-
     // d = "device"
     d: {
       u: {

@@ -9,8 +9,6 @@ if [ "$1" = "changed" ]; then
 fi
 
 if [ "$1" = "smartold" ]; then
-    # { jj diff --name-only --from main; fd --type f; } | awk '!seen[$0]++' | fzf --reverse --tiebreak=index | xargs -r zed
-    # { jj diff --name-only --from main; fd --type f; } | awk '!seen[$0]++' | fzf --reverse --tiebreak=index --preview 'bat --color=always --style=numbers --line-range=:500 {}' | xargs -r zed
     { jj diff --name-only --from main | awk '{print "\033[33m" $0 "\033[0m"}'; fd --type f; } | awk '{s=$0; gsub(/\033\[[0-9;]*m/, "", s); if (!seen[s]++) print}' | fzf --reverse --tiebreak=index --ansi --preview 'bat --color=always --style=numbers --line-range=:500 {}' | sed 's/\x1b\[[0-9;]*m//g' | xargs -r zed
 
 fi
