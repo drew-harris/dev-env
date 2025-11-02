@@ -1,0 +1,53 @@
+[language-server.discord-rpc]
+command = "discord-rpc-lsp"  # full path if needed
+
+
+[[language]]
+name = "typescript"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+formatter = {command = "prettierd", args = ["%{buffer_name}"]}
+auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+formatter = {command = "prettierd", args = ["%{buffer_name}"]}
+auto-format = true
+
+[[language]]
+name = "javascript"
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+formatter = {command = "prettierd", args = ["%{buffer_name}"]}
+auto-format = true
+
+# [language-server]
+# tailwind = { command = "tailwindcss-language-server", args = ["--stdio"], required-root-patterns = ["tailwind.config.js"]}
+# ty = { command = "ty", args = ["server"]}
+
+# [[language]]
+# name = "javascript"
+# language-servers = [ { name = "efm-lsp-prettier", only-features = [ "format" ] }, "typescript-language-server" ]
+# auto-format = true
+
+# # [[language]]
+# name = "typescript"
+# formatter = { command = 'prettier' }
+# language-servers = [ { name = "efm-lsp-prettier", only-features = [ "format" ] }, "typescript-language-server" ]
+# auto-format = true
+
+# # [[language]]
+# name = "tsx"
+# auto-format = true
+# language-servers = [ { name = "efm-lsp-prettier", only-features = [ "format" ] }, "typescript-language-server" ]
+
+# # [[language]]
+# name = "jsx"
+# auto-format = true
+# language-servers = [ { name = "efm-lsp-prettier", only-features = [ "format" ] }, "typescript-language-server" ]
+
+# [[language]]
+# name = "json"
+
+# [[language]]
+# name = "python"
+# language-servers = [ "ty"]
