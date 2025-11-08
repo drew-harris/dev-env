@@ -1,0 +1,10 @@
+#!/usr/bin/env nu
+
+let ns = cat $env.ZED_FILE | lines | first | str replace '(ns ' ''
+print $ns
+
+if ($env.PWD == "/Users/drew/programs/instant") {
+    cd /Users/drew/programs/instant/server
+}
+
+rep -n $ns $env.ZED_SELECTED_TEXT

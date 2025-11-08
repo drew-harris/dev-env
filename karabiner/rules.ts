@@ -82,9 +82,10 @@ const rules: KarabinerRules[] = [
     spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 
     q: app("Legcord"),
-    i: app("Zed Previ"),
+    i: app("Zed Preview"),
     w: app("Slack"),
     a: app(BROWSER),
+    c: app("Google Chrome"),
     g: app("Ghostty"),
     n: app("Notion"),
     m: open("raycast://extensions/iamyeizi/toggle-menu-bar/toggle"),
@@ -92,18 +93,6 @@ const rules: KarabinerRules[] = [
     s: app("Spotify"),
     z: app("Zed Preview"),
     v: app("FreeTube"),
-
-    c: {
-      p: {
-        to: [{ key_code: "play_or_pause" }],
-      },
-      n: {
-        to: [{ key_code: "fastforward" }],
-      },
-      b: {
-        to: [{ key_code: "rewind" }],
-      },
-    },
 
     // b = "B"rowse
     b: {

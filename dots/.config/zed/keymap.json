@@ -3,7 +3,6 @@
   // for linux
   {
     "context": "Pane && os==linux > (KeyContextView)",
-
     "bindings": {
       "alt-j": "workspace::ToggleBottomDock",
       "alt-p": "file_finder::Toggle",
@@ -38,7 +37,8 @@
     "context": "vim_mode==visual || vim_mode==helix_normal",
     "bindings": {
       "g c": "editor::ToggleComments",
-      "] j": "vim::SelectNext"
+      "] j": "vim::SelectNext",
+      "s": "vim::HelixSelectRegex"
     }
   },
   {
@@ -53,12 +53,12 @@
     "context": "vim_mode==helix_normal",
     "bindings": {
       "shift-r": ["workspace::SendKeystrokes", "\" _ d h p y"],
-      "g shift-r": "vim::PushReplaceWithRegister",
-      "s": "vim::PushSneak",
+      "g shift-r": "vim::PushReplaceWithRegister"
+      // "s": "vim::PushSneak",
       // sorry but the muscle memory is too strong
       // t enter c is too awkward
       // "shift-c": ["workspace::SendKeystrokes", "t enter c"],
-      "shift-s": "vim::PushSneakBackward"
+      // "shift-s": "vim::PushSneakBackward"
     }
   },
   {
@@ -66,6 +66,12 @@
     "bindings": {
       "ctrl-d": ["workspace::SendKeystrokes", "ctrl-d z z"],
       "ctrl-u": ["workspace::SendKeystrokes", "ctrl-u z z"]
+    }
+  },
+  {
+    "context": "DebugConsole > Editor",
+    "bindings": {
+      "cmd-;": "workspace::ToggleZoom"
     }
   },
   {
@@ -90,7 +96,26 @@
     "bindings": {
       "space g d": "editor::ToggleSelectedDiffHunks",
       "space g s": "git::Diff",
-      "space p": "pane::AlternateFile",
+      "space c r": [
+        "task::Spawn",
+        {
+          "task_name": "clj",
+          "reveal_target": "center"
+        }
+      ],
+      "space c f": [
+        "task::Spawn",
+        {
+          "task_name": "Eval File",
+          "reveal_target": "dock"
+        }
+      ],
+      "space g o": "git::BranchDiff",
+      "space q": "pane::AlternateFile",
+      "space p": [
+        "action::Sequence",
+        ["tab_switcher::Toggle", ["workspace::SendKeystrokes", "enter"]]
+      ],
       "space a": "agent::ToggleFocus",
       "space g b": "git::Blame",
       // "space k": ["workspace::SendKeystrokes", "space n enter g r"],
@@ -221,8 +246,8 @@
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
-      "s": ["vim::PushSneak", {}],
-      "S": ["vim::PushSneakBackward", {}]
+      // "s": ["vim::PushSneak", {}],
+      // "S": ["vim::PushSneakBackward", {}]
     }
   },
   {
@@ -293,7 +318,6 @@
           "reveal_target": "center"
         }
       ],
-      "space space": "file_finder::Toggle",
       "space g m": "git::OpenModifiedFiles",
       // Open recent project
       "ctrl-a f": "projects::OpenRecent",

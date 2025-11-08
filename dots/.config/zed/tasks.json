@@ -3,6 +3,10 @@
 // Example:
 [
   {
+    "command": "zedl",
+    "label": "clj"
+  },
+  {
     "label": "javelin",
     "command": "javelin",
     "reveal_target": "center",
@@ -107,7 +111,7 @@
   {
     "label": "ff",
     "command": "zask",
-    "args": ["files"],
+    "args": ["smartold"],
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh"
@@ -119,7 +123,7 @@
   },
   {
     "label": "Choose File",
-    "command": "/home/drew/dev-env/scripts/chooser",
+    "command": "/Users/drew/dev-env/scripts/chooser",
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh"
@@ -140,7 +144,7 @@
   {
     "label": "helix",
     "command": "hx",
-    "args": ["$ZED_RELATIVE_FILE"],
+    "args": ["$ZED_RELATIVE_FILE:$ZED_COLUMN:$ZED_ROW"],
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh"

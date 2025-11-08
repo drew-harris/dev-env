@@ -9,11 +9,6 @@
 // from the command palette or from `Zed` application menu.
 {
   "agent_servers": {
-    "Opencode": {
-      "command": "opencode-acp",
-      "args": [],
-      "env": {}
-    },
     "claude": {
       "default_mode": "acceptEdits"
     }
@@ -57,7 +52,6 @@
     "mode": "subtle",
     "enabled_in_text_threads": false
   },
-  "icon_theme": "VSCode Icons (Dark)",
   "ssh_connections": [
     {
       "host": "enterprises-dev",
@@ -104,11 +98,11 @@
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "Sonokai",
+    "dark": "aesthetic(blue)",
     "light": "One Light"
   },
   "features": {
-    "edit_prediction_provider": "supermaven"
+    "edit_prediction_provider": "zed"
   },
   "base_keymap": "VSCode",
   "selection_highlight": false,
@@ -120,7 +114,7 @@
   "ui_font_size": 14,
   // "ui_font_family": "Berkeley Mono",
   // "ui_font_weight": 500,
-  // "buffer_font_family": "Berkeley Mono",
+  "buffer_font_family": "Berkeley Mono",
   "buffer_font_weight": 500,
   // Vim mode settings
   // "vim_mode": true,
@@ -134,14 +128,14 @@
     "use_smartcase_find": true,
     "highlight_on_yank_duration": 100
   },
-  "relative_line_numbers": true,
+  "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": true
+    "show": false
   },
   "scrollbar": {
     "axes": {
       "horizontal": false,
-      "vertical": false
+      "vertical": true
     }
   },
   // Indentation, rainbow indentation
@@ -154,7 +148,7 @@
     "coloring": "fixed"
   },
   "git": {
-    "gutter_debounce": null,
+    "gutter_debounce": 0,
     "inline_blame": {
       "enabled": false,
       "delay_ms": 30000,
@@ -171,6 +165,7 @@
     "right_padding": 0.25
   },
   "inlay_hints": {
+    "show_value_hints": false,
     "enabled": false
   },
   "file_finder": {
@@ -201,7 +196,7 @@
       "language_servers": [
         "!eslint",
         "!typescript-language-server",
-        "vtsls",
+        "!vtsls",
         "biome",
         "..."
       ]
@@ -259,6 +254,9 @@
   "file_types": {
     "Dockerfile": ["Dockerfile", "Dockerfile.*"],
     "JSON": ["json", "jsonc", "*.code-snippets"]
+  },
+  "search": {
+    "center_on_match": true
   },
   // File scan exclusions, hide on the file explorer and search
   "file_scan_exclusions": [
