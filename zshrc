@@ -8,7 +8,8 @@ ZSH_THEME="robbyrussell"
 path+=($HOME/dev-env/scripts)
 path+=($HOME/go/bin)
 
-plugins=(zsh-autosuggestions zsh-syntax-highlighting tmux zsh-vi-mode)
+# plugins=(zsh-autosuggestions zsh-syntax-highlighting tmux zsh-vi-mode)
+plugins=(zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -69,10 +70,10 @@ source <(fzf --zsh)
 
 autoload -Uz compinit && compinit
 
-# Carapace
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
-zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-source <(carapace _carapace)
+# # Carapace
+# export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+# zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+# source <(carapace _carapace)
 
 export HELIX_RUNTIME=/Users/drew/clones/helix/runtime
 
