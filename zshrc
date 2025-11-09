@@ -9,7 +9,7 @@ path+=($HOME/dev-env/scripts)
 path+=($HOME/go/bin)
 
 # plugins=(zsh-autosuggestions zsh-syntax-highlighting tmux zsh-vi-mode)
-plugins=(zsh-vi-mode)
+plugins=(zsh-vi-mode zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
