@@ -98,7 +98,7 @@
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "aesthetic(blue)",
+    "dark": "Sonokai",
     "light": "One Light"
   },
   "features": {

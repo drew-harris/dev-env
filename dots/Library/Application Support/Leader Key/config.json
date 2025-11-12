@@ -1,0 +1,43 @@
+{
+  "actions" : [
+    {
+      "key" : "g",
+      "label" : "Ghostty",
+      "type" : "application",
+      "value" : "/Applications/Ghostty.app"
+    },
+    {
+      "iconPath" : "/Applications/Helium.app",
+      "key" : "a",
+      "label" : "Browser",
+      "type" : "application",
+      "value" : "/Applications/Helium.app"
+    },
+    {
+      "key" : "q",
+      "label" : "Discord",
+      "type" : "application",
+      "value" : "/Applications/legcord.app"
+    },
+    {
+      "key" : "i",
+      "label" : "Editor",
+      "type" : "application",
+      "value" : "/Applications/Zed Preview.app"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "s",
+          "label" : "Spotify",
+          "type" : "application",
+          "value" : "/Applications/Spotify.app"
+        }
+      ],
+      "key" : "o",
+      "label" : "More apps",
+      "type" : "group"
+    }
+  ],
+  "type" : "group"
+}
