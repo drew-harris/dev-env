@@ -20,6 +20,9 @@
   "use_system_window_tabs": true,
   "extend_comment_on_newline": false,
   "show_edit_predictions": true,
+  "sticky_scroll": {
+    "enabled": true
+  },
   "agent": {
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
@@ -31,8 +34,13 @@
       "model": "gemini-2.0-flash-001"
     }
   },
+  "disable_ai": true,
   "minimap": {
-    "show": "never"
+    "thumb_border": "left_open",
+    "current_line_highlight": "gutter",
+    "display_in": "active_editor",
+    "thumb": "always",
+    "show": "auto"
   },
   "agent_ui_font_size": 18,
   "restore_on_startup": "last_workspace",
@@ -367,6 +375,7 @@
       "terminal.ansi.white": "#f8f8f2",
       "terminal.ansi.bright_black": "#75715e",
       "terminal.ansi.bright_red": "#f92672",
+      "minimap.thumb.background": "#ffffff20",
       "terminal.ansi.bright_green": "#a6e22e",
       "terminal.ansi.bright_yellow": "#f4bf75",
       "terminal.ansi.bright_blue": "#66d9ef",
