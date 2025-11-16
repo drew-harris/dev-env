@@ -270,7 +270,7 @@ layout {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
 spawn-at-startup "wlsunset"
-spawn-sh-at-startup "swaybg -i /home/drew/Downloads/paper.jpeg -o '*'"
+spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -301,16 +301,15 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
 
     workspace-switch {
-        duration-ms 100
+        duration-ms 50
         // spring damping-ratio=0.9 stiffness=400 epsilon=0.0001
-
     }
 
     // Uncomment to turn off all animations.
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 0.5
+    slowdown 1
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -351,7 +350,7 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-    geometry-corner-radius 0
+    geometry-corner-radius 10
     clip-to-geometry true
 }
 

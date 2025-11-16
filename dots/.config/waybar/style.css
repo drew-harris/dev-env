@@ -10,7 +10,7 @@
 #waybar {
   background: transparent;
   color: #c6d0f5;
-  margin: 2px 2px;
+  /* margin: 2px 2px; */
 }
 
 #workspaces {
