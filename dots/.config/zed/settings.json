@@ -40,7 +40,7 @@
     "current_line_highlight": "gutter",
     "display_in": "active_editor",
     "thumb": "always",
-    "show": "auto"
+    "show": "never"
   },
   "agent_ui_font_size": 18,
   "restore_on_startup": "last_workspace",
@@ -102,12 +102,21 @@
           "paths": ["/home/drew/benwrong"]
         }
       ]
+    },
+    {
+      "host": "mbp",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/Users/drew/programs/instant/./"]
+        }
+      ]
     }
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "Sonokai",
-    "light": "One Light"
+    "dark": "One Light",
+    "light": "Sonokai"
   },
   "features": {
     "edit_prediction_provider": "zed"
@@ -204,7 +213,7 @@
       "language_servers": [
         "!eslint",
         "!typescript-language-server",
-        "!vtsls",
+        "vtsls",
         "biome",
         "..."
       ]

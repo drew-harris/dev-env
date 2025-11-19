@@ -2,7 +2,7 @@
 [
   // for linux
   {
-    "context": "Pane && os==linux > (KeyContextView)",
+    "context": "Pane && os==linux > (KeyContextView || MarkdownPreview || KeymapEditor)",
     "bindings": {
       "alt-j": "workspace::ToggleBottomDock",
       "alt-p": "file_finder::Toggle",
@@ -13,7 +13,7 @@
     }
   },
   {
-    "context": "os==linux && Workspace > (Pane || Dock) > (Editor || ProjectPanel || KeyContextView || Terminal || Diagnostics)",
+    "context": "os==linux && Workspace > (Pane || Dock) > (Editor || ProjectPanel || KeyContextView || Terminal || Diagnostics || ProjectPanel)",
     "bindings": {
       "alt-b": "workspace::ToggleRightDock",
       "alt-;": "workspace::ToggleZoom",
@@ -30,6 +30,12 @@
       "alt-p": "file_finder::Toggle",
       "alt-w": "pane::CloseActiveItem",
       "alt-\\": "pane::SplitVertical"
+    }
+  },
+  {
+    "context": "os==linux > Terminal",
+    "bindings": {
+      "alt-n": "workspace::NewTerminal"
     }
   },
   {
@@ -587,6 +593,25 @@
     "context": "Pane",
     "bindings": {
       "alt-w": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-n": null,
+      "ctrl-p": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-s": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "save": null
     }
   }
 ]
