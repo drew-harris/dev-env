@@ -20,7 +20,10 @@
       "alt-j": "workspace::ToggleBottomDock",
       "alt-p": "file_finder::Toggle",
       "alt-w": "pane::CloseActiveItem",
-      "alt-\\": "pane::SplitVertical"
+      "ctrl-a n": "pane::ActivateNextItem",
+      "alt-\\": "pane::SplitVertical",
+      "alt-}": "pane::ActivateNextItem",
+      "alt-{": "pane::ActivatePreviousItem"
     }
   },
   {
@@ -126,7 +129,7 @@
       "space g b": "git::Blame",
       // "space k": ["workspace::SendKeystrokes", "space n enter g r"],
       "space m": "editor::ToggleMinimap",
-      "ctrl-a n": "terminal_panel::ToggleFocus",
+      "ctrl-a n": "panel::NextPanelTab",
       "space j a": "pane::JoinAll",
       "cmd-p": [
         "file_finder::Toggle",

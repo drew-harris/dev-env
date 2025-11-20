@@ -1,0 +1,7 @@
+source:
+  type: File
+  path: "/home/drew/Downloads/79683-569622753.mp4"
+playback:
+  loop: true
+  volume: 0
+  paused: false

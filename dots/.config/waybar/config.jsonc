@@ -1,6 +1,7 @@
 {
   "layer": "top",
   "position": "top",
+  "modules-left": ["cffi/niri-taskbar"],
 
   "modules-center": ["clock", "custom/weather", "custom/music"],
 
@@ -111,4 +112,7 @@
     "return-type": "json",
     "tooltip": true, // Already handled by the script's JSON output
   },
+  "cffi/niri-taskbar": {
+    "module_path": "/home/drew/clones/niri-taskbar/target/release/libniri_taskbar.so"
+  }
 }

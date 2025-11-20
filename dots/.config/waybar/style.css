@@ -172,3 +172,12 @@ button {
 #custom-weather.error {
   color: #e78284; /* Red */
 }
+
+.niri-taskbar button {
+  font-size: 4px;
+}
+
+.niri-taskbar button.focused {
+  background:  rgba(0, 0, 0, 0.3);
+  
+}
