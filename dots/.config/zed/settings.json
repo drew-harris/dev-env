@@ -14,7 +14,7 @@
     }
   },
   "debugger": {
-    "dock": "bottom"
+    "dock": "right"
   },
   "zoomed_padding": true,
   "use_system_window_tabs": true,
@@ -34,7 +34,7 @@
       "model": "gemini-2.0-flash-001"
     }
   },
-  "disable_ai": true,
+  "disable_ai": false,
   "minimap": {
     "thumb_border": "left_open",
     "current_line_highlight": "gutter",
@@ -66,16 +66,24 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew/home"]
+          "paths": [
+            "/home/drew/home"
+          ]
         },
         {
-          "paths": ["/root/enterprises"]
+          "paths": [
+            "/root/enterprises"
+          ]
         },
         {
-          "paths": ["/root/rustical"]
+          "paths": [
+            "/root/rustical"
+          ]
         },
         {
-          "paths": ["/root/timerbot"]
+          "paths": [
+            "/root/timerbot"
+          ]
         }
       ]
     },
@@ -84,10 +92,19 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/root"]
+          "paths": [
+            "/root"
+          ]
         },
         {
-          "paths": ["/root/n8n"]
+          "paths": [
+            "/root/n8n"
+          ]
+        },
+        {
+          "paths": [
+            "/root/wealth"
+          ]
         }
       ]
     },
@@ -96,10 +113,14 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew"]
+          "paths": [
+            "/home/drew"
+          ]
         },
         {
-          "paths": ["/home/drew/benwrong"]
+          "paths": [
+            "/home/drew/benwrong"
+          ]
         }
       ]
     },
@@ -108,14 +129,16 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/Users/drew/programs/instant/./"]
+          "paths": [
+            "/Users/drew/programs/instant/./"
+          ]
         }
       ]
     }
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "One Light",
+    "dark": "Drewh Wolf Theme",
     "light": "Sonokai"
   },
   "features": {
@@ -157,7 +180,7 @@
   },
   // Indentation, rainbow indentation
   "active_pane_modifiers": {
-    "border_size": 1,
+    "border_size": 2,
     "inactive_opacity": 0.9
   },
   "indent_guides": {

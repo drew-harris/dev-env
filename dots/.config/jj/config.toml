@@ -93,8 +93,8 @@ l = ["log", "-r", "work"]
 open = ["log", "-r", "open()"]
 ll = ["log", "-T", "log_with_files"]
 
-[revsets]
-log = "default-with-hidden"
+# [revsets]
+# log = "default-with-hidden"
 
 [revset-aliases]
 'default-with-hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & ~(description("hidden:")::)'
