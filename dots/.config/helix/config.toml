@@ -23,7 +23,7 @@ render = true
   ":open %sh{cat /tmp/unique-file}",
   ":redraw",
 ]
-space = { s = { s = "symbol_picker", f = [
+space = { p = ":buffer-previous", s = { s = "symbol_picker", f = [
   ":sh rm -f /tmp/unique-file",
   ":insert-output sh -c 'zask find_files > /tmp/unique-file 2>&1' > /dev/null",
   ':insert-output echo "\x1b[?1049h\x1b[?2004h" > /dev/tty',

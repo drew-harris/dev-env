@@ -8,6 +8,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "auto_update": false,
   "agent_servers": {
     "claude": {
       "default_mode": "acceptEdits"
@@ -34,6 +35,7 @@
       "model": "gemini-2.0-flash-001"
     }
   },
+
   "disable_ai": false,
   "minimap": {
     "thumb_border": "left_open",
@@ -51,6 +53,7 @@
   "expand_excerpt_lines": 3,
   "minimum_contrast_for_highlights": 0,
   "bottom_dock_layout": "left_aligned",
+  "colorize_brackets": true,
   "current_line_highlight": "gutter",
   "title_bar": {
     "show_branch_name": true,
@@ -66,24 +69,16 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"]
         },
         {
-          "paths": [
-            "/root/enterprises"
-          ]
+          "paths": ["/root/enterprises"]
         },
         {
-          "paths": [
-            "/root/rustical"
-          ]
+          "paths": ["/root/rustical"]
         },
         {
-          "paths": [
-            "/root/timerbot"
-          ]
+          "paths": ["/root/timerbot"]
         }
       ]
     },
@@ -92,19 +87,13 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root"
-          ]
+          "paths": ["/root"]
         },
         {
-          "paths": [
-            "/root/n8n"
-          ]
+          "paths": ["/root/n8n"]
         },
         {
-          "paths": [
-            "/root/wealth"
-          ]
+          "paths": ["/root/wealth"]
         }
       ]
     },
@@ -113,14 +102,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew"
-          ]
+          "paths": ["/home/drew"]
         },
         {
-          "paths": [
-            "/home/drew/benwrong"
-          ]
+          "paths": ["/home/drew/benwrong"]
         }
       ]
     },
@@ -129,16 +114,14 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/Users/drew/programs/instant/./"
-          ]
+          "paths": ["/Users/drew/programs/instant/./"]
         }
       ]
     }
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "Drewh Wolf Theme",
+    "dark": "Sonokai",
     "light": "Sonokai"
   },
   "features": {
@@ -267,6 +250,14 @@
       "settings": {
         "require_config_file": true
       }
+    },
+    "vtsls": {
+      "settings": {
+        // For TypeScript:
+        "typescript": { "tsserver": { "maxTsServerMemory": 16184 } },
+        // For JavaScript:
+        "javascript": { "tsserver": { "maxTsServerMemory": 16184 } }
+      }
     }
   },
   "excerpt_context_lines": 4,
@@ -319,7 +310,7 @@
   },
   "git_panel": {
     "sort_by_path": false,
-    "dock": "right",
+    "dock": "left",
     "button": true
   },
   "tabs": {
