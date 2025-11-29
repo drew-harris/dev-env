@@ -2,7 +2,7 @@
 [
   // for linux
   {
-    "context": "Pane && os==linux > (KeyContextView || MarkdownPreview || KeymapEditor)",
+    "context": "Pane && os==linux > (KeyContextView || MarkdownPreview || KeymapEditor || CollabPanel)",
     "bindings": {
       "alt-j": "workspace::ToggleBottomDock",
       "alt-p": "file_finder::Toggle",
