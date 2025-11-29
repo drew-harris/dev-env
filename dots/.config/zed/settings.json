@@ -8,6 +8,8 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "rounded_selection": false,
+  "window_decorations": "server",
   "auto_update": false,
   "agent_servers": {
     "claude": {
@@ -340,7 +342,7 @@
   },
   "collaboration_panel": {
     "dock": "left",
-    "button": false
+    "button": true
   },
   // Move some unnecessary panels to the left
   "notification_panel": {

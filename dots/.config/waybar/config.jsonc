@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-left": ["cffi/niri-taskbar"],
+  // "modules-left": ["cffi/niri-taskbar"],
 
   "modules-center": ["clock", "custom/weather", "custom/music"],
 

@@ -4,21 +4,22 @@
   min-height: 0;
   padding-right: 2px;
   padding-left: 2px;
-  padding-bottom: 0px;
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
 
 #waybar {
-  background: transparent;
-  color: #c6d0f5;
-  /* margin: 2px 2px; */
+    background: #242424;
+    color: #c6d0f5;
+    margin: 0px 2px;
 }
 
-#workspaces {
+/*#workspaces {
   border-radius: 5px;
   margin: 5px;
   background: #101010;
   margin-left: 2px;
-}
+}*/
 
 #workspaces button {
   color: #ea999c;
@@ -57,7 +58,6 @@ button {
 #custom-docker {
   background-color: #242424;
   padding: 0.4rem 0.8rem;
-  margin: 5px 0;
 }
 
 #custom-music {
@@ -179,5 +179,5 @@ button {
 
 .niri-taskbar button.focused {
   background:  rgba(0, 0, 0, 0.3);
-  
+
 }

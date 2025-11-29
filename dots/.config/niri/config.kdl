@@ -115,6 +115,9 @@ input {
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
+
+    // empty-workspace-above-first
+
     // Set gaps around windows in logical pixels.
     gaps 12
 
@@ -272,7 +275,7 @@ layout {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
-spawn-at-startup "wlsunset"
+// spawn-at-startup "wlsunset"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
 spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
@@ -311,10 +314,10 @@ animations {
     // }
 
     // Uncomment to turn off all animations.
-    // off
+    off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 1
+    // slowdown 0.5
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -355,7 +358,7 @@ window-rule {
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
 window-rule {
-    geometry-corner-radius 10
+    geometry-corner-radius 0
     clip-to-geometry true
 }
 
