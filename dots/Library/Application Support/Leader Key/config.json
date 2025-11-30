@@ -32,11 +32,21 @@
           "label" : "Spotify",
           "type" : "application",
           "value" : "/Applications/Spotify.app"
+        },
+        {
+          "key" : "m",
+          "type" : "application",
+          "value" : "/System/Applications/Messages.app"
         }
       ],
       "key" : "o",
       "label" : "More apps",
       "type" : "group"
+    },
+    {
+      "key" : "c",
+      "type" : "application",
+      "value" : "/Applications/Google Chrome.app"
     }
   ],
   "type" : "group"
