@@ -3,6 +3,8 @@ theme = "drew"
 [editor]
 true-color = true
 line-number = "relative"
+soft-wrap.enable = true
+
 end-of-line-diagnostics = "hint"
 
 [editor.inline-diagnostics]

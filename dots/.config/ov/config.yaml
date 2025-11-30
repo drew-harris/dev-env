@@ -1,0 +1,7 @@
+General:
+  VScrollLines: 7
+KeyBind:
+  down:
+    - j
+  up:
+    - k

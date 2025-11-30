@@ -3,7 +3,7 @@
 // https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
-        repeat-delay 200
+        repeat-delay 250
         repeat-rate 20
         xkb {
             // You can set rules, model, layout, variant and options.
@@ -111,10 +111,25 @@ input {
     position x=1280 y=0
 }
 
+overview {
+    workspace-shadow {
+        off
+    }
+    backdrop-color "transparent"
+}
+
+layer-rule {
+    // This is for swaybg; change for other wallpaper tools.
+    // Find the right namespace by running niri msg layers.
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
 layout {
+    background-color "transparent"
 
     // empty-workspace-above-first
 
@@ -272,6 +287,12 @@ layout {
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
+//
+
+workspace "chat"
+workspace "main"
+workspace "aux" {
+}
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
@@ -279,6 +300,7 @@ spawn-at-startup "waybar"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
 spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
+spawn-sh-at-startup "xdg-settings set default-web-browser helium-browser.desktop"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -317,12 +339,28 @@ animations {
     off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 0.5
+    // slowdown 1.3
 }
 
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Window-Rules
+//
+
+window-rule {
+    match app-id="helium"
+    open-on-workspace "main"
+}
+window-rule {
+    match app-id="discord"
+    open-on-workspace "chat"
+    default-column-width { proportion 1.0; }
+}
+window-rule {
+    match app-id="spotify"
+    open-on-workspace "aux"
+    default-column-width { proportion 1.0; }
+}
 
 // Work around WezTerm's initial configure bug
 // by setting an empty default-column-width.
@@ -333,6 +371,8 @@ window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
 }
+
+
 
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
@@ -530,18 +570,18 @@ binds {
     //
     // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
     // will all refer to the 3rd workspace.
-    Mod+1 { focus-workspace 1; }
-    Mod+2 { focus-workspace 2; }
-    Mod+3 { focus-workspace 3; }
+    Mod+1 { focus-workspace "chat"; }
+    Mod+2 { focus-workspace "main"; }
+    Mod+3 { focus-workspace "aux"; }
     Mod+4 { focus-workspace 4; }
     Mod+5 { focus-workspace 5; }
     Mod+6 { focus-workspace 6; }
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    Mod+Shift+1 { move-column-to-workspace 1; }
-    Mod+Shift+2 { move-column-to-workspace 2; }
-    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+1 { move-column-to-workspace "chat"; }
+    Mod+Shift+2 { move-column-to-workspace "main"; }
+    Mod+Shift+3 { move-column-to-workspace "aux"; }
     // Mod+Shift+4 { move-column-to-workspace 4; }
     Mod+Shift+5 { move-column-to-workspace 5; }
     Mod+Shift+6 { move-column-to-workspace 6; }
@@ -605,7 +645,7 @@ binds {
     // Toggle tabbed column display mode.
     // Windows in this column will appear as vertical tabs,
     // rather than stacked on top of each other.
-    // Mod+W { toggle-column-tabbed-display; }
+    Mod+W { toggle-column-tabbed-display; }
 
     // Actions to switch layouts.
     // Note: if you uncomment these, make sure you do NOT have
@@ -615,7 +655,7 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
     //
-    Mod+W { spawn-sh "notify-send $(niri msg --json pick-window | jq .app_id)"; }
+    // Mod+W { spawn-sh "notify-send $(niri msg --json pick-window | jq .app_id)"; }
     Mod+P { spawn-sh "wl-copy $(hyprpicker)"; }
 
     Mod+Shift+4 { screenshot; }
