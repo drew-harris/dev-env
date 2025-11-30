@@ -3,3 +3,6 @@ background-color=#242424ff
 padding=6
 border-color=#f92672
 border-size=1
+
+default-timeout=2000
+ignore-timeout=0

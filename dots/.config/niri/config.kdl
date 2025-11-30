@@ -75,11 +75,6 @@ input {
 // https://yalter.github.io/niri/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
 
- // output "HDMI-A-1" {
- //     scale 2
- //     mode "1920x1080@60"
- // }
-
 /-output "eDP-1" {
     // Uncomment this line to disable this output.
     // off
@@ -261,7 +256,7 @@ layout {
         // Softness controls the shadow blur radius. softness 30
 
         // Spread expands the shadow.
-        spread 2
+        spread 1
 
         // Offset moves the shadow relative to the window.
         offset x=0 y=3
@@ -339,7 +334,7 @@ animations {
     off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    // slowdown 1.3
+    slowdown 0.3
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -376,23 +371,17 @@ window-rule {
 
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
-    // This app-id regular expression will work for both:
-    // - host Firefox (app-id is "firefox")
-    // - Flatpak Firefox (app-id is "org.mozilla.firefox")
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     match app-id=r#"^org\.keepassxc\.KeePassXC$"#
     match app-id=r#"^org\.gnome\.World\.Secrets$"#
 
     block-out-from "screen-capture"
-
-    // Use this instead if you want them visible on third-party screenshot tools.
-    // block-out-from "screencast"
 }
 
 // Example: enable rounded corners for all windows.
