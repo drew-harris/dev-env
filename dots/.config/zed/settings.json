@@ -17,7 +17,7 @@
     }
   },
   "debugger": {
-    "dock": "right"
+    "dock": "bottom"
   },
   "zoomed_padding": true,
   "use_system_window_tabs": true,
