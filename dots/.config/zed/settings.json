@@ -155,7 +155,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": false
+    "show": true
   },
   "scrollbar": {
     "axes": {

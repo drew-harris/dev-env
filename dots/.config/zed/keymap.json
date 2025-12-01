@@ -581,12 +581,6 @@
     }
   },
   {
-    "context": "(VimControl && !menu) && os==linux",
-    "bindings": {
-      "ctrl-j": "workspace::ToggleBottomDock"
-    }
-  },
-  {
     "context": "(Editor && !edit_prediction)",
     "bindings": {
       "alt-\\": null
@@ -635,4 +629,11 @@
   //     "ctrl-l": "editor::AcceptEditPrediction"
   //   }
   // }
+,
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-j": null
+    }
+  }
 ]
