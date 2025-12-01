@@ -10,7 +10,6 @@
 {
   "rounded_selection": false,
   "window_decorations": "server",
-  "auto_update": false,
   "agent_servers": {
     "claude": {
       "default_mode": "acceptEdits"
@@ -71,16 +70,24 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew/home"]
+          "paths": [
+            "/home/drew/home"
+          ]
         },
         {
-          "paths": ["/root/enterprises"]
+          "paths": [
+            "/root/enterprises"
+          ]
         },
         {
-          "paths": ["/root/rustical"]
+          "paths": [
+            "/root/rustical"
+          ]
         },
         {
-          "paths": ["/root/timerbot"]
+          "paths": [
+            "/root/timerbot"
+          ]
         }
       ]
     },
@@ -89,13 +96,19 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/root"]
+          "paths": [
+            "/root"
+          ]
         },
         {
-          "paths": ["/root/n8n"]
+          "paths": [
+            "/root/n8n"
+          ]
         },
         {
-          "paths": ["/root/wealth"]
+          "paths": [
+            "/root/wealth"
+          ]
         }
       ]
     },
@@ -104,10 +117,14 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew"]
+          "paths": [
+            "/home/drew"
+          ]
         },
         {
-          "paths": ["/home/drew/benwrong"]
+          "paths": [
+            "/home/drew/benwrong"
+          ]
         }
       ]
     },
@@ -116,15 +133,28 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/Users/drew/programs/instant/./"]
+          "paths": [
+            "/Users/drew/programs/instant/./"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "arch",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/drew/programs/hourhand"
+          ]
         }
       ]
     }
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "Sonokai",
-    "light": "Sonokai"
+    "dark": "Drewh Wolf Theme",
+    "light": "One Light"
   },
   "features": {
     "edit_prediction_provider": "zed"
