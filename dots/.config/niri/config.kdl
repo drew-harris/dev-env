@@ -347,7 +347,7 @@ window-rule {
     open-on-workspace "main"
 }
 window-rule {
-    match app-id="discord"
+    match app-id="vesktop"
     open-on-workspace "chat"
     default-column-width { proportion 1.0; }
 }
@@ -674,7 +674,7 @@ binds {
     Alt+A { spawn-sh "/home/drew/dev-env/scripts/fol helium helium-browser"; }
     Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed-Preview zed"; }
     Alt+G { spawn-sh "/home/drew/dev-env/scripts/fol com.mitchellh.ghostty ghostty"; }
-    Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol discord discord"; }
+    Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol vesktop vesktop"; }
 
     Mod+Space { spawn-sh "makoctl dismiss -a";}
 
