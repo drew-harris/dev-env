@@ -129,7 +129,7 @@ layout {
     // empty-workspace-above-first
 
     // Set gaps around windows in logical pixels.
-    gaps 12
+    gaps 18
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
