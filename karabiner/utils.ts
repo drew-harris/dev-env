@@ -21,7 +21,7 @@ export function generateUnsetForEveryKey(): To[] {
       name: `hyper_sublayer_${letter}`,
       value: 0,
     },
-    modifiers: ['any'],
+    modifiers: ["any"],
   }));
 }
 
@@ -125,40 +125,40 @@ export function createHyperSubLayers(subLayers: {
   return Object.entries(subLayers).map(([key, value]) =>
     "to" in value
       ? {
-        description: `Hyper Key + ${key}`,
-        manipulators: [
-          {
-            ...value,
-            type: "basic" as const,
-            from: {
-              key_code: key as KeyCode,
-              modifiers: {
-                optional: ["any"],
+          description: `Hyper Key + ${key}`,
+          manipulators: [
+            {
+              ...value,
+              type: "basic" as const,
+              from: {
+                key_code: key as KeyCode,
+                modifiers: {
+                  optional: ["any"],
+                },
               },
+              conditions: [
+                {
+                  type: "variable_if",
+                  name: "hyper",
+                  value: 1,
+                },
+                ...allSubLayerVariables.map((subLayerVariable) => ({
+                  type: "variable_if" as const,
+                  name: subLayerVariable,
+                  value: 0,
+                })),
+              ],
             },
-            conditions: [
-              {
-                type: "variable_if",
-                name: "hyper",
-                value: 1,
-              },
-              ...allSubLayerVariables.map((subLayerVariable) => ({
-                type: "variable_if" as const,
-                name: subLayerVariable,
-                value: 0,
-              })),
-            ],
-          },
-        ],
-      }
+          ],
+        }
       : {
-        description: `Hyper Key sublayer "${key}"`,
-        manipulators: createHyperSubLayer(
-          key as KeyCode,
-          value,
-          allSubLayerVariables
-        ),
-      }
+          description: `Hyper Key sublayer "${key}"`,
+          manipulators: createHyperSubLayer(
+            key as KeyCode,
+            value,
+            allSubLayerVariables
+          ),
+        }
   );
 }
 
@@ -229,8 +229,14 @@ export function superPress(letter: string) {
     to: [
       {
         key_code: letter,
-        modifiers: ["left_command", "left_shift", "left_option", "left_command", "left_control"],
-      } as To
-    ]
-  }
+        modifiers: [
+          "left_command",
+          "left_shift",
+          "left_option",
+          "left_command",
+          "left_control",
+        ],
+      } as To,
+    ],
+  };
 }

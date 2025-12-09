@@ -5,6 +5,7 @@ import {
   createHyperSubLayers,
   app,
   open,
+  shell,
   generateUnsetForEveryKey,
   superPress,
 } from "./utils";
@@ -122,6 +123,7 @@ const rules: KarabinerRules[] = [
       s: app("Spotify"),
       c: app("Zed Preview"),
     },
+    k: shell`/Users/drew/dev-env/scripts/pip-toggle.sh`,
     t: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
     // d = "device"
     d: {

@@ -1,6 +1,16 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
+  "mcp": {
+    "chrome-devtools": {
+      "type": "local",
+      "command": [
+        "npx",
+        "chrome-devtools-mcp@latest",
+        "--browserUrl=http://127.0.0.1:9425"
+      ],
+    }
+  },
   "autoupdate": true,
   "agent": {
     "ask": {

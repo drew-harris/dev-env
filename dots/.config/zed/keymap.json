@@ -612,24 +612,6 @@
     }
   },
   {
-    "context": "vim_mode == insert",
-    "bindings": {
-      "ctrl-l": "editor::ShowEditPrediction"
-    }
-  },
-  {
-    "context": "(Editor && edit_prediction)",
-    "bindings": {
-      "ctrl-l": "editor::AcceptEditPrediction"
-    }
-  },
-  {
-    "context": "Editor && edit_prediction_conflict",
-    "bindings": {
-      "ctrl-l": "editor::AcceptEditPrediction"
-    }
-  },
-  {
     "context": "Workspace",
     "bindings": {
       "ctrl-j": null

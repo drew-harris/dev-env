@@ -8,6 +8,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "context_servers": {},
   "rounded_selection": false,
   "window_decorations": "server",
   "agent_servers": {
@@ -21,19 +22,20 @@
   "zoomed_padding": true,
   "use_system_window_tabs": true,
   "extend_comment_on_newline": false,
-  "show_edit_predictions": false,
+  "show_edit_predictions": true,
   "sticky_scroll": {
     "enabled": true
   },
   "agent": {
+    "always_allow_tool_actions": true,
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
       "provider": "openai",
       "model": "gpt-5"
     },
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gemini-2.0-flash-001"
+      "provider": "openrouter",
+      "model": "anthropic/claude-sonnet-4"
     }
   },
 
@@ -70,24 +72,16 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"]
         },
         {
-          "paths": [
-            "/root/enterprises"
-          ]
+          "paths": ["/root/enterprises"]
         },
         {
-          "paths": [
-            "/root/rustical"
-          ]
+          "paths": ["/root/rustical"]
         },
         {
-          "paths": [
-            "/root/timerbot"
-          ]
+          "paths": ["/root/timerbot"]
         }
       ]
     },
@@ -96,19 +90,13 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root"
-          ]
+          "paths": ["/root"]
         },
         {
-          "paths": [
-            "/root/n8n"
-          ]
+          "paths": ["/root/n8n"]
         },
         {
-          "paths": [
-            "/root/wealth"
-          ]
+          "paths": ["/root/wealth"]
         }
       ]
     },
@@ -117,14 +105,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew"
-          ]
+          "paths": ["/home/drew"]
         },
         {
-          "paths": [
-            "/home/drew/benwrong"
-          ]
+          "paths": ["/home/drew/benwrong"]
         }
       ]
     },
@@ -133,9 +117,7 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/Users/drew/programs/instant/./"
-          ]
+          "paths": ["/Users/drew/programs/instant/./"]
         }
       ]
     },
@@ -144,16 +126,15 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/programs/hourhand"
-          ]
+          "paths": ["/home/drew/programs/hourhand"]
         }
       ]
     }
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "dark": "Drewh Wolf Theme",
+    "mode": "dark",
+    "dark": "Sonokai",
     "light": "One Light"
   },
   "features": {

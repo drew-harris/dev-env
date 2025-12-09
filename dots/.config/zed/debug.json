@@ -1,4 +1,3 @@
-// Some example tasks for common languages.
 //
 // For more documentation on how to configure debug tasks,
 // see: https://zed.dev/docs/debugger
@@ -16,9 +15,12 @@
     "killBehavior": "none",
     "enableContentValidation": false,
     "console": "integratedTerminal",
+    "port": "9425",
     "enableDWARF": false,
     "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": [
+      "<node_internals>/**"
+    ]
   },
   {
     "adapter": "JavaScript",
@@ -31,11 +33,17 @@
     "trace": true, // This will show debug logs,
     "userDataDir": "/Users/drew/Library/Application Support/Google/Chrome/Testing",
     "killBehavior": "none",
+    "port": "9425",
     "enableContentValidation": false,
     "console": "integratedTerminal",
     "enableDWARF": false,
     "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "skipFiles": ["<node_internals>/**", "js.stripe.com/v3", "stripe", "v3"]
+    "skipFiles": [
+      "<node_internals>/**",
+      "js.stripe.com/v3",
+      "stripe",
+      "v3"
+    ]
   },
   {
     "adapter": "JavaScript",
@@ -52,7 +60,9 @@
     "userDataDir": "/Users/drew/Library/Application Support/net.imput.helium-debug",
     "webRoot": "/Users/drew/programs/instant",
     "sourceMaps": true,
-    "skipFiles": ["<node_internals>/**"]
+    "skipFiles": [
+      "<node_internals>/**"
+    ]
   },
   {
     "label": "login",
@@ -60,7 +70,10 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/migrations",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": ["login", "--headless"],
+    "args": [
+      "login",
+      "--headless"
+    ],
     "console": "integratedTerminal",
     "env": {
       "INSTANT_CLI_DEV": "true"
@@ -76,7 +89,9 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/minis/bun-react-test",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": ["push"],
+    "args": [
+      "push"
+    ],
     "console": "integratedTerminal",
     "env": {
       "INSTANT_CLI_DEV": "true"
@@ -92,7 +107,11 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/migrations",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": ["--env", ".env.prod", "init"],
+    "args": [
+      "--env",
+      ".env.prod",
+      "init"
+    ],
     "console": "integratedTerminal",
     "env": {
       "INSTANT_CLI_DEV": "true"
