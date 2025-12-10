@@ -42,7 +42,7 @@
   "disable_ai": false,
   "minimap": {
     "thumb_border": "left_open",
-    "current_line_highlight": "gutter",
+    "current_line_highlight": "all",
     "display_in": "active_editor",
     "thumb": "always",
     "show": "never"
@@ -344,7 +344,7 @@
     "dock": "right",
     "default_width": 344.0,
     "hide_root": true,
-    "indent_size": 23.0,
+    "indent_size": 16.0,
     "starts_open": false,
     "sticky_scroll": true
   },

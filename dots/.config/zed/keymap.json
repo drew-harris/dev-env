@@ -63,8 +63,7 @@
     "bindings": {
       "shift-r": ["workspace::SendKeystrokes", "\" _ d h p y"],
       "g shift-r": "vim::PushReplaceWithRegister"
-      // "s": "vim::PushSneak",
-      // sorry but the muscle memory is too strong
+      // sorry but the muscle memory is too strong - update wrong!
       // t enter c is too awkward
       // "shift-c": ["workspace::SendKeystrokes", "t enter c"],
       // "shift-s": "vim::PushSneakBackward"
