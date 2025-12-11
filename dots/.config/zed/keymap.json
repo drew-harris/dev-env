@@ -2,6 +2,12 @@
 [
   // for linux
   {
+    "context": "RunModal > Picker",
+    "bindings": {
+      "tab": "picker::ConfirmCompletion",
+    },
+  },
+  {
     "context": "Pane && os==linux > (KeyContextView || MarkdownPreview || KeymapEditor || CollabPanel)",
     "bindings": {
       "alt-j": "workspace::ToggleBottomDock",
@@ -9,8 +15,8 @@
       "alt-;": "workspace::ToggleZoom",
       "alt-b": "workspace::ToggleRightDock",
       "alt-w": "pane::CloseActiveItem",
-      "alt-\\": "pane::SplitVertical"
-    }
+      "alt-\\": "pane::SplitVertical",
+    },
   },
   {
     "context": "os==linux && Workspace > (Pane || Dock) > (Editor || ProjectPanel || KeyContextView || Terminal || Diagnostics || ProjectPanel)",
@@ -23,8 +29,8 @@
       "ctrl-a n": "pane::ActivateNextItem",
       "alt-\\": "pane::SplitVertical",
       "alt-}": "pane::ActivateNextItem",
-      "alt-{": "pane::ActivatePreviousItem"
-    }
+      "alt-{": "pane::ActivatePreviousItem",
+    },
   },
   {
     "context": "Pane && os==linux",
@@ -32,14 +38,14 @@
       "alt-j": "workspace::ToggleBottomDock",
       "alt-p": "file_finder::Toggle",
       "alt-w": "pane::CloseActiveItem",
-      "alt-\\": "pane::SplitVertical"
-    }
+      "alt-\\": "pane::SplitVertical",
+    },
   },
   {
     "context": "os==linux > Terminal",
     "bindings": {
-      "alt-n": "workspace::NewTerminal"
-    }
+      "alt-n": "workspace::NewTerminal",
+    },
   },
   {
     // for helix
@@ -47,47 +53,47 @@
     "bindings": {
       "g c": "editor::ToggleComments",
       "] j": "vim::SelectNext",
-      "s": "vim::HelixSelectRegex"
-    }
+      "s": "vim::HelixSelectRegex",
+    },
   },
   {
     // for helix
     "context": "vim_mode==helix_select",
     "bindings": {
-      "g shift-r": "vim::PushReplaceWithRegister"
-    }
+      "g shift-r": "vim::PushReplaceWithRegister",
+    },
   },
   {
     // for helix
     "context": "vim_mode==helix_normal",
     "bindings": {
       "shift-r": ["workspace::SendKeystrokes", "\" _ d h p y"],
-      "g shift-r": "vim::PushReplaceWithRegister"
+      "g shift-r": "vim::PushReplaceWithRegister",
       // sorry but the muscle memory is too strong - update wrong!
       // t enter c is too awkward
       // "shift-c": ["workspace::SendKeystrokes", "t enter c"],
       // "shift-s": "vim::PushSneakBackward"
-    }
+    },
   },
   {
     "context": "VimControl && !menu",
     "bindings": {
       "ctrl-d": ["workspace::SendKeystrokes", "ctrl-d z z"],
-      "ctrl-u": ["workspace::SendKeystrokes", "ctrl-u z z"]
-    }
+      "ctrl-u": ["workspace::SendKeystrokes", "ctrl-u z z"],
+    },
   },
   {
     "context": "DebugConsole > Editor",
     "bindings": {
-      "cmd-;": "workspace::ToggleZoom"
-    }
+      "cmd-;": "workspace::ToggleZoom",
+    },
   },
   {
     "context": "showing_code_actions",
     "bindings": {
       "j": "editor::ContextMenuNext",
-      "k": "editor::ContextMenuPrevious"
-    }
+      "k": "editor::ContextMenuPrevious",
+    },
   },
   {
     // make gf in multibuffer more consistent
@@ -95,9 +101,9 @@
     "bindings": {
       "g f": [
         "action::Sequence",
-        ["editor::OpenExcerpts", ["workspace::SendKeystrokes", "z z"]]
-      ]
-    }
+        ["editor::OpenExcerpts", ["workspace::SendKeystrokes", "z z"]],
+      ],
+    },
   },
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual || vim_mode == helix_normal) && !VimWaiting && !menu",
@@ -108,21 +114,21 @@
         "task::Spawn",
         {
           "task_name": "clj",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space c f": [
         "task::Spawn",
         {
           "task_name": "Eval File",
-          "reveal_target": "dock"
-        }
+          "reveal_target": "dock",
+        },
       ],
       "space g o": "git::BranchDiff",
       "space q": "pane::AlternateFile",
       "space p": [
         "action::Sequence",
-        ["tab_switcher::Toggle", ["workspace::SendKeystrokes", "enter"]]
+        ["tab_switcher::Toggle", ["workspace::SendKeystrokes", "enter"]],
       ],
       "space a": "agent::ToggleFocus",
       "space g b": "git::Blame",
@@ -133,8 +139,8 @@
       "cmd-p": [
         "file_finder::Toggle",
         {
-          "separate_history": true
-        }
+          "separate_history": true,
+        },
       ],
       "ctrl-a p": "terminal_panel::Toggle",
       "] h": "editor::GoToNextDocumentHighlight",
@@ -145,58 +151,58 @@
         "task::Spawn",
         {
           "task_name": "ff",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space s g": [
         "task::Spawn",
         {
           "task_name": "ffchanged",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space h": [
         "task::Spawn",
         {
           "task_name": "javelin",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 1": [
         "task::Spawn",
         {
           "task_name": "j1",
           "reveal_target": "center",
-          "ephemeral": true // does not work (but it's what i want)
-        }
+          "ephemeral": true, // does not work (but it's what i want)
+        },
       ],
       "space 2": [
         "task::Spawn",
         {
           "task_name": "j2",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 3": [
         "task::Spawn",
         {
           "task_name": "j3",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 4": [
         "task::Spawn",
         {
           "task_name": "j4",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 5": [
         "task::Spawn",
         {
           "task_name": "j5",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 9": [
         "action::Sequence",
@@ -206,8 +212,8 @@
           ["task::Spawn", { "task_name": "frontend" }],
           ["task::Spawn", { "task_name": "dev-platform" }],
           ["task::Spawn", { "task_name": "Kill java" }],
-          ["task::Spawn", { "task_name": "dev-cli" }]
-        ]
+          ["task::Spawn", { "task_name": "dev-cli" }],
+        ],
       ],
       // Toggle inlay hints
       "space t i": "editor::ToggleInlayHints",
@@ -222,8 +228,8 @@
         "task::Spawn",
         {
           "task_name": "Choose File",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       // Open markdown preview
       "space m p": "markdown::OpenPreview",
@@ -245,18 +251,18 @@
         "task::Spawn",
         {
           "task_name": "bjjui",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
-      "ctrl-a \"": "workspace::NewTerminal"
-    }
+      "ctrl-a \"": "workspace::NewTerminal",
+    },
   },
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
       // "s": ["vim::PushSneak", {}],
       // "S": ["vim::PushSneakBackward", {}]
-    }
+    },
   },
   {
     "context": "Editor && (vim_mode == normal || vim_mode == helix_normal) && !VimWaiting && !menu",
@@ -308,11 +314,11 @@
       "space o": "pane::CloseOtherItems",
       // Save file
       // Project search
-      "space /": "pane::DeploySearch"
+      "space /": "pane::DeploySearch",
       // TODO: Open other files
       // Show project panel with current file
       // "cmd-e": "pane::RevealInProjectPanel"
-    }
+    },
   },
   // Empty pane, set of keybindings that are available when there is no active editor
   {
@@ -323,8 +329,8 @@
         "task::Spawn",
         {
           "task_name": "Choose File",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space g m": "git::OpenModifiedFiles",
       // Open recent project
@@ -335,52 +341,52 @@
         "task::Spawn",
         {
           "task_name": "ff",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "ctrl-a j": [
         "task::Spawn",
         {
           "task_name": "bjjui",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 1": [
         "task::Spawn",
         {
           "task_name": "j1",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 2": [
         "task::Spawn",
         {
           "task_name": "j2",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 3": [
         "task::Spawn",
         {
           "task_name": "j3",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 4": [
         "task::Spawn",
         {
           "task_name": "j4",
-          "reveal_target": "center"
-        }
+          "reveal_target": "center",
+        },
       ],
       "space 5": [
         "task::Spawn",
         {
           "task_name": "j5",
-          "reveal_target": "center"
-        }
-      ]
-    }
+          "reveal_target": "center",
+        },
+      ],
+    },
   },
   // Comment code
   {
@@ -391,23 +397,23 @@
       "space y": "editor::Copy",
 
       // paste over without cutting
-      "space p": ["workspace::SendKeystrokes", "g R"]
-    }
+      "space p": ["workspace::SendKeystrokes", "g R"],
+    },
   },
   // Rename
   {
     "context": "Editor && vim_operator == c",
     "bindings": {
-      "r": "editor::Rename" // zed specific
-    }
+      "r": "editor::Rename", // zed specific
+    },
   },
   // Code Action
   {
     "context": "Editor && vim_operator == c",
     "bindings": {
       "c": "vim::CurrentLine",
-      "a": "editor::ToggleCodeActions" // zed specific
-    }
+      "a": "editor::ToggleCodeActions", // zed specific
+    },
   },
   {
     "context": "Terminal",
@@ -433,10 +439,10 @@
         "task::Spawn",
         {
           "task_name": "bjjui",
-          "reveal_target": "center"
-        }
-      ]
-    }
+          "reveal_target": "center",
+        },
+      ],
+    },
   },
   // File panel (netrw)
   {
@@ -456,8 +462,8 @@
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-k": "workspace::ActivatePaneUp",
-      "-": "project_panel::SelectPrevDirectory"
-    }
+      "-": "project_panel::SelectPrevDirectory",
+    },
   },
   // Panel nagivation
   {
@@ -470,8 +476,8 @@
       "ctrl-w cmd-h": "pane::SplitAndMoveLeft",
       "ctrl-w cmd-j": "pane::SplitAndMoveDown",
       "ctrl-w cmd-k": "pane::SplitAndMoveUp",
-      "ctrl-w cmd-l": "pane::SplitAndMoveRight"
-    }
+      "ctrl-w cmd-l": "pane::SplitAndMoveRight",
+    },
   },
   {
     "context": "Workspace",
@@ -485,27 +491,27 @@
       "ctrl-w j": "workspace::ActivatePaneDown",
       "ctrl-w cmd-h": [
         "workspace::MoveItemToPaneInDirection",
-        { "direction": "left" }
+        { "direction": "left" },
       ],
       "ctrl-w cmd-j": [
         "workspace::MoveItemToPaneInDirection",
-        { "direction": "down" }
+        { "direction": "down" },
       ],
       "ctrl-w cmd-k": [
         "workspace::MoveItemToPaneInDirection",
-        { "direction": "up" }
+        { "direction": "up" },
       ],
       "ctrl-w cmd-l": [
         "workspace::MoveItemToPaneInDirection",
-        { "direction": "right" }
+        { "direction": "right" },
       ],
       "cmd-p": [
         "file_finder::Toggle",
         {
-          "separate_history": true
-        }
-      ]
-    }
+          "separate_history": true,
+        },
+      ],
+    },
   },
   {
     "context": "EmptyPane || SharedScreen || vim_mode == normal || vim_mode == helix_normal",
@@ -513,107 +519,107 @@
       "space r t": [
         "editor::SpawnNearestTask",
         {
-          "reveal": "no_focus"
-        }
-      ]
-    }
+          "reveal": "no_focus",
+        },
+      ],
+    },
   },
   {
     "context": "Terminal",
     "bindings": {
-      "cmd-k": null
-    }
+      "cmd-k": null,
+    },
   },
   {
     "context": "Editor",
     "bindings": {
-      "cmd-]": null
-    }
+      "cmd-]": null,
+    },
   },
   {
     "context": "(Editor && showing_completions)",
     "bindings": {
-      "ctrl-y": "editor::ConfirmCompletion"
-    }
+      "ctrl-y": "editor::ConfirmCompletion",
+    },
   },
   {
     "context": "vim_mode == literal",
-    "bindings": {}
+    "bindings": {},
   },
   {
     "context": "vim_mode == literal",
     "bindings": {
-      "ctrl-shift-u": ["vim::Literal", ["ctrl-u", "\u0015"]]
-    }
+      "ctrl-shift-u": ["vim::Literal", ["ctrl-u", "\u0015"]],
+    },
   },
   {
     "context": "(Editor && showing_completions)",
     "bindings": {
-      "enter": null
-    }
+      "enter": null,
+    },
   },
   {
     "bindings": {
-      "alt-cmd-,": null
-    }
+      "alt-cmd-,": null,
+    },
   },
   {
     "bindings": {
-      "alt-cmd-|": "zed::OpenSettings"
-    }
+      "alt-cmd-|": "zed::OpenSettings",
+    },
   },
   {
     "context": "AgentPanel",
     "bindings": {
-      "cmd-,": "agent::OpenSettings"
-    }
+      "cmd-,": "agent::OpenSettings",
+    },
   },
   {
     "bindings": {
-      "cmd-,": "zed::OpenSettingsFile"
-    }
+      "cmd-,": "zed::OpenSettingsFile",
+    },
   },
   {
     "context": "Pane && os==macos",
     "bindings": {
-      "alt-w": null
-    }
+      "alt-w": null,
+    },
   },
   {
     "context": "(Editor && !edit_prediction)",
     "bindings": {
-      "alt-\\": null
-    }
+      "alt-\\": null,
+    },
   },
   {
     "context": "Pane",
     "bindings": {
-      "alt-w": null
-    }
+      "alt-w": null,
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
       "ctrl-n": null,
-      "ctrl-p": null
-    }
+      "ctrl-p": null,
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
-      "ctrl-s": null
-    }
+      "ctrl-s": null,
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
-      "save": null
-    }
+      "save": null,
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
-      "ctrl-j": null
-    }
-  }
+      "ctrl-j": null,
+    },
+  },
 ]
