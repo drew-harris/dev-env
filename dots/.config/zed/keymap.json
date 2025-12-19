@@ -108,6 +108,77 @@
   {
     "context": "Editor && (vim_mode == normal || vim_mode == visual || vim_mode == helix_normal) && !VimWaiting && !menu",
     "bindings": {
+      "space c k": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "clj-ks",
+              "reveal_target": "dock",
+            },
+          ],
+          "editor::ReloadFile",
+        ],
+      ],
+      "space c e": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "eval",
+              "reveal_target": "dock",
+            },
+          ],
+          "editor::ReloadFile",
+        ],
+      ],
+      "space c s": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "clj-fs",
+              "reveal_target": "dock",
+            },
+          ],
+          // "editor::ReloadFile",
+        ],
+      ],
+      "space c b": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "clj-fb",
+              "reveal_target": "dock",
+            },
+          ],
+          // "editor::ReloadFile",
+        ],
+      ],
+      "space c a": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "clj-any",
+              "reveal_target": "dock",
+            },
+          ],
+          "editor::ReloadFile",
+        ],
+      ],
+      "space k": "vim::SelectLargerSyntaxNode",
       "space g d": "editor::ToggleSelectedDiffHunks",
       "space g s": "git::Diff",
       "space c r": [
@@ -210,9 +281,6 @@
           ["task::Spawn", { "task_name": "backend" }],
           ["task::Spawn", { "task_name": "docker" }],
           ["task::Spawn", { "task_name": "frontend" }],
-          ["task::Spawn", { "task_name": "dev-platform" }],
-          ["task::Spawn", { "task_name": "Kill java" }],
-          ["task::Spawn", { "task_name": "dev-cli" }],
         ],
       ],
       // Toggle inlay hints
@@ -392,6 +460,21 @@
   {
     "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
     "bindings": {
+      "space c e": [
+        "action::Sequence",
+        [
+          "workspace::SaveWithoutFormat",
+          [
+            "task::Spawn",
+            {
+              "task_name": "eval",
+              "reveal_target": "dock",
+            },
+          ],
+          "editor::ReloadFile",
+        ],
+      ],
+
       // visual, visual line & visual block modes
       "g c": "editor::ToggleComments",
       "space y": "editor::Copy",
@@ -622,4 +705,10 @@
       "ctrl-j": null,
     },
   },
+  {
+    "context": "((vim_mode == helix_normal || vim_mode == helix_select) && !menu)",
+    "bindings": {
+      "space c": null
+    }
+  }
 ]

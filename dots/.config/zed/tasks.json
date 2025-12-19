@@ -1,19 +1,67 @@
 [
   {
     "command": "zedl",
-    "label": "clj"
+    "label": "clj",
+  },
+  {
+    "command": "/Users/drew/programs/parzed/zed-eval.sh",
+    "label": "eval",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "reveal": "no_focus",
+    "hide": "never",
+  },
+  {
+    "label": "clj-ks",
+    "command": "/Users/drew/programs/parzed/zed-cmd.sh ks",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "reveal": "never",
+    "hide": "on_success",
+  },
+  {
+    "label": "clj-fs",
+    "command": "/Users/drew/programs/parzed/zed-cmd.sh fs",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "allow_concurrent_runs": true,
+    "reveal": "never",
+    "hide": "on_success",
+  },
+  {
+    "label": "clj-fb",
+    "command": "/Users/drew/programs/parzed/zed-cmd.sh fb",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "allow_concurrent_runs": true,
+    "reveal": "never",
+    "hide": "never",
+  },
+  {
+    "label": "clj-any",
+    "command": "/Users/drew/programs/parzed/zed-cmd.sh",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "hide": "always",
   },
   {
     "label": "javelin",
     "command": "javelin",
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "j1",
@@ -21,12 +69,12 @@
     "args": ["1"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "j2",
@@ -34,12 +82,12 @@
     "args": ["2"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "j3",
@@ -47,12 +95,12 @@
     "args": ["3"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "j4",
@@ -60,12 +108,12 @@
     "args": ["4"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "j5",
@@ -73,36 +121,36 @@
     "reveal_target": "center",
     "args": ["5"],
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "bjjui",
     "command": "jjui",
     "reveal_target": "dock",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "lg",
     "command": "lazygit",
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "reveal": "always",
     "show_command": false,
     "allow_concurrent_runs": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "ffchanged",
@@ -110,12 +158,12 @@
     "reveal_target": "center",
     "args": ["changed"],
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "allow_concurrent_runs": true,
     "reveal": "always",
     "use_new_terminal": true,
-    "hide": "on_success"
+    "hide": "on_success",
   },
   {
     "label": "ff",
@@ -123,32 +171,32 @@
     "args": ["smartold"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "hide": "on_success",
     "allow_concurrent_runs": true,
     "reveal": "always",
-    "use_new_terminal": true
+    "use_new_terminal": true,
   },
   {
     "label": "Choose File",
     "command": "~/dev-env/scripts/chooser",
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "hide": "on_success",
     "allow_concurrent_runs": true,
     "reveal": "always",
-    "use_new_terminal": true
+    "use_new_terminal": true,
   },
   {
     "label": "biome fix",
     "command": "bun biome lint --write --unsafe",
     "reveal_target": "dock",
     "shell": {
-      "program": "/bin/sh"
-    }
+      "program": "/bin/sh",
+    },
   },
   {
     "label": "helix",
@@ -156,24 +204,24 @@
     "args": ["$ZED_RELATIVE_FILE:$ZED_COLUMN:$ZED_ROW"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "hide": "on_success",
     "allow_concurrent_runs": true,
     "reveal": "always",
-    "use_new_terminal": true
+    "use_new_terminal": true,
   },
   {
     "label": "block",
     "command": "innerblocker",
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "hide": "always",
     "allow_concurrent_runs": true,
     "reveal": "always",
-    "use_new_terminal": true
+    "use_new_terminal": true,
   },
   {
     "label": "nvim",
@@ -181,11 +229,11 @@
     "args": ["$ZED_RELATIVE_FILE"],
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh"
+      "program": "/bin/sh",
     },
     "hide": "on_success",
     "allow_concurrent_runs": true,
     "reveal": "always",
-    "use_new_terminal": true
-  }
+    "use_new_terminal": true,
+  },
 ]

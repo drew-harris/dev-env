@@ -7,27 +7,29 @@
     "label": "SANDBOX",
     "type": "chrome",
     "request": "launch",
-    "url": "http://localhost:7777",
+    "url": "http://localhost:5173",
     "disableNetworkCache": false,
     "showAsyncStacks": false,
     "trace": true, // This will show debug logs,
     "userDataDir": "/Users/drew/Library/Application Support/Google/Chrome/Testing",
     "killBehavior": "none",
-    "enableContentValidation": false,
+    "enableContentValidation": true,
     "console": "integratedTerminal",
-    "port": "9425",
+    "pathMapping": {
+      "/src": "/Users/drew/programs/instant/client/packages/components/src",
+    },
+    // "port": "9425",
     "enableDWARF": false,
     "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "skipFiles": [
-      "<node_internals>/**"
-    ]
+    // "skipFiles": ["<node_internals>/**"],
   },
   {
     "adapter": "JavaScript",
     "label": "Debug app in Chrome",
     "type": "chrome",
     "request": "launch",
-    "url": "http://localhost:3000/dash?s=main&app=5696faa0-af6b-4562-ade9-47ffb3b2b87b&t=explorer&ns=todos",
+    // "url": "http://localhost:3000/dash?s=main&app=5696faa0-af6b-4562-ade9-47ffb3b2b87b&t=explorer&ns=todos",
+    "url": "http://localhost:3001/",
     "disableNetworkCache": false,
     "showAsyncStacks": false,
     "trace": true, // This will show debug logs,
@@ -38,12 +40,7 @@
     "console": "integratedTerminal",
     "enableDWARF": false,
     "runtimeExecutable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "skipFiles": [
-      "<node_internals>/**",
-      "js.stripe.com/v3",
-      "stripe",
-      "v3"
-    ]
+    "skipFiles": ["<node_internals>/**", "js.stripe.com/v3", "stripe", "v3"],
   },
   {
     "adapter": "JavaScript",
@@ -55,14 +52,12 @@
     "runtimeExecutable": "/Applications/Helium.app/Contents/MacOS/Helium",
     "runtimeArgs": [
       "--remote-debugging-port=9222",
-      "--user-data-dir=/Users/drew/Library/Application Support/net.imput.helium-debug"
+      "--user-data-dir=/Users/drew/Library/Application Support/net.imput.helium-debug",
     ],
     "userDataDir": "/Users/drew/Library/Application Support/net.imput.helium-debug",
     "webRoot": "/Users/drew/programs/instant",
     "sourceMaps": true,
-    "skipFiles": [
-      "<node_internals>/**"
-    ]
+    "skipFiles": ["<node_internals>/**"],
   },
   {
     "label": "login",
@@ -70,18 +65,15 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/migrations",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": [
-      "login",
-      "--headless"
-    ],
+    "args": ["login", "--headless"],
     "console": "integratedTerminal",
     "env": {
-      "INSTANT_CLI_DEV": "true"
+      "INSTANT_CLI_DEV": "true",
     },
     "envFile": "/Users/drew/programs/migrations/.env",
     "type": "node",
     "pauseForSourceMap": true,
-    "sourceMaps": true
+    "sourceMaps": true,
   },
   {
     "label": "Pull schema",
@@ -89,17 +81,15 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/minis/bun-react-test",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": [
-      "push"
-    ],
+    "args": ["push"],
     "console": "integratedTerminal",
     "env": {
-      "INSTANT_CLI_DEV": "true"
+      "INSTANT_CLI_DEV": "true",
     },
     "envFile": "/Users/drew/programs/minis/bun-react-test/.env",
     "type": "node",
     "pauseForSourceMap": true,
-    "sourceMaps": true
+    "sourceMaps": true,
   },
   {
     "label": "INit with env file",
@@ -107,18 +97,14 @@
     "request": "launch",
     "cwd": "/Users/drew/programs/migrations",
     "program": "/Users/drew/programs/instant/client/packages/cli/dist/index.js",
-    "args": [
-      "--env",
-      ".env.prod",
-      "init"
-    ],
+    "args": ["--env", ".env.prod", "init"],
     "console": "integratedTerminal",
     "env": {
-      "INSTANT_CLI_DEV": "true"
+      "INSTANT_CLI_DEV": "true",
     },
     "envFile": "/Users/drew/programs/migrations/.env",
     "type": "node",
     "pauseForSourceMap": true,
-    "sourceMaps": true
-  }
+    "sourceMaps": true,
+  },
 ]

@@ -7,4 +7,6 @@ if ($env.PWD == "/Users/drew/programs/instant") {
     cd /Users/drew/programs/instant/server
 }
 
+print $env.PWD
+
 rep -n $ns $env.ZED_SELECTED_TEXT

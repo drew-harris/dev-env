@@ -8,6 +8,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "icon_theme": "VSCode Icons for Zed (Light)",
   "context_servers": {},
   "rounded_selection": false,
   "window_decorations": "server",
@@ -56,8 +57,8 @@
   "expand_excerpt_lines": 3,
   "minimum_contrast_for_highlights": 0,
   "bottom_dock_layout": "left_aligned",
-  // "colorize_brackets": true,
-  "current_line_highlight": "gutter",
+  "colorize_brackets": true,
+  "current_line_highlight": "all",
   "title_bar": {
     "show_branch_name": true,
     "show_branch_icon": true,
@@ -96,6 +97,9 @@
           "paths": ["/root/n8n"],
         },
         {
+          "paths": ["/root/sites/cookery/./"],
+        },
+        {
           "paths": ["/root/wealth"],
         },
       ],
@@ -130,10 +134,21 @@
         },
       ],
     },
+    {
+      "host": "5.78.94.31",
+      "username": "root",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/root/minecraft/./"],
+        },
+      ],
+      "nickname": "minecraft-server",
+    },
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "mode": "light",
+    "mode": "dark",
     "dark": "Sonokai",
     "light": "One Light",
   },
@@ -174,9 +189,8 @@
       "vertical": false,
     },
   },
-  // Indentation, rainbow indentation
   "active_pane_modifiers": {
-    "border_size": 2,
+    "border_size": 0,
     "inactive_opacity": 0.9,
   },
   "indent_guides": {
@@ -195,6 +209,7 @@
       "show_author_name": true,
     },
     "hunk_style": "staged_hollow",
+    "path_style": "file_path_first",
   },
   "centered_layout": {
     "left_padding": 0.25,
@@ -315,13 +330,14 @@
   ],
   "cursor_blink": false,
   "toolbar": {
-    "selections_menu": false,
-    "code_actions": false,
-    "agent_review": false,
+    "selections_menu": true,
+    "code_actions": true,
+    "agent_review": true,
     "breadcrumbs": true,
-    "quick_actions": false,
+    "quick_actions": true,
   },
   "git_panel": {
+    "tree_view": true,
     "sort_by_path": false,
     "dock": "left",
     "button": true,
@@ -336,16 +352,16 @@
   // Move all panel to the right
   "project_panel": {
     "git_status": true,
-    "folder_icons": false,
+    "folder_icons": true,
     "file_icons": true,
-    "entry_spacing": "standard",
+    "entry_spacing": "comfortable",
     "hide_gitignore": false,
     "button": true,
-    "dock": "right",
+    "dock": "left",
     "default_width": 344.0,
     "hide_root": true,
-    "indent_size": 16.0,
-    "starts_open": false,
+    "indent_size": 18.0,
+    "starts_open": true,
     "sticky_scroll": true,
   },
   "outline_panel": {
