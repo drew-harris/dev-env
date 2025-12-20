@@ -11,8 +11,8 @@ input {
 
             // For example:
             // layout "us,ru"
-            options "caps:escape,altwin:swap_alt_win"
-            // options "caps:escape"
+            // options "caps:escape,altwin:swap_alt_win"
+            options "caps:escape"
             // options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
 
             // If this section is empty, niri will fetch xkb settings
@@ -129,7 +129,7 @@ layout {
     // empty-workspace-above-first
 
     // Set gaps around windows in logical pixels.
-    gaps 18
+    gaps 14
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -287,6 +287,10 @@ layout {
 workspace "chat"
 workspace "main"
 workspace "aux" {
+}
+
+recent-windows {
+    off
 }
 
 // This line starts waybar, a commonly used bar for Wayland compositors.

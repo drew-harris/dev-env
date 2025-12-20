@@ -2,7 +2,7 @@
 
 # Dependencies: Materials Icon font for the glyphs (ensure your Waybar font config includes it)
 
-device="08:25:73:2E:45:77" # Replace with your device's MAC address
+device="BC:80:4E:88:79:08" # Replace with your device's MAC address
 
 # Define colors (Waybar will handle colors via CSS, but we can define classes)
 # grey_class="grey" # Not used directly in JSON output, but for clarity
