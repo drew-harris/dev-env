@@ -113,37 +113,67 @@ if [[ "$goto_execution" != "true" ]]; then
     # Extract block names marked with #@ <name>
     BLOCK_NAMES=$(grep -E '^#@ ' "$PAD_FILE" | sed 's/#@ //')
 
-    # Select a block using fzf with keybindings
-    SELECTED_OUTPUT=$(echo "$BLOCK_NAMES" | fzf \
-        --header ' <cr>: window, <c-p> pane (unfocused), <c-f> pane (focused), <c-s> shell, <c-e> edit, or type command to run' \
-        --prompt="Select block or enter command: " \
-        --expect=ctrl-p,ctrl-s,ctrl-e,ctrl-f \
-        --bind='ctrl-p:accept' \
-        --bind='ctrl-s:accept' \
-        --bind='ctrl-e:accept' \
-        --bind='ctrl-f:accept' \
-        --reverse \
-        --print-query)
+    # Check if we're in Zed editing pad.nu - use cursor position to select block
+    if [[ "$(basename "$ZED_FILENAME" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW" ]]; then
+        # Find the block that contains the current row
+        # ZED_ROW is 1-indexed, we need to find the #@ line at or before this row
+        SELECTED_BLOCK=$(awk -v row="$ZED_ROW" '
+            /^#@ / {
+                block_name = substr($0, 4)
+                block_line = NR
+            }
+            /^$/ {
+                # Empty line ends the current block
+                block_name = ""
+                block_line = 0
+            }
+            NR == row {
+                if (block_name != "") {
+                    print block_name
+                }
+                exit
+            }
+        ' "$PAD_FILE")
 
-    # Split the output into query, key press, and selection
-    # First line is the query, second line is the key, third line is the selection
-    QUERY=$(echo "$SELECTED_OUTPUT" | sed -n '1p')
-    KEY=$(echo "$SELECTED_OUTPUT" | sed -n '2p')
-    SELECTED_BLOCK=$(echo "$SELECTED_OUTPUT" | sed -n '3p')
-
-    if [[ -z "$SELECTED_BLOCK" ]]; then
-        # No block selected, but query might be present
-        if [[ -n "$QUERY" ]]; then
-            echo "Running command: $QUERY"
-
-            # Execute the query and add the "Press Enter to close" prompt
-            eval "$QUERY"
-            echo -e "\nPress Enter to close"
-            read -r
-            exit 0
-        else
-            echo "No block selected or command entered."
+        if [[ -z "$SELECTED_BLOCK" ]]; then
+            echo "No block found at row $ZED_ROW"
             exit 1
+        fi
+
+        KEY=""  # Default to normal execution (window mode)
+    else
+        # Select a block using fzf with keybindings
+        SELECTED_OUTPUT=$(echo "$BLOCK_NAMES" | fzf \
+            --header ' <cr>: window, <c-p> pane (unfocused), <c-f> pane (focused), <c-s> shell, <c-e> edit, or type command to run' \
+            --prompt="Select block or enter command: " \
+            --expect=ctrl-p,ctrl-s,ctrl-e,ctrl-f \
+            --bind='ctrl-p:accept' \
+            --bind='ctrl-s:accept' \
+            --bind='ctrl-e:accept' \
+            --bind='ctrl-f:accept' \
+            --reverse \
+            --print-query)
+
+        # Split the output into query, key press, and selection
+        # First line is the query, second line is the key, third line is the selection
+        QUERY=$(echo "$SELECTED_OUTPUT" | sed -n '1p')
+        KEY=$(echo "$SELECTED_OUTPUT" | sed -n '2p')
+        SELECTED_BLOCK=$(echo "$SELECTED_OUTPUT" | sed -n '3p')
+
+        if [[ -z "$SELECTED_BLOCK" ]]; then
+            # No block selected, but query might be present
+            if [[ -n "$QUERY" ]]; then
+                echo "Running command: $QUERY"
+
+                # Execute the query and add the "Press Enter to close" prompt
+                eval "$QUERY"
+                echo -e "\nPress Enter to close"
+                read -r
+                exit 0
+            else
+                echo "No block selected or command entered."
+                exit 1
+            fi
         fi
     fi
 
