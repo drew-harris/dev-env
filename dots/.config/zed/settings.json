@@ -8,6 +8,8 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "lsp_document_colors": "inlay",
+  "ui_font_weight": 400.0,
   "icon_theme": "VSCode Icons for Zed (Light)",
   "context_servers": {},
   "rounded_selection": false,
@@ -48,7 +50,6 @@
     "thumb": "always",
     "show": "never",
   },
-  "agent_ui_font_size": 18,
   "restore_on_startup": "last_workspace",
   "restore_on_file_reopen": true,
   "close_on_file_delete": true,
@@ -57,7 +58,7 @@
   "expand_excerpt_lines": 3,
   "minimum_contrast_for_highlights": 0,
   "bottom_dock_layout": "left_aligned",
-  "colorize_brackets": true,
+  "colorize_brackets": false,
   "current_line_highlight": "all",
   "title_bar": {
     "show_branch_name": true,
@@ -149,7 +150,7 @@
   "vertical_scroll_margin": 6,
   "theme": {
     "mode": "dark",
-    "dark": "Sonokai",
+    "dark": "One Dark",
     "light": "One Light",
   },
   "features": {
@@ -162,13 +163,9 @@
   },
   "buffer_font_size": 14,
   // NOTE: Change the font family to your preference
-  "ui_font_size": 14,
-  // "ui_font_family": "Berkeley Mono",
-  // "ui_font_weight": 500,
+  "ui_font_size": 13.0,
   "buffer_font_family": "Berkeley Mono",
   "buffer_font_weight": 500,
-  // Vim mode settings
-  // "vim_mode": true,
   "helix_mode": true,
   "vim": {
     "use_system_clipboard": "never",
@@ -216,7 +213,10 @@
     "right_padding": 0.25,
   },
   "inlay_hints": {
-    "show_value_hints": false,
+    "show_background": false,
+    "show_parameter_hints": true,
+    "show_type_hints": true,
+    "show_value_hints": true,
     "enabled": false,
   },
   "file_finder": {
@@ -234,7 +234,6 @@
   },
   // LSP
   "languages": {
-    // Refer https://zed.dev/docs/languages/javascript and https://zed.dev/docs/languages/typescript for more info
     "TypeScript": {
       "formatter": [
         {
@@ -279,19 +278,12 @@
         "require_config_file": true,
       },
     },
-    "vtsls": {
-      "settings": {
-        // For TypeScript:
-        "typescript": { "tsserver": { "maxTsServerMemory": 16184 } },
-        // For JavaScript:
-        "javascript": { "tsserver": { "maxTsServerMemory": 16184 } },
-      },
-    },
   },
   "excerpt_context_lines": 2,
   // Use zed commit editor
   "terminal": {
-    "alternate_scroll": "off",
+    "alternate_scroll": "on",
+    "scroll_multiplier": 0.5,
     // Delta freezes up without this!
     "minimum_contrast": 0,
     "env": {
@@ -357,11 +349,11 @@
     "entry_spacing": "comfortable",
     "hide_gitignore": false,
     "button": true,
-    "dock": "left",
+    "dock": "right",
     "default_width": 344.0,
     "hide_root": true,
     "indent_size": 18.0,
-    "starts_open": true,
+    "starts_open": false,
     "sticky_scroll": true,
   },
   "outline_panel": {

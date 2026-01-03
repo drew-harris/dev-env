@@ -322,6 +322,20 @@
           "reveal_target": "center",
         },
       ],
+      "ctrl-a r": [
+        "task::Spawn",
+        {
+          "task_name": "block",
+          "reveal_target": "center",
+        },
+      ],
+      "cmd-r": [
+        "task::Spawn",
+        {
+          "task_name": "block",
+          "reveal_target": "center",
+        },
+      ],
       "ctrl-a \"": "workspace::NewTerminal",
     },
   },
@@ -348,6 +362,7 @@
       "space l a": "editor::ToggleCodeActions",
       "space .": "editor::ToggleCodeActions",
       "space l r": "editor::Rename",
+      "space z": "editor::Cancel",
       "g d": "editor::GoToDefinition",
       "g D": "editor::GoToDefinitionSplit",
       "g i": "editor::GoToImplementation",
@@ -708,7 +723,7 @@
   {
     "context": "((vim_mode == helix_normal || vim_mode == helix_select) && !menu)",
     "bindings": {
-      "space c": null
-    }
-  }
+      "space c": null,
+    },
+  },
 ]

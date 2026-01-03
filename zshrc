@@ -90,6 +90,8 @@ fwd() {
   socat TCP-LISTEN:"$1",fork,reuseaddr TCP:"$2":"$3"
 }
 
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
