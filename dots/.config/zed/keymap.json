@@ -5,8 +5,8 @@
     "context": "os==linux && Workspace > Editor",
     "bindings": {
       "super-tab": "editor::AcceptEditPrediction",
-      "ctrl-l": "editor::AcceptEditPrediction"
-    }
+      "ctrl-l": "editor::AcceptEditPrediction",
+    },
   },
   {
     "context": "Pane && os==linux > (KeyContextView || MarkdownPreview || KeymapEditor || CollabPanel)",
@@ -727,18 +727,15 @@
       "space c": null,
     },
   },
-      "ctrl-j": null
-    }
-  },
   {
     "context": "os==linux && Editor",
     "bindings": {
       "alt-d": [
         "editor::SelectNext",
         {
-          "replace_newest": false
-        }
-      ]
-    }
-  }
+          "replace_newest": false,
+        },
+      ],
+    },
+  },
 ]

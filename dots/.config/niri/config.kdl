@@ -421,6 +421,8 @@ binds {
 
     Mod+Ctrl+Shift+L { spawn "swaylock";}
 
+    Mod+Shift+A { spawn-sh "~/dev-env/scripts/airpods --toggle";}
+
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.

@@ -167,6 +167,7 @@
   "buffer_font_family": "Berkeley Mono",
   "buffer_font_weight": 500,
   "helix_mode": true,
+  "vim_mode": false,
   "vim": {
     "use_system_clipboard": "never",
     "cursor_shape": {

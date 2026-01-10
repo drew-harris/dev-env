@@ -3,6 +3,34 @@
 # Dependencies: Materials Icon font for the glyphs (ensure your Waybar font config includes it)
 
 device="BC:80:4E:88:79:08" # Replace with your device's MAC address
+controller="E0:D3:62:64:87:87" # dongle controller MAC address
+
+# Helper to run bluetoothctl commands on the correct controller
+btctl() {
+    echo -e "select $controller\n$*" | bluetoothctl 2>/dev/null
+}
+
+# Connect with retry logic (Bluetooth connections can be flaky)
+connect_with_retry() {
+    local attempts=3
+    local delay=1.5
+    
+    for ((i=1; i<=attempts; i++)); do
+        btctl connect "$device"
+        sleep "$delay"
+        
+        # Check if connection succeeded
+        if btctl info "$device" | grep -q "Connected: yes"; then
+            return 0
+        fi
+        
+        if ((i < attempts)); then
+            sleep 0.5
+        fi
+    done
+    
+    return 1
+}
 
 # Define colors (Waybar will handle colors via CSS, but we can define classes)
 # grey_class="grey" # Not used directly in JSON output, but for clarity
@@ -25,14 +53,14 @@ if [[ ! $service_running ]]; then
     exit 0
 fi
 
-controller_on=$(bluetoothctl show | grep "Powered: yes")
-device_paired=$(bluetoothctl devices Paired | grep "$device")
+controller_on=$(btctl show | grep "Powered: yes")
+device_paired=$(btctl devices Paired | grep "$device")
 # Initialize device_connected and device_blocked to avoid errors if device not paired
 device_connected=""
 device_blocked=""
 
 if [[ $device_paired ]]; then
-    device_info=$(bluetoothctl info "$device")
+    device_info=$(btctl info "$device")
     device_connected=$(echo "$device_info" | grep "Connected: yes")
     device_blocked=$(echo "$device_info" | grep "Blocked: yes")
 fi
@@ -84,30 +112,34 @@ toggle_state() {
         # Try to start the service if it's not running
         systemctl start bluetooth.service
         sleep 1 # Give it a moment
-        controller_on=$(bluetoothctl show | grep "Powered: yes")
+        controller_on=$(btctl show | grep "Powered: yes")
         # Fall through to power on logic if service starts
     fi
 
     if [[ ! $controller_on ]]; then
-        bluetoothctl power on
+        btctl power on
         sleep 0.5 # Give it a moment
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
-            bluetoothctl unblock "$device" && bluetoothctl connect "$device"
+            btctl unblock "$device"
+            sleep 0.5
+            connect_with_retry
         fi
     elif [[ $device_connected ]]; then
-        bluetoothctl disconnect "$device"
+        btctl disconnect "$device"
         sleep 0.5
-        bluetoothctl block "$device"
+        btctl block "$device"
     elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
-        bluetoothctl connect "$device" || bluetoothctl block "$device" # Try connect, if fails, block
+        connect_with_retry || btctl block "$device" # Try connect with retries, if fails, block
     elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked
-        bluetoothctl unblock "$device" && bluetoothctl connect "$device"
+        btctl unblock "$device"
+        sleep 0.5
+        connect_with_retry
     else # Controller on, but device not paired (or some other state)
         # This case might need more specific handling depending on desired behavior
         # For now, if device is known, try to connect (assuming it might have been unpaired manually)
         if [[ $device ]]; then
-            bluetoothctl connect "$device"
+            connect_with_retry
         fi
     fi
 }
@@ -115,7 +147,7 @@ toggle_state() {
 # --- maybe_block function ---
 maybe_block() {
     if [[ $controller_on ]] && [[ $device_paired ]] && [[ ! $device_connected ]] && [[ ! $device_blocked ]]; then
-        bluetoothctl block "$device"
+        btctl block "$device"
     fi
 }
 
