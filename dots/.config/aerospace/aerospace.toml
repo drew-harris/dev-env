@@ -56,12 +56,12 @@ preset = "qwerty"
 3 = "secondary"  # Main monitor
 
 [gaps]
-inner.horizontal =[{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
-inner.vertical =[{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
-outer.left = [{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
-outer.bottom = [{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
-outer.top = [{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
-outer.right = [{monitor.Retina = 0}, {monitor.'DELL$' = 24} ,24]
+inner.horizontal =[{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
+inner.vertical =[{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
+outer.left = [{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
+outer.bottom = [{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
+outer.top = [{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
+outer.right = [{monitor.Retina = 0}, {monitor.'DELL$' = 12} ,12]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

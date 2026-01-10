@@ -9,6 +9,10 @@
 // from the command palette or from `Zed` application menu.
 {
   "lsp_document_colors": "inlay",
+  "which_key": {
+    "enabled": true,
+    "delay_ms": 200,
+  },
   "ui_font_weight": 400.0,
   "icon_theme": "VSCode Icons for Zed (Light)",
   "context_servers": {},
@@ -42,7 +46,7 @@
     },
   },
 
-  "disable_ai": false,
+  "disable_ai": true,
   "minimap": {
     "thumb_border": "left_open",
     "current_line_highlight": "all",
@@ -59,7 +63,7 @@
   "minimum_contrast_for_highlights": 0,
   "bottom_dock_layout": "left_aligned",
   "colorize_brackets": false,
-  "current_line_highlight": "all",
+  "current_line_highlight": "gutter",
   "title_bar": {
     "show_branch_name": true,
     "show_branch_icon": true,
@@ -150,7 +154,7 @@
   "vertical_scroll_margin": 6,
   "theme": {
     "mode": "dark",
-    "dark": "One Dark",
+    "dark": "Sonokai",
     "light": "One Light",
   },
   "features": {
@@ -163,7 +167,7 @@
   },
   "buffer_font_size": 14,
   // NOTE: Change the font family to your preference
-  "ui_font_size": 13.0,
+  "ui_font_size": 14.0,
   "buffer_font_family": "Berkeley Mono",
   "buffer_font_weight": 500,
   "helix_mode": true,
@@ -208,6 +212,7 @@
     },
     "hunk_style": "staged_hollow",
     "path_style": "file_path_first",
+    "git_gutter": "tracked_files",
   },
   "centered_layout": {
     "left_padding": 0.25,
@@ -274,6 +279,13 @@
     },
   },
   "lsp": {
+    "typescript-language-server": {
+      "initialization_options": {
+        "vtsls": {
+          "autoUseWorkspaceTsdk": true,
+        },
+      },
+    },
     "biome": {
       "settings": {
         "require_config_file": true,
@@ -342,6 +354,10 @@
     "file_icons": true,
   },
   "soft_wrap": "editor_width",
+  "gutter": {
+    "min_line_number_digits": 2,
+  },
+
   // Move all panel to the right
   "project_panel": {
     "git_status": true,
@@ -401,8 +417,8 @@
       "background": "#242425",
       "terminal.background": "#242424",
       "search.match_background": "#67426b",
-      "editor.background": "#242424",
-      "editor.gutter.background": "#242424",
+      "editor.background": "#202020",
+      "editor.gutter.background": "#202020",
       "warning.background": "#2E2D24",
       "players": [{ "background": "#ff00ff", "selection": "#4A4A4A" }],
       "error.background": "#793336",

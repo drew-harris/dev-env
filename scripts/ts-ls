@@ -1,0 +1,2 @@
+#!/bin/sh
+node /Users/drew/Library/Application\ Support/Zed/languages/vtsls/node_modules/typescript/lib/tsserver.js

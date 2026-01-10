@@ -47,6 +47,7 @@ alias b="blocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
+alias oc="opencode"
 alias j='jjui'
 if [[ `uname -s` != Darwin ]]; then
   alias hx='helix'

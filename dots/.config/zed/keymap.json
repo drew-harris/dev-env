@@ -66,10 +66,14 @@
   },
   {
     // for helix
-    "context": "vim_mode==helix_normal",
+    "context": "vim_mode==helix_normal && !menu",
     "bindings": {
       "shift-r": ["workspace::SendKeystrokes", "\" _ d h p y"],
       "g shift-r": "vim::PushReplaceWithRegister",
+      "escape": [
+        "action::Sequence",
+        ["vim::SwitchToHelixNormalMode", "buffer_search::Dismiss"],
+      ],
       // sorry but the muscle memory is too strong - update wrong!
       // t enter c is too awkward
       // "shift-c": ["workspace::SendKeystrokes", "t enter c"],
