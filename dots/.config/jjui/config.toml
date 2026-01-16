@@ -14,7 +14,7 @@ log_batching = true
 # revset = "here"
 
 [custom_commands]
-"pick commit" = { args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
+"pick commit" = { key = ["C"], args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
 "rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
 "new main" = { args = ["new", "main"] }
 "new after selected" = { key = ["N"], args = [

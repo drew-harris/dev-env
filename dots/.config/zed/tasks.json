@@ -237,8 +237,36 @@
     "use_new_terminal": true,
   },
   {
-    "label": "opencode",
+    "label": "oc",
     "command": "opencode",
+    "reveal_target": "center",
+    "env": {
+      "OPENCODE_EXPERIMENTAL": "1",
+    },
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "hide": "on_success",
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "use_new_terminal": true,
+  },
+  {
+    "label": "commit",
+    "command": "jj",
+    "args": ["commit", "-i", "--tool", "gitpatch"],
+    "reveal_target": "center",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "hide": "on_success",
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "use_new_terminal": true,
+  },
+  {
+    "label": "jpad",
+    "command": "innerblocker -p ~/jpad.nu",
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh",

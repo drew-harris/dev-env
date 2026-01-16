@@ -29,7 +29,7 @@
     "type": "chrome",
     "request": "launch",
     // "url": "http://localhost:3000/dash?s=main&app=5696faa0-af6b-4562-ade9-47ffb3b2b87b&t=explorer&ns=todos",
-    "url": "http://localhost:3001/",
+    "url": "http://localhost:3000/docs",
     "disableNetworkCache": false,
     "showAsyncStacks": false,
     "trace": true, // This will show debug logs,

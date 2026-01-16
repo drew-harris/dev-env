@@ -1,8 +1,5 @@
 # "$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
 
-[fsmonitor]
-backend = "watchman"
-
 [user]
 name = "Drew Harris"
 email = "drew@drewh.net"

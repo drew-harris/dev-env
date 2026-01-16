@@ -2,6 +2,9 @@
   "$schema": "https://opencode.ai/config.json",
   "theme": "system",
   "tui": {},
+  "disabled_providers": [
+    "anthropic"
+  ],
   "autoupdate": true,
   "agent": {
     "ask": {

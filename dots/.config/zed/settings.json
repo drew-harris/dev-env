@@ -8,6 +8,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "show_signature_help_after_edits": true,
   "lsp_document_colors": "inlay",
   "which_key": {
     "enabled": true,
@@ -26,7 +27,7 @@
   "debugger": {
     "dock": "bottom",
   },
-  "zoomed_padding": true,
+  "zoomed_padding": false,
   "use_system_window_tabs": true,
   "extend_comment_on_newline": false,
   "show_edit_predictions": true,
@@ -46,7 +47,7 @@
     },
   },
 
-  "disable_ai": true,
+  "disable_ai": false,
   "minimap": {
     "thumb_border": "left_open",
     "current_line_highlight": "all",
@@ -61,7 +62,7 @@
   "when_closing_with_no_tabs": "keep_window_open",
   "expand_excerpt_lines": 3,
   "minimum_contrast_for_highlights": 0,
-  "bottom_dock_layout": "left_aligned",
+  "bottom_dock_layout": "full",
   "colorize_brackets": false,
   "current_line_highlight": "gutter",
   "title_bar": {
@@ -184,6 +185,8 @@
   "relative_line_numbers": "enabled",
   "tab_bar": {
     "show": false,
+    "show_pinned_tabs_in_separate_row": false,
+    "show_tab_bar_buttons": true,
   },
   "scrollbar": {
     "axes": {
@@ -202,8 +205,8 @@
   "git": {
     "gutter_debounce": 0,
     "inline_blame": {
-      "enabled": false,
-      "delay_ms": 30000,
+      "enabled": true,
+      "delay_ms": 1500,
       "padding": 18,
       "show_commit_summary": true,
     },
@@ -320,7 +323,7 @@
     "JSON": ["json", "jsonc", "*.code-snippets"],
   },
   "search": {
-    "center_on_match": true,
+    // "center_on_match": true,
   },
   // File scan exclusions, hide on the file explorer and search
   "file_scan_exclusions": [
@@ -417,8 +420,8 @@
       "background": "#242425",
       "terminal.background": "#242424",
       "search.match_background": "#67426b",
-      "editor.background": "#202020",
-      "editor.gutter.background": "#202020",
+      "editor.background": "#1B1C1E",
+      "editor.gutter.background": "#1e1d1d",
       "warning.background": "#2E2D24",
       "players": [{ "background": "#ff00ff", "selection": "#4A4A4A" }],
       "error.background": "#793336",
