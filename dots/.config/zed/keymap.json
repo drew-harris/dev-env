@@ -200,7 +200,7 @@
           "reveal_target": "dock",
         },
       ],
-      "space g o": "git::BranchDiff",
+      "space g o": "workspace::ActivatePreviousPane",
       "space q": "pane::AlternateFile",
       "space p": [
         "action::Sequence",
@@ -293,7 +293,7 @@
       "space t k": "vim::PreviousLesserIndent",
       "space g r": "git::Restore",
       "space g R": "git::RestoreFile",
-      "space b": "tab_switcher::ToggleAll",
+      "space b": "tab_switcher::Toggle",
       "space u w": "editor::ToggleSoftWrap",
       // NOTE: Toggle Zen mode, not fully working yet
       "space c z": "workspace::ToggleCenteredLayout",
@@ -347,8 +347,8 @@
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
-      // "s": ["vim::PushSneak", {}],
-      // "S": ["vim::PushSneakBackward", {}]
+      "s": ["vim::PushSneak", {}],
+      "S": ["vim::PushSneakBackward", {}],
     },
   },
   {

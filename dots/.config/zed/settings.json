@@ -8,7 +8,7 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
-  "show_signature_help_after_edits": true,
+  "show_signature_help_after_edits": false,
   "lsp_document_colors": "inlay",
   "which_key": {
     "enabled": true,
@@ -29,7 +29,7 @@
   },
   "zoomed_padding": false,
   "use_system_window_tabs": true,
-  "extend_comment_on_newline": false,
+  "extend_comment_on_newline": true,
   "show_edit_predictions": true,
   "sticky_scroll": {
     "enabled": true,
@@ -38,16 +38,14 @@
     "always_allow_tool_actions": true,
     "play_sound_when_agent_done": true,
     "inline_assistant_model": {
-      "provider": "openai",
-      "model": "gpt-5",
+      "provider": "openrouter",
+      "model": "anthropic/claude-opus-4.5",
     },
     "default_model": {
       "provider": "openrouter",
-      "model": "anthropic/claude-sonnet-4",
+      "model": "anthropic/claude-opus-4.5",
     },
   },
-
-  "disable_ai": false,
   "minimap": {
     "thumb_border": "left_open",
     "current_line_highlight": "all",
@@ -66,8 +64,8 @@
   "colorize_brackets": false,
   "current_line_highlight": "gutter",
   "title_bar": {
-    "show_branch_name": true,
-    "show_branch_icon": true,
+    "show_branch_name": false,
+    "show_branch_icon": false,
   },
   "edit_predictions": {
     "mode": "subtle",
@@ -156,7 +154,7 @@
   "theme": {
     "mode": "dark",
     "dark": "Sonokai",
-    "light": "One Light",
+    "light": "Rosé Pine Dawn",
   },
   "features": {
     "edit_prediction_provider": "zed",
@@ -205,7 +203,7 @@
   "git": {
     "gutter_debounce": 0,
     "inline_blame": {
-      "enabled": true,
+      "enabled": false,
       "delay_ms": 1500,
       "padding": 18,
       "show_commit_summary": true,
@@ -295,7 +293,7 @@
       },
     },
   },
-  "excerpt_context_lines": 2,
+  "excerpt_context_lines": 3,
   // Use zed commit editor
   "terminal": {
     "alternate_scroll": "on",
@@ -401,18 +399,17 @@
       "border.variant": "#313244",
       "border.selected": "#3C3C4E",
     },
-    "One Light": {
-      // "editor.background": "#e0e0e0",
-      // "background.appearance": "blurred"
-    },
     "Fleet Dark": {
       "border.selected": "#464B51",
+    },
+    "Catppuccin Latte": {
+      "border.variant": "#c9ccd1",
     },
     "Sonokai": {
       "background.appearance": "opaque",
       "panel.background": "#252525",
       "border.selected": "#737373",
-      "border.variant": "#4A4a4a",
+      "border.variant": "#4a4a4a",
       "tab_bar.background": "#242424",
       "toolbar.background": "#303030",
       "title_bar.background": "#242424",
@@ -420,8 +417,8 @@
       "background": "#242425",
       "terminal.background": "#242424",
       "search.match_background": "#67426b",
-      "editor.background": "#1B1C1E",
-      "editor.gutter.background": "#1e1d1d",
+      "editor.background": "#1e1e1e",
+      "editor.gutter.background": "#1e1e1e",
       "warning.background": "#2E2D24",
       "players": [{ "background": "#ff00ff", "selection": "#4A4A4A" }],
       "error.background": "#793336",

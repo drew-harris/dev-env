@@ -97,6 +97,8 @@ ll = ["log", "-T", "log_with_files"]
 # log = "default-with-hidden"
 
 [revset-aliases]
+'trunc' = '(present(@) | ancestors(heads(mine() & immutable_heads()..) | @, 3) | (descendants(trunk(), 3) & ::(heads(mine() & immutable_heads()..) | @)) | present(trunk())) & ~(description("hidden:")::)'
+
 'default-with-hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & ~(description("hidden:")::)'
 'super-default' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk()))'
 'hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & (description("hidden:")::)'
