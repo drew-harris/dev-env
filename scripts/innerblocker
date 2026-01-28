@@ -144,10 +144,9 @@ if [[ "$goto_execution" != "true" ]]; then
     else
         # Select a block using fzf with keybindings
         SELECTED_OUTPUT=$(echo "$BLOCK_NAMES" | fzf \
-            --header ' <cr>: window, <c-p> pane (unfocused), <c-f> pane (focused), <c-s> shell, <c-e> edit, or type command to run' \
+            --header ' <cr>: window, <c-f> pane (focused), <c-s> shell, <c-e> edit, or type command to run' \
             --prompt="Select block or enter command: " \
-            --expect=ctrl-p,ctrl-s,ctrl-e,ctrl-f \
-            --bind='ctrl-p:accept' \
+            --expect=ctrl-s,ctrl-e,ctrl-f \
             --bind='ctrl-s:accept' \
             --bind='ctrl-e:accept' \
             --bind='ctrl-f:accept' \

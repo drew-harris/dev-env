@@ -52,7 +52,7 @@
     // for helix
     "context": "vim_mode==visual || vim_mode==helix_normal",
     "bindings": {
-      "g c": "editor::ToggleComments",
+      // "g c": "editor::ToggleComments",
       "] j": "vim::SelectNext",
       "s": "vim::HelixSelectRegex",
     },
@@ -237,7 +237,7 @@
           "reveal_target": "center",
         },
       ],
-      "space h": [
+      "\\": [
         "task::Spawn",
         {
           "task_name": "javelin",
@@ -324,6 +324,13 @@
         "task::Spawn",
         {
           "task_name": "bjjui",
+          "reveal_target": "center",
+        },
+      ],
+      "ctrl-a J": [
+        "task::Spawn",
+        {
+          "task_name": "jpad",
           "reveal_target": "center",
         },
       ],
@@ -542,6 +549,13 @@
         "task::Spawn",
         {
           "task_name": "bjjui",
+          "reveal_target": "center",
+        },
+      ],
+      "ctrl-a J": [
+        "task::Spawn",
+        {
+          "task_name": "jpad",
           "reveal_target": "center",
         },
       ],

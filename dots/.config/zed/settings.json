@@ -1,4 +1,4 @@
-// settings.json, generated at Thu Nov 07 2024 18:01:50 GMT+0800 (Singapore Standard Time)
+// settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 // Zed settings
 //
 // For information on how to configure Zed, see the Zed
@@ -152,9 +152,9 @@
   ],
   "vertical_scroll_margin": 6,
   "theme": {
-    "mode": "dark",
+    "mode": "light",
     "dark": "Sonokai",
-    "light": "Rosé Pine Dawn",
+    "light": "One Light",
   },
   "features": {
     "edit_prediction_provider": "zed",
@@ -162,12 +162,12 @@
   "base_keymap": "VSCode",
   "selection_highlight": false,
   "buffer_line_height": {
-    "custom": 1.2,
+    "custom": 1.3,
   },
   "buffer_font_size": 14.0,
   // NOTE: Change the font family to your preference
   "ui_font_size": 14.0,
-  "buffer_font_family": "Berkeley Mono",
+  "buffer_font_family": "Hack Nerd Font Mono",
   "buffer_font_weight": 500,
   "helix_mode": true,
   "vim_mode": false,
@@ -198,6 +198,9 @@
   },
   "indent_guides": {
     "enabled": true,
+    // "background_coloring": "indent_aware",
+    "active_line_width": 2,
+    "line_width": 1,
     "coloring": "fixed",
   },
   "git": {
@@ -356,6 +359,7 @@
   },
   "soft_wrap": "editor_width",
   "gutter": {
+    "folds": true,
     "min_line_number_digits": 2,
   },
 
@@ -404,6 +408,67 @@
     },
     "Catppuccin Latte": {
       "border.variant": "#c9ccd1",
+    },
+    "One Light": {
+      "border": "#D6D6D6FF",
+      "elevated_surface.background": "#FAFAFAFF",
+      "surface.background": "#FAFAFAFF",
+      "background": "#F2F2F2FF",
+      "text": "#000000FF",
+      "text.muted": "#696969FF",
+      "icon": "#000000FF",
+      "icon.muted": "#696969FF",
+      "status_bar.background": "#F2F2F2FF",
+      "title_bar.background": "#F2F2F2FF",
+      "toolbar.background": "#FFFFFFFF",
+      "tab_bar.background": "#FAFAFAFF",
+      "tab.active_background": "#FFFFFFFF",
+      "panel.background": "#FAFAFAFF",
+      "editor.background": "#FFFFFFFF",
+      "editor.gutter.background": "#FFFFFFFF",
+      "editor.subheader.background": "#F5F5F5FF",
+      "editor.highlighted_line.background": "#FAFAFAFF",
+      "editor.line_number": "#A3A3A3FF",
+      "editor.active_line_number": "#383A3DFF",
+      "terminal.background": "#FAFAFAFF",
+      "version_control.added": "#1CC95CFF",
+      "syntax": {
+        "attribute": {
+          "color": "#1487DBFF",
+        },
+        "comment": {
+          "color": "#828282FF",
+        },
+        "constant": {
+          "color": "#DB9300FF",
+        },
+        "constructor": {
+          "color": "#193BC2FF",
+        },
+        "function": {
+          "color": "#002CC4FF",
+        },
+        "keyword": {
+          "color": "#A500B8FF",
+        },
+        "number": {
+          "color": "#B36000FF",
+        },
+        "property": {
+          "color": "#C41E0CFF",
+        },
+        "string": {
+          "color": "#198500FF",
+        },
+        "tag": {
+          "color": "#002BC9FF",
+        },
+        "type": {
+          "color": "#0058A1FF",
+        },
+      },
+      "panel.overlay_background": "#FAFAFAFF",
+      "panel.overlay_hover": "#F2F2F2FF",
     },
     "Sonokai": {
       "background.appearance": "opaque",

@@ -153,19 +153,6 @@
     "hide": "on_success",
   },
   {
-    "label": "ffchanged",
-    "command": "zask",
-    "reveal_target": "center",
-    "args": ["changed"],
-    "shell": {
-      "program": "/bin/sh",
-    },
-    "allow_concurrent_runs": true,
-    "reveal": "always",
-    "use_new_terminal": true,
-    "hide": "on_success",
-  },
-  {
     "label": "ff",
     "command": "zask",
     "args": ["smartold"],
@@ -189,14 +176,6 @@
     "allow_concurrent_runs": true,
     "reveal": "always",
     "use_new_terminal": true,
-  },
-  {
-    "label": "biome fix",
-    "command": "bun biome lint --write --unsafe",
-    "reveal_target": "dock",
-    "shell": {
-      "program": "/bin/sh",
-    },
   },
   {
     "label": "helix",
