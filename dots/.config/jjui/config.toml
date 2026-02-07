@@ -1,5 +1,8 @@
-[ui.colors]
-"selected" = { bg = "#444444" }
+# [ui.colors]
+# "selected" = { bg = "#52c8ff", fg = "#000000" }
+#
+[ui.theme]
+light = "light"
 
 # [ui.tracer]
 # enabled = true
@@ -14,6 +17,9 @@ log_batching = true
 # revset = "trunc"
 
 [custom_commands]
+"diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}
+"diffedit" = {args = ["diffedit", "-r", "$change_id", "--tool", "zededit"]}
+"open pr" = { args = ["pr"]}
 "pick commit" = { key = ["C"], args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
 "rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
 "new main" = { args = ["new", "main"] }

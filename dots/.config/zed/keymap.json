@@ -200,7 +200,7 @@
           "reveal_target": "dock",
         },
       ],
-      "space g o": "workspace::ActivatePreviousPane",
+      "space g o": "git::BranchDiff",
       "space q": "pane::AlternateFile",
       "space p": [
         "action::Sequence",
@@ -211,6 +211,7 @@
       // "space k": ["workspace::SendKeystrokes", "space n enter g r"],
       "space m": "editor::ToggleMinimap",
       "ctrl-a n": "panel::NextPanelTab",
+      "ctrl-a m": "workspace::NewTerminal",
       "space j a": "pane::JoinAll",
       "cmd-p": [
         "file_finder::Toggle",
@@ -301,6 +302,13 @@
         "task::Spawn",
         {
           "task_name": "Choose File",
+          "reveal_target": "center",
+        },
+      ],
+      "_": [
+        "task::Spawn",
+        {
+          "task_name": "Choose Dir",
           "reveal_target": "center",
         },
       ],
@@ -427,6 +435,13 @@
           "reveal_target": "center",
         },
       ],
+      "_": [
+        "task::Spawn",
+        {
+          "task_name": "Choose Dir",
+          "reveal_target": "center",
+        },
+      ],
       "space g m": "git::OpenModifiedFiles",
       // Open recent project
       "ctrl-a f": "projects::OpenRecent",
@@ -481,6 +496,7 @@
           "reveal_target": "center",
         },
       ],
+      "ctrl-a m": "workspace::NewTerminal",
     },
   },
   // Comment code
@@ -545,6 +561,7 @@
       "ctrl-a f": "projects::OpenRecent",
       "ctrl-a \"": "pane::SplitHorizontal",
       "ctrl-a %": "pane::SplitVertical",
+      "ctrl-a m": "workspace::NewTerminal",
       "ctrl-a j": [
         "task::Spawn",
         {

@@ -1,0 +1,14 @@
+#!/bin/bash
+# Find a directory with zoxide and open a yazi session there
+# Save as ~/.local/bin/zed-yazi
+# zoxide query -i | xargs yazi
+TEMP_FILE="/tmp/zed-yazi-$(date +%s)"
+EDITOR="zed"
+zoxide query -i | xargs -J % yazi % --chooser-file="$TEMP_FILE"
+if [ -f "$TEMP_FILE" ]; then
+    CHOSEN_FILE=$(cat "$TEMP_FILE")
+    rm "$TEMP_FILE"
+    if [ -n "$CHOSEN_FILE" ]; then
+        zed "$CHOSEN_FILE"
+    fi
+fi

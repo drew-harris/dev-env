@@ -8,7 +8,7 @@ soft-wrap.enable = true
 end-of-line-diagnostics = "hint"
 
 [editor.inline-diagnostics]
-cursor-line = "warning"
+cursor-line = "disable"
 
 [editor.cursor-shape]
 insert = "bar"
@@ -31,7 +31,7 @@ space = { p = ":buffer-previous", s = { s = "symbol_picker", f = [
   ':insert-output echo "\x1b[?1049h\x1b[?2004h" > /dev/tty',
   ":open %sh{cat /tmp/unique-file}",
   ":redraw",
-] }, g = { r = [":reset-diff-change"] }, r = ":reload-all", l = { r = "rename_symbol", a = "code_action" }, a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" } }
+] }, g = { r = [":reset-diff-change"] }, r = ":reload-all", l = { r = "rename_symbol", a = "code_action" }, a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" }, x = ":buffer-close" }
 esc = ["collapse_selection", "keep_primary_selection"]
 
 [keys.insert]

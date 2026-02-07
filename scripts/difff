@@ -1,0 +1,3 @@
+#!/bin/bash
+
+jj diffedit -r $1 --tool zed &>/dev/null & disown
