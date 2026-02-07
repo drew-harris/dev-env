@@ -183,7 +183,7 @@
   "tab_bar": {
     "show": true,
     "show_pinned_tabs_in_separate_row": false,
-    "show_tab_bar_buttons": true,
+    "show_tab_bar_buttons": false,
   },
   "scrollbar": {
     "axes": {
@@ -282,6 +282,21 @@
     },
   },
   "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always",
+          },
+        },
+      },
+      "enable_lsp_tasks": true,
+    },
     "typescript-language-server": {
       "initialization_options": {
         "vtsls": {
@@ -336,7 +351,7 @@
     "**/.classpath",
     "**/.settings",
   ],
-  "cursor_blink": false,
+  "cursor_blink": true,
   "toolbar": {
     "selections_menu": true,
     "code_actions": true,
