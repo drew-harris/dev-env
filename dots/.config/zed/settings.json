@@ -181,7 +181,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": false,
+    "show": true,
     "show_pinned_tabs_in_separate_row": false,
     "show_tab_bar_buttons": true,
   },

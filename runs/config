@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo " Skipping , old code use gnu stow instead"
+exit 0
+
 mkdir -p $HOME/.config/ghostty
 cp $HOME/dev-env/config/ghostty/config $HOME/.config/ghostty/config
 
