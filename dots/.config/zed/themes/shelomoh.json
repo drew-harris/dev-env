@@ -156,11 +156,7 @@
         "warning": "#ffc828",
         "warning.background": "#ffff1019",
         "warning.border": null,
-        "players": [
-          {
-            "selection": "#f23a1e"
-          }
-        ],
+        "players": [{ "background": "#ff00ff", "selection": "#595959" }],
         "syntax": {
           "attribute": {
             "color": "#9696FF",

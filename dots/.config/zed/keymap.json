@@ -185,6 +185,7 @@
       ],
       "space k": "vim::SelectLargerSyntaxNode",
       "space g d": "editor::ToggleSelectedDiffHunks",
+      "space g t": "editor::ToggleSplitDiff",
       "space g s": "git::Diff",
       "space c r": [
         "task::Spawn",
@@ -294,7 +295,7 @@
       "space t k": "vim::PreviousLesserIndent",
       "space g r": "git::Restore",
       "space g R": "git::RestoreFile",
-      "space b": "tab_switcher::Toggle",
+      "space b": "tab_switcher::OpenInActivePane",
       "space u w": "editor::ToggleSoftWrap",
       // NOTE: Toggle Zen mode, not fully working yet
       "space c z": "workspace::ToggleCenteredLayout",
@@ -412,7 +413,7 @@
       // Close active panel
       "shift-q": "pane::CloseActiveItem",
       "ctrl-q": "pane::CloseActiveItem",
-      "space x": "pane::CloseActiveItem",
+      "space x": "workspace::CloseItemInAllPanes",
       // Close other items
       "space o": "pane::CloseOtherItems",
       // Save file

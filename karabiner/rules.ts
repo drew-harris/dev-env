@@ -92,7 +92,7 @@ const rules: KarabinerRules[] = [
     m: open("raycast://extensions/iamyeizi/toggle-menu-bar/toggle"),
     x: app("Calendar"),
     s: app("Spotify"),
-    z: app("Zed Preview"),
+    z: app("OpenCode"),
     v: app("FreeTube"),
 
     // b = "B"rowse

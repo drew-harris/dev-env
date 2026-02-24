@@ -3,8 +3,8 @@
 local function is_file_buffer(info)
   -- Listed, not special, has a filename
   return info.name ~= ""
-    and (info.buftype == nil or info.buftype == "")
-    and (info.buflisted == 1 or info.buflisted == nil)
+      and (info.buftype == nil or info.buftype == "")
+      and (info.buflisted == 1 or info.buflisted == nil)
 end
 
 local function buffer_arg(info, opts)
@@ -132,3 +132,4 @@ vim.api.nvim_create_user_command(
   make_open_current_fn(zed_opts),
   { desc = "Open current buffer in Zed", nargs = 0 }
 )
+
