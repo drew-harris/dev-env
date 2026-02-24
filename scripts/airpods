@@ -13,7 +13,7 @@ btctl() {
 # Connect with retry logic (Bluetooth connections can be flaky)
 connect_with_retry() {
     local attempts=3
-    local delay=1.5
+    local delay=0.3
     
     for ((i=1; i<=attempts; i++)); do
         btctl connect "$device"
@@ -118,22 +118,22 @@ toggle_state() {
 
     if [[ ! $controller_on ]]; then
         btctl power on
-        sleep 0.5 # Give it a moment
+        sleep 0.2 # Give it a moment
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
             btctl unblock "$device"
-            sleep 0.5
+            sleep 0.2
             connect_with_retry
         fi
     elif [[ $device_connected ]]; then
         btctl disconnect "$device"
-        sleep 0.5
+        sleep 0.2
         btctl block "$device"
     elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
         connect_with_retry || btctl block "$device" # Try connect with retries, if fails, block
     elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked
         btctl unblock "$device"
-        sleep 0.5
+        sleep 0.2
         connect_with_retry
     else # Controller on, but device not paired (or some other state)
         # This case might need more specific handling depending on desired behavior
