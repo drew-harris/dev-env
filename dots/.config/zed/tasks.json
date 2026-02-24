@@ -155,7 +155,7 @@
   {
     "label": "ff",
     "command": "zask",
-    "args": ["smartold"],
+    "args": ["smarterold"],
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh",

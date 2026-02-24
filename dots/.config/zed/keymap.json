@@ -187,6 +187,8 @@
       "space g d": "editor::ToggleSelectedDiffHunks",
       "space g t": "editor::ToggleSplitDiff",
       "space g s": "git::Diff",
+      "g .": "vim::ChangeListOlder",
+      "g ,": "vim::ChangeListNewer",
       "space c r": [
         "task::Spawn",
         {
