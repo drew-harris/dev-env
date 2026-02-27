@@ -1,5 +1,8 @@
 // settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 {
+  "debugger": {
+    "dock": "right",
+  },
   "show_signature_help_after_edits": false,
   "lsp_document_colors": "inlay",
   "which_key": {
@@ -51,7 +54,6 @@
   "inline_code_actions": false,
   "when_closing_with_no_tabs": "keep_window_open",
   "minimum_contrast_for_highlights": 0,
-  "bottom_dock_layout": "full",
   "colorize_brackets": false,
   "current_line_highlight": "gutter",
   "edit_predictions": {
@@ -122,8 +124,15 @@
       "args": [],
       "projects": [
         {
+          "paths": ["/home/drew/programs/arch-instant/./"],
+        },
+        {
           "paths": ["/home/drew/programs/hourhand"],
         },
+      ],
+      "port_forwards": [
+        { "local_port": 3000, "remote_port": 3000 },
+        { "local_port": 4000, "remote_port": 4000 },
       ],
     },
     {
@@ -149,9 +158,9 @@
   ],
   "vertical_scroll_margin": 3,
   "theme": {
-    "mode": "dark",
+    "mode": "light",
     "dark": "Drewh Lion Theme",
-    "light": "Adaptify Light",
+    "light": "One Light",
   },
   "base_keymap": "VSCode",
   "selection_highlight": false,
@@ -191,7 +200,7 @@
   "indent_guides": {
     "enabled": true,
     // "background_coloring": "indent_aware",
-    "active_line_width": 2,
+    "active_line_width": 1,
     "line_width": 1,
     "coloring": "fixed",
   },
@@ -351,13 +360,6 @@
     "**/.settings",
   ],
   "cursor_blink": true,
-  "toolbar": {
-    "selections_menu": true,
-    "code_actions": true,
-    "agent_review": true,
-    "breadcrumbs": true,
-    "quick_actions": true,
-  },
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
@@ -370,12 +372,6 @@
     "activate_on_close": "history",
     "file_icons": true,
   },
-  "soft_wrap": "editor_width",
-  "gutter": {
-    "folds": true,
-    "min_line_number_digits": 2,
-  },
-
   // Move all panel to the right
   "project_panel": {
     "git_status": true,

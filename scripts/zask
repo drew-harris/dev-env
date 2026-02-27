@@ -14,7 +14,7 @@ if [ "$1" = "smartold" ]; then
 fi
 
 if [ "$1" = "smarterold" ]; then
-    { jj diff -r @ -T 'status ++ ":" ++ path ++ "\n"' | awk -F: '{print "\033[34m" $2 "\033[0m"}'; jj diff --from main --to @ -T 'status ++ ":" ++ path ++ "\n"' | awk -F: '{
+    { jj diff -r @ -T 'status ++ ":" ++ path.display() ++ "\n"' | awk -F: '{print "\033[34m" $2 "\033[0m"}'; jj diff --from main --to @ -T 'status ++ ":" ++ path.display() ++ "\n"' | awk -F: '{
     if ($1 == "added") print "\033[32m" $2 "\033[0m"
     else print "\033[33m" $2 "\033[0m"
 }'; fd --type f; } | awk '{s=$0; gsub(/\033\[[0-9;]*m/, "", s); if (!seen[s]++) print}' | fzf --reverse --tiebreak=index --ansi --preview 'bat --color=always --style=numbers --line-range=:500 {}' | sed 's/\x1b\[[0-9;]*m//g' | xargs -r zed

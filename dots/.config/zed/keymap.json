@@ -776,4 +776,15 @@
       ],
     },
   },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-shift-d": null
+    }
+  },
+  {
+    "bindings": {
+      "cmd-shift-d": "debug_panel::Toggle"
+    }
+  }
 ]
