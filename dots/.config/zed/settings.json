@@ -3,6 +3,7 @@
   "debugger": {
     "dock": "right",
   },
+  "soft_wrap": "editor_width",
   "show_signature_help_after_edits": false,
   "lsp_document_colors": "inlay",
   "which_key": {
@@ -10,14 +11,19 @@
     "delay_ms": 200,
   },
   "ui_font_weight": 400.0,
-  "icon_theme": "VSCode Icons for Zed (Dark)",
+  "icon_theme": {
+    "mode": "light",
+    "light": "VSCode Icons for Zed (Dark)",
+    "dark": "VSCode Icons for Zed (Dark)",
+  },
   "window_decorations": "server",
   "agent_servers": {
+    "claude-acp": {
+      "type": "registry",
+      "default_mode": "acceptEdits",
+    },
     "opencode": {
       "type": "registry",
-    },
-    "claude": {
-      "default_mode": "acceptEdits",
     },
   },
   "zoomed_padding": false,
@@ -53,9 +59,12 @@
   "close_on_file_delete": true,
   "inline_code_actions": false,
   "when_closing_with_no_tabs": "keep_window_open",
-  "minimum_contrast_for_highlights": 0,
+  "minimum_contrast_for_highlights": 42,
   "colorize_brackets": false,
   "current_line_highlight": "gutter",
+  "gutter": {
+    "min_line_number_digits": 3,
+  },
   "edit_predictions": {
     "provider": "sweep",
     "mode": "subtle",
@@ -67,73 +76,115 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew/home"],
+          "paths": [
+            "/home/drew/home"
+          ]
         },
         {
-          "paths": ["/root/enterprises"],
+          "paths": [
+            "/root/enterprises"
+          ]
         },
         {
-          "paths": ["/root/rustical"],
+          "paths": [
+            "/root/rustical"
+          ]
         },
         {
-          "paths": ["/root/timerbot"],
-        },
-      ],
+          "paths": [
+            "/root/timerbot"
+          ]
+        }
+      ]
     },
     {
       "host": "hetzner",
       "args": [],
       "projects": [
         {
-          "paths": ["/root"],
+          "paths": [
+            "/root"
+          ]
         },
         {
-          "paths": ["/root/n8n"],
+          "paths": [
+            "/root/n8n"
+          ]
         },
         {
-          "paths": ["/root/sites/cookery/./"],
+          "paths": [
+            "/root/sites/cookery/./"
+          ]
         },
         {
-          "paths": ["/root/wealth"],
-        },
-      ],
+          "paths": [
+            "/root/wealth"
+          ]
+        }
+      ]
     },
     {
       "host": "dell",
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew"],
+          "paths": [
+            "/home/drew"
+          ]
         },
         {
-          "paths": ["/home/drew/benwrong"],
+          "paths": [
+            "/home/drew/benwrong"
+          ]
         },
-      ],
+        {
+          "paths": [
+            "/home/drew/home"
+          ]
+        },
+        {
+          "paths": [
+            "/home/drew/movies"
+          ]
+        }
+      ]
     },
     {
       "host": "mbp",
       "args": [],
       "projects": [
         {
-          "paths": ["/Users/drew/programs/instant/./"],
-        },
-      ],
+          "paths": [
+            "/Users/drew/programs/instant/./"
+          ]
+        }
+      ]
     },
     {
       "host": "arch",
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew/programs/arch-instant/./"],
+          "paths": [
+            "/home/drew/programs/arch-instant/./"
+          ]
         },
         {
-          "paths": ["/home/drew/programs/hourhand"],
-        },
+          "paths": [
+            "/home/drew/programs/hourhand"
+          ]
+        }
       ],
       "port_forwards": [
-        { "local_port": 3000, "remote_port": 3000 },
-        { "local_port": 4000, "remote_port": 4000 },
-      ],
+        {
+          "local_port": 3000,
+          "remote_port": 3000
+        },
+        {
+          "local_port": 4000,
+          "remote_port": 4000
+        }
+      ]
     },
     {
       "host": "5.78.94.31",
@@ -141,26 +192,46 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/root/caddy"],
+          "paths": [
+            "/root/caddy"
+          ]
         },
         {
-          "paths": ["/root/chat"],
+          "paths": [
+            "/root/chat"
+          ]
         },
         {
-          "paths": ["/root/manhunt"],
+          "paths": [
+            "/root/manhunt"
+          ]
         },
         {
-          "paths": ["/root/minecraft/./"],
-        },
+          "paths": [
+            "/root/minecraft/./"
+          ]
+        }
       ],
-      "nickname": "minecraft-server",
+      "nickname": "minecraft-server"
     },
+    {
+      "host": "5.78.74.140",
+      "username": "root",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/root/instant/server"
+          ]
+        }
+      ]
+    }
   ],
   "vertical_scroll_margin": 3,
   "theme": {
-    "mode": "light",
-    "dark": "Drewh Lion Theme",
-    "light": "One Light",
+    "mode": "dark",
+    "dark": "Sonokai",
+    "light": "Ayu Light",
   },
   "base_keymap": "VSCode",
   "selection_highlight": false,
@@ -171,6 +242,7 @@
   "ui_font_size": 14.0,
   "buffer_font_family": "BitstromWera Nerd Font",
   "helix_mode": true,
+  "vim_mode": false,
   "vim": {
     "default_mode": "normal",
     "use_system_clipboard": "never",
@@ -321,23 +393,8 @@
   },
   // Use zed commit editor
   "terminal": {
-    "alternate_scroll": "on",
-    "scroll_multiplier": 0.5,
-    // Delta freezes up without this!
-    "minimum_contrast": 0,
-    "env": {
-      "EDITOR": "zed --wait",
-    },
-    "line_height": {
-      "custom": 1.2,
-    },
-    "font_size": 14,
-    "font_weight": 500,
-    "font_family": "BitstromWera Nerd Font",
-    "toolbar": {
-      "breadcrumbs": false,
-    },
-    "copy_on_select": true,
+    "dock": "bottom",
+    "line_height": { "custom": 1.2 },
   },
   "snippet_sort_order": "top",
   // File syntax highlighting
@@ -358,6 +415,7 @@
     "**/Thumbs.db",
     "**/.classpath",
     "**/.settings",
+    "**/node_modules",
   ],
   "cursor_blink": true,
   "git_panel": {
@@ -397,7 +455,7 @@
     "dock": "left",
     "button": true,
   },
-  "semantic_tokens": "combined",
+  "semantic_tokens": "off",
   // Move some unnecessary panels to the left
   "notification_panel": {
     "button": false,

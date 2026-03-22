@@ -216,12 +216,6 @@
       "ctrl-a n": "panel::NextPanelTab",
       "ctrl-a m": "workspace::NewTerminal",
       "space j a": "pane::JoinAll",
-      "cmd-p": [
-        "file_finder::Toggle",
-        {
-          "separate_history": true,
-        },
-      ],
       "ctrl-a p": "terminal_panel::Toggle",
       "] h": "editor::GoToNextDocumentHighlight",
       "[ h": "editor::GoToPreviousDocumentHighlight",
@@ -245,42 +239,6 @@
         "task::Spawn",
         {
           "task_name": "javelin",
-          "reveal_target": "center",
-        },
-      ],
-      "space 1": [
-        "task::Spawn",
-        {
-          "task_name": "j1",
-          "reveal_target": "center",
-          "ephemeral": true, // does not work (but it's what i want)
-        },
-      ],
-      "space 2": [
-        "task::Spawn",
-        {
-          "task_name": "j2",
-          "reveal_target": "center",
-        },
-      ],
-      "space 3": [
-        "task::Spawn",
-        {
-          "task_name": "j3",
-          "reveal_target": "center",
-        },
-      ],
-      "space 4": [
-        "task::Spawn",
-        {
-          "task_name": "j4",
-          "reveal_target": "center",
-        },
-      ],
-      "space 5": [
-        "task::Spawn",
-        {
-          "task_name": "j5",
           "reveal_target": "center",
         },
       ],
@@ -370,6 +328,19 @@
     },
   },
   {
+    "context": "(Editor && (vim_mode == normal || vim_mode == helix_normal) && !VimWaiting && !menu) || DebugPanel",
+    "bindings": {
+      "space d l": "debugger::Start",
+      "space d r": "debugger::RerunSession",
+      "space d c": "debugger::Continue",
+      "space d e": "debugger::OpenProjectDebugTasks",
+      "space d h": "debugger::RunToCursor", // run to here
+      "space d o": "editor::EditLogBreakpoint", // run to here
+      "space d b": "editor::ToggleBreakpoint", // run to here
+      "space d C": "debugger::ClearAllBreakpoints", // run to here
+    },
+  },
+  {
     "context": "Editor && (vim_mode == normal || vim_mode == helix_normal) && !VimWaiting && !menu",
     "bindings": {
       // put key-bindings here if you want them to work only in normal mode
@@ -383,6 +354,10 @@
       // "ctrl-j": "workspace::ActivatePaneDown",
       // +LSP
       "space l a": "editor::ToggleCodeActions",
+      "space d l": "debugger::Start",
+      "space d r": "debugger::RerunSession",
+      "space d c": "debugger::Continue",
+      "space d e": "debugger::OpenProjectDebugTasks",
       "space .": "editor::ToggleCodeActions",
       "space l r": "editor::Rename",
       "space z": "editor::Cancel",
@@ -642,12 +617,6 @@
         "workspace::MoveItemToPaneInDirection",
         { "direction": "right" },
       ],
-      "cmd-p": [
-        "file_finder::Toggle",
-        {
-          "separate_history": true,
-        },
-      ],
     },
   },
   {
@@ -779,12 +748,12 @@
   {
     "context": "Workspace",
     "bindings": {
-      "cmd-shift-d": null
-    }
+      "cmd-shift-d": null,
+    },
   },
   {
     "bindings": {
-      "cmd-shift-d": "debug_panel::Toggle"
-    }
-  }
+      "cmd-shift-d": "debug_panel::Toggle",
+    },
+  },
 ]
