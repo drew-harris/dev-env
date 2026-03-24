@@ -231,7 +231,7 @@
   "theme": {
     "mode": "dark",
     "dark": "Sonokai",
-    "light": "Ayu Light",
+    "light": "One Light",
   },
   "base_keymap": "VSCode",
   "selection_highlight": false,

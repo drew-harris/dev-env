@@ -4,6 +4,7 @@ theme = "drew"
 true-color = true
 line-number = "relative"
 soft-wrap.enable = true
+bufferline = "always"
 
 end-of-line-diagnostics = "hint"
 
