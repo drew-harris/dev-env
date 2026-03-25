@@ -332,6 +332,7 @@
     "bindings": {
       "space d l": "debugger::Start",
       "space d r": "debugger::RerunSession",
+      "space d a": ["task::Rerun", { "reevaluate_context": false }],
       "space d c": "debugger::Continue",
       "space d e": "debugger::OpenProjectDebugTasks",
       "space d h": "debugger::RunToCursor", // run to here

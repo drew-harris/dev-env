@@ -1,3 +1,5 @@
+#:tombi toml-version = "v1.1.0-preview"
+
 theme = "drew"
 
 [editor]
@@ -26,13 +28,22 @@ render = true
   ":open %sh{cat /tmp/unique-file}",
   ":redraw",
 ]
-space = { p = ":buffer-previous", s = { s = "symbol_picker", f = [
-  ":sh rm -f /tmp/unique-file",
-  ":insert-output sh -c 'zask find_files > /tmp/unique-file 2>&1' > /dev/null",
-  ':insert-output echo "\x1b[?1049h\x1b[?2004h" > /dev/tty',
-  ":open %sh{cat /tmp/unique-file}",
-  ":redraw",
-] }, g = { r = [":reset-diff-change"] }, r = ":reload-all", l = { r = "rename_symbol", a = "code_action" }, a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" }, x = ":buffer-close" }
+space = {
+  e = "file_explorer_in_current_buffer_directory",
+  p = ":buffer-previous",
+  s = { s = "symbol_picker", f = [
+    ":sh rm -f /tmp/unique-file",
+    ":insert-output sh -c 'zask find_files > /tmp/unique-file 2>&1' > /dev/null",
+    ':insert-output echo "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+    ":open %sh{cat /tmp/unique-file}",
+    ":redraw",
+  ] },
+  g = { r = [":reset-diff-change"], c = "changed_file_picker" },
+  r = ":reload-all",
+  l = { r = "rename_symbol", a = "code_action" },
+  a = { p = ":sh tmux new-window 'nvim +%{cursor_line} %{buffer_name}'" },
+  x = ":buffer-close",
+}
 esc = ["collapse_selection", "keep_primary_selection"]
 
 [keys.insert]

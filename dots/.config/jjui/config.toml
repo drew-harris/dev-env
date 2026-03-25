@@ -16,17 +16,17 @@ log_batching = true
 # template = 'builtin_log_comfortable' # overrides jj's templates.log
 # revset = "trunc"
 
-[custom_commands]
-"diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}
-"diffedit" = {args = ["diffedit", "-r", "$change_id", "--tool", "zededit"]}
-"open pr" = { args = ["pr"]}
-"pick commit" = { key = ["C"], args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
-"rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
-"new main" = { args = ["new", "main"] }
-"new after selected" = { key = ["N"], args = [
-  "new",
-  "-A",
-  "$change_id",
-  "--no-edit",
-] }
-"edit file" = { key = ["e"], args = [ "util", "exec", "open-in-zed", "$file" ] }
+# [custom_commands]
+# "diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}
+# "diffedit" = {args = ["diffedit", "-r", "$change_id", "--tool", "zededit"]}
+# "open pr" = { args = ["pr"]}
+# "pick commit" = { key = ["C"], args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
+# "rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
+# "new main" = { args = ["new", "main"] }
+# "new after selected" = { key = ["N"], args = [
+#   "new",
+#   "-A",
+#   "$change_id",
+#   "--no-edit",
+# ] }
+# "edit file" = { key = ["e"], args = [ "util", "exec", "open-in-zed", "$file" ] }
