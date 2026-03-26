@@ -6,8 +6,9 @@ theme = "drew"
 [editor]
 true-color = true
 line-number = "relative"
-bufferline = "always"
+bufferline = "multiple"
 end-of-line-diagnostics = "hint"
+color-modes = true
 
 [editor.soft-wrap]
 enable = true

@@ -196,6 +196,7 @@
       "space g s": "git::Diff",
       "g .": "vim::ChangeListOlder",
       "g ,": "vim::ChangeListNewer",
+      "g x": "pane::CloseActiveItem",
       "space c r": [
         "task::Spawn",
         {
