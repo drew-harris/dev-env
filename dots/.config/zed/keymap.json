@@ -49,6 +49,13 @@
     },
   },
   {
+    "context": "Pane > Editor && vim_mode==insert",
+    "bindings": {
+      "ctrl-l": "editor::MoveRight",
+      "ctrl-h": "editor::MoveLeft",
+    },
+  },
+  {
     // for helix
     "context": "vim_mode==visual || vim_mode==helix_normal",
     "bindings": {

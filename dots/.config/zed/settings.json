@@ -66,7 +66,6 @@
     "min_line_number_digits": 3,
   },
   "edit_predictions": {
-    "provider": "sweep",
     "mode": "subtle",
     "enabled_in_text_threads": false,
   },
@@ -76,115 +75,85 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"],
         },
         {
-          "paths": [
-            "/root/enterprises"
-          ]
+          "paths": ["/root/enterprises"],
         },
         {
-          "paths": [
-            "/root/rustical"
-          ]
+          "paths": ["/root/rustical"],
         },
         {
-          "paths": [
-            "/root/timerbot"
-          ]
-        }
-      ]
+          "paths": ["/root/timerbot"],
+        },
+      ],
     },
     {
       "host": "hetzner",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root"
-          ]
+          "paths": ["/root"],
         },
         {
-          "paths": [
-            "/root/n8n"
-          ]
+          "paths": ["/root/n8n"],
         },
         {
-          "paths": [
-            "/root/sites/cookery/./"
-          ]
+          "paths": ["/root/sites/cookery/./"],
         },
         {
-          "paths": [
-            "/root/wealth"
-          ]
-        }
-      ]
+          "paths": ["/root/wealth"],
+        },
+      ],
     },
     {
       "host": "dell",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew"
-          ]
+          "paths": ["/home/drew"],
         },
         {
-          "paths": [
-            "/home/drew/benwrong"
-          ]
+          "paths": ["/home/drew/benwrong"],
         },
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"],
         },
         {
-          "paths": [
-            "/home/drew/movies"
-          ]
-        }
-      ]
+          "paths": ["/home/drew/movies"],
+        },
+      ],
     },
     {
       "host": "mbp",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/Users/drew/programs/instant/./"
-          ]
-        }
-      ]
+          "paths": ["/Users/drew/programs/instant/./"],
+        },
+      ],
     },
     {
       "host": "arch",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/programs/arch-instant/./"
-          ]
+          "paths": ["/home/drew/programs/arch-instant/./"],
         },
         {
-          "paths": [
-            "/home/drew/programs/hourhand"
-          ]
-        }
+          "paths": ["/home/drew/programs/hourhand"],
+        },
       ],
       "port_forwards": [
         {
           "local_port": 3000,
-          "remote_port": 3000
+          "remote_port": 3000,
         },
         {
           "local_port": 4000,
-          "remote_port": 4000
-        }
-      ]
+          "remote_port": 4000,
+        },
+      ],
     },
     {
       "host": "5.78.94.31",
@@ -192,27 +161,19 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root/caddy"
-          ]
+          "paths": ["/root/caddy"],
         },
         {
-          "paths": [
-            "/root/chat"
-          ]
+          "paths": ["/root/chat"],
         },
         {
-          "paths": [
-            "/root/manhunt"
-          ]
+          "paths": ["/root/manhunt"],
         },
         {
-          "paths": [
-            "/root/minecraft/./"
-          ]
-        }
+          "paths": ["/root/minecraft/./"],
+        },
       ],
-      "nickname": "minecraft-server"
+      "nickname": "minecraft-server",
     },
     {
       "host": "5.78.74.140",
@@ -220,12 +181,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root/instant/server"
-          ]
-        }
-      ]
-    }
+          "paths": ["/root/instant/server"],
+        },
+      ],
+    },
   ],
   "vertical_scroll_margin": 3,
   "theme": {
@@ -255,9 +214,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": false,
-    "show_pinned_tabs_in_separate_row": false,
-    "show_tab_bar_buttons": false,
+    "show": true,
   },
   "scrollbar": {
     "axes": {
