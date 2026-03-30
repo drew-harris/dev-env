@@ -1,22 +1,26 @@
 [language-server.discord-rpc]
 command = "discord-rpc-lsp"  # full path if needed
 
+[language-server.tailwindcss]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+
 
 [[language]]
 name = "typescript"
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc", "tailwindcss" ]
 formatter = {command = "prettierd", args = ["%{buffer_name}"]}
 auto-format = true
 
 [[language]]
 name = "tsx"
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc", "tailwindcss" ]
 formatter = {command = "prettierd", args = ["%{buffer_name}"]}
 auto-format = true
 
 [[language]]
 name = "javascript"
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "discord-rpc", "tailwindcss" ]
 formatter = {command = "prettierd", args = ["%{buffer_name}"]}
 auto-format = true
 

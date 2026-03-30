@@ -4,8 +4,6 @@
 name = "Drew Harris"
 email = "drew@drewh.net"
 
-
-
 [merge-tools.zed]
 program = "zed"
 diff-args = [
@@ -24,7 +22,6 @@ edit-args = [
   "$left",
   "$right",
 ]
-
 
 [merge-tools.zededit]
 program = "zed"
@@ -45,7 +42,6 @@ edit-args = [
   "$right",
 ]
 
-
 [merge-tools.gitpatch]
 program = "sh"
 edit-args = [
@@ -64,7 +60,6 @@ edit-args = [
   git -C "$right" reset -q --hard
 ''',
 ]
-
 
 [ui]
 default-command = ["log", "-T", "builtin_log_comfortable"]
@@ -111,20 +106,25 @@ l = ["log", "-r", "work"]
 open = ["log", "-r", "open()"]
 ll = ["log", "-T", "log_with_files"]
 # View A Pr
-pr = ["util", "exec", "--", "bash", "-c", """
+pr = [
+  "util",
+  "exec",
+  "--",
+  "bash",
+  "-c",
+  """
 gh pr view --web $(jj bookmark list -r '@-' -T 'name' | cut -d ' ' -f 1)
-"""]
+""",
+]
 
 # [revsets]
 # log = "default-with-hidden"
 
 [revset-aliases]
-'closest_bookmark(to)' = 'heads(::to & bookmarks())'
-
+'closest_bookmark(to)' = "heads(::to & bookmarks())"
 'trunc' = '(present(@) | ancestors(heads(mine() & immutable_heads()..) | @, 3) | (descendants(trunk(), 3) & ::(heads(mine() & immutable_heads()..) | @)) | present(trunk())) & ~(description("hidden:")::)'
-
 'default-with-hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & ~(description("hidden:")::)'
-'super-default' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk()))'
+'super-default' = "(present(@) | ancestors(immutable_heads()..,2) | present(trunk()))"
 'hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & (description("hidden:")::)'
 'trunks' = "main"  # big list of branch names
 'local(x)' = "reachable(x, ~::trunks)"

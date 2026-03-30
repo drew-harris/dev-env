@@ -6,7 +6,7 @@ theme = "drew"
 [editor]
 true-color = true
 line-number = "relative"
-bufferline = "multiple"
+bufferline = "always"
 end-of-line-diagnostics = "hint"
 color-modes = true
 

@@ -199,8 +199,8 @@
   },
   "buffer_font_size": 14.0,
   "ui_font_size": 14.0,
-  // "buffer_font_family": "BitstromWera Nerd Font",
-  "buffer_font_family": "Berkeley Mono",
+  "buffer_font_family": "RobotoMono Nerd Font",
+  // "buffer_font_family": "Berkeley Mono",
   "helix_mode": true,
   "vim_mode": false,
   "vim": {
@@ -215,7 +215,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": true,
+    "show": false,
   },
   "scrollbar": {
     "axes": {
@@ -351,7 +351,7 @@
   },
   // Use zed commit editor
   "terminal": {
-    "font_family": "Berkeley Mono",
+    "font_family": "RobotoMono Nerd Font",
     "dock": "bottom",
     "line_height": { "custom": 1.2 },
   },
@@ -376,7 +376,7 @@
     "**/.settings",
     "**/node_modules",
   ],
-  "cursor_blink": true,
+  "cursor_blink": false,
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
