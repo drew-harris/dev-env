@@ -14,7 +14,7 @@ show_at_start = false
 log_batching = true
 # template = 'builtin_log_oneline' # overrides jj's templates.log
 # template = 'builtin_log_comfortable' # overrides jj's templates.log
-# revset = "trunc"
+revset = "current_branch()"
 
 # [custom_commands]
 # "diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}

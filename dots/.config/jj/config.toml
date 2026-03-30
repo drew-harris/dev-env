@@ -128,6 +128,7 @@ gh pr view --web $(jj bookmark list -r '@-' -T 'name' | cut -d ' ' -f 1)
 'hidden' = '(present(@) | ancestors(immutable_heads()..,2) | present(trunk())) & (description("hidden:")::)'
 'trunks' = "main"  # big list of branch names
 'local(x)' = "reachable(x, ~::trunks)"
+'current_branch()' = "local(@) | roots(local(@))- | present(trunk())"
 simple = "ancestors(local(@), 2)"
 here = "ancestors(reachable(@, trunk()..), 2) | trunk()"
 "active(rev)" = "(ancestors(rev) | descendants(rev)) ~ immutable()"
