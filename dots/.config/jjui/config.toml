@@ -14,7 +14,9 @@ show_at_start = false
 log_batching = true
 # template = 'builtin_log_oneline' # overrides jj's templates.log
 # template = 'builtin_log_comfortable' # overrides jj's templates.log
-revset = "current_branch()"
+#
+# Set default to be the "current branch only"
+# revset = "current_branch()"
 
 # [custom_commands]
 # "diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}
@@ -30,3 +32,122 @@ revset = "current_branch()"
 #   "--no-edit",
 # ] }
 # "edit file" = { key = ["e"], args = [ "util", "exec", "open-in-zed", "$file" ] }
+
+[[actions]]
+name = "branch-switcher"
+desc = "switch working copy to bookmark"
+lua = '''
+local log_revset, revset_err = jj("config", "get", "revsets.log")
+if revset_err then
+  log_revset = "present(@) | ancestors(immutable_heads().., 2) | trunk()"
+else
+  log_revset = log_revset:gsub("%s+$", "")
+end
+
+local output, list_err = jj("bookmark", "list", "-r", log_revset, "-T", "name ++ \"\\n\"")
+if list_err then
+  flash({ text = "Failed to list bookmarks: " .. list_err, error = true, sticky = true })
+  return
+end
+
+local options = split_lines(output)
+if #options == 0 then
+  flash({ text = "No bookmarks in default jj log revset", error = true })
+  return
+end
+
+local seen = {}
+local filtered = {}
+for _, option in ipairs(options) do
+  if option ~= "" and not seen[option] then
+    seen[option] = true
+    table.insert(filtered, option)
+  end
+end
+
+table.sort(filtered)
+
+local selected = choose({
+  title = "Switch to branch",
+  options = filtered,
+  filter = true,
+})
+if not selected then
+  return
+end
+
+local _, new_err = jj("new", selected)
+if new_err then
+  flash({ text = "Switch failed: " .. new_err, error = true, sticky = true })
+  return
+end
+
+revset.set("current_branch()")
+revisions.refresh({ keep_selections = false })
+flash("Switched to " .. selected)
+'''
+
+[[actions]]
+name = "revset-normal"
+desc = "toggle between default log and current branch"
+lua = '''
+local log_revset, revset_err = jj("config", "get", "revsets.log")
+if revset_err then
+  log_revset = "present(@) | ancestors(immutable_heads().., 2) | trunk()"
+else
+  log_revset = log_revset:gsub("^%s+", ""):gsub("%s+$", "")
+end
+
+local branch_revset = "current_branch()"
+local current = revset.current()
+if current then
+  current = current:gsub("^%s+", ""):gsub("%s+$", "")
+end
+
+if current == branch_revset then
+  revset.set(log_revset)
+  flash("Revset set to default jj log")
+else
+  revset.set(branch_revset)
+  flash("Revset set to current_branch()")
+end
+
+revisions.refresh({ keep_selections = false })
+'''
+
+[[actions]]
+name = "edit-file"
+desc = "open selected file in zed"
+lua = '''
+local file = context.file()
+if not file then
+  flash({ text = "No file selected", error = true })
+  return
+end
+
+local _, open_err = jj("util", "exec", "open-in-zed", file)
+if open_err then
+  flash({ text = "Open failed: " .. open_err, error = true, sticky = true })
+  return
+end
+
+flash("Opened " .. file)
+'''
+
+[[bindings]]
+action = "branch-switcher"
+key = ";"
+scope = "revisions"
+desc = "switch branch"
+
+[[bindings]]
+action = "revset-normal"
+seq = ["\\", "r"]
+scope = "revisions"
+desc = "toggle revset"
+
+[[bindings]]
+action = "edit-file"
+key = "e"
+scope = "revisions.details"
+desc = "edit file"
