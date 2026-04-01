@@ -243,6 +243,18 @@
     "use_new_terminal": true,
   },
   {
+    "label": "pi",
+    "command": "pi",
+    "reveal_target": "center",
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "hide": "on_success",
+    "allow_concurrent_runs": true,
+    "reveal": "always",
+    "use_new_terminal": true,
+  },
+  {
     "label": "commit",
     "command": "jj",
     "args": ["commit", "-i", "--tool", "gitpatch"],
