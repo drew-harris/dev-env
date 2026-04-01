@@ -134,6 +134,26 @@ end
 flash("Opened " .. file)
 '''
 
+[[actions]]
+name = "rebase-all-prs"
+desc = "rebase all mutable commits onto main"
+lua = '''
+local _, err = jj("rebase", "-r", "mutable() & mine()", "-d", "main")
+if err then
+  flash({ text = "Rebase failed: " .. err, error = true, sticky = true })
+  return
+end
+
+revisions.refresh({ keep_selections = false })
+flash("Rebased all PRs onto main")
+'''
+
+[[bindings]]
+action = "rebase-all-prs"
+seq = ["\\", "R"]
+scope = "revisions"
+desc = "rebase all prs onto main"
+
 [[bindings]]
 action = "branch-switcher"
 key = ";"
