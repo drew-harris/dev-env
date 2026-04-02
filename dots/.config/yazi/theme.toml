@@ -1,2 +1,5 @@
 [flavor]
 use = "monokai-vibrant"
+
+[indicator]
+padding = { open = "▐", close = "▌" }
