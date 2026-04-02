@@ -5,8 +5,10 @@ export default function (pi: ExtensionAPI) {
   let jitEnabled = false;
 
   pi.registerCommand("jit", {
+    description: "Toggle jujitsu history tracking",
     async handler(_args, ctx) {
       jitEnabled = !jitEnabled;
+
       ctx.ui.setStatus(
         "jit",
         "jit: " + (jitEnabled ? chalk.green("enabled") : chalk.red("disabled")),
