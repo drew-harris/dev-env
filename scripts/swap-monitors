@@ -3,7 +3,8 @@
 # Move ALL workspaces to the other monitor, then focus it.
 # Lets you walk between rooms and pull everything to where you are.
 
-MONITORS=("DP-1" "HDMI-A-1")
+# Desired workspace order
+ORDER=("chat" "main" "aux")
 
 workspaces=$(niri msg -j workspaces)
 focused_output=$(niri msg -j focused-output | jq -r '.name')
@@ -15,20 +16,24 @@ else
   target="DP-1"
 fi
 
-# Move all named workspaces from the current monitor to the target
-names=$(echo "$workspaces" | jq -r --arg out "$focused_output" '.[] | select(.output == $out and .name != null) | .name')
+# Move all named workspaces to the target
+names=$(echo "$workspaces" | jq -r '.[] | select(.name != null) | .name')
 for name in $names; do
   niri msg action move-workspace-to-monitor --reference "$name" "$target"
 done
 
-# Move all named workspaces from the target that are already there (from the other monitor) — they stay
-# But we also need to grab any named workspaces on the source that weren't moved yet
-# Re-query and move anything still not on target
+# Re-check in case any were missed
 workspaces=$(niri msg -j workspaces)
 remaining=$(echo "$workspaces" | jq -r --arg target "$target" '.[] | select(.output != $target and .name != null) | .name')
 for name in $remaining; do
   niri msg action move-workspace-to-monitor --reference "$name" "$target"
 done
 
-# Focus the target monitor and its first workspace
+# Reorder workspaces to the desired order
+for i in "${!ORDER[@]}"; do
+  idx=$((i + 1))
+  niri msg action move-workspace-to-index --reference "${ORDER[$i]}" "$idx"
+done
+
+# Focus the target monitor
 niri msg action focus-monitor "$target"
