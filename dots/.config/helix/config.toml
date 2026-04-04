@@ -13,8 +13,8 @@ color-modes = true
 [editor.soft-wrap]
 enable = true
 
-[editor.auto-reload]
-enable = true
+# [editor.auto-reload]
+# enable = true
 
 [editor.inline-diagnostics]
 cursor-line = "disable"

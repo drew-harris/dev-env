@@ -6,6 +6,13 @@
     "bindings": {
       "super-tab": "editor::AcceptEditPrediction",
       "ctrl-l": "editor::AcceptEditPrediction",
+      "alt-r": [
+        "task::Spawn",
+        {
+          "task_name": "block",
+          "reveal_target": "center",
+        },
+      ],
     },
   },
   {
@@ -40,6 +47,13 @@
       "alt-p": "file_finder::Toggle",
       "alt-w": "pane::CloseActiveItem",
       "alt-\\": "pane::SplitVertical",
+      "alt-r": [
+        "task::Spawn",
+        {
+          "task_name": "block",
+          "reveal_target": "center",
+        },
+      ],
     },
   },
   {
@@ -47,6 +61,10 @@
     "bindings": {
       "alt-n": "workspace::NewTerminal",
     },
+  },
+  {
+    "context": "os==linux > Editor",
+    "bindings": {},
   },
   {
     "context": "Pane > Editor && vim_mode==insert",

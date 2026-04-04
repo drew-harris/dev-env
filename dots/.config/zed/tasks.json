@@ -191,6 +191,7 @@
   },
   {
     "label": "helix",
+    "save": "current",
     "command": "hx",
     "args": ["$ZED_RELATIVE_FILE:$ZED_COLUMN:$ZED_ROW"],
     "reveal_target": "center",

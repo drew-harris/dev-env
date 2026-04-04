@@ -335,7 +335,7 @@ animations {
     // }
 
     // Uncomment to turn off all animations.
-    // off
+    off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
     slowdown 0.8
@@ -684,7 +684,7 @@ binds {
     // Focus or launch!
     Alt+S { spawn-sh "/home/drew/dev-env/scripts/fol Spotify spotify-launcher"; }
     Alt+A { spawn-sh "/home/drew/dev-env/scripts/fol helium helium-browser"; }
-    Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed-Preview zed"; }
+    Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed-Preview /home/drew/.local/bin/zed"; }
     Alt+G { spawn-sh "/home/drew/dev-env/scripts/fol com.mitchellh.ghostty ghostty"; }
     Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol vesktop vesktop"; }
 
