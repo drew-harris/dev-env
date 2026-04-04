@@ -3,6 +3,13 @@
 # Move ALL workspaces to the other monitor, then focus it.
 # Lets you walk between rooms and pull everything to where you are.
 
+# Ensure both monitors are active
+both_active=$(niri msg -j outputs | jq '[to_entries[] | select(.value.logical != null)] | length')
+if [[ "$both_active" -lt 2 ]]; then
+  "$HOME/dev-env/scripts/to-both"
+  sleep 1
+fi
+
 # Desired workspace order
 ORDER=("chat" "main" "aux")
 
@@ -35,5 +42,13 @@ for i in "${!ORDER[@]}"; do
   niri msg action move-workspace-to-index --reference "${ORDER[$i]}" "$idx"
 done
 
-# Focus the target monitor
+# Kill any existing wl-mirror instance
+pkill -f wl-mirror || true
+
+# Mirror the target monitor onto the source (non-active) monitor
+wl-mirror --fullscreen-output "$focused_output" "$target" &
+disown
+
+# Wait for wl-mirror to open, then reclaim focus on the target monitor
+sleep 0.5
 niri msg action focus-monitor "$target"
