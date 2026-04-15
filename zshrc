@@ -101,3 +101,6 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+
+export MISE_EXPERIMENTAL=1
+

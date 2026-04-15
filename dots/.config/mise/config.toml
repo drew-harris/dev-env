@@ -1,0 +1,18 @@
+[tools]
+bun = "latest"
+fzf = "latest"
+helix = "latest"
+jj = "latest"
+jjui = "latest"
+just = "latest"
+lazydocker = "latest"
+node = "latest"
+yazi = "latest"
+pnpm = "latest"
+github-cli = "latest"
+bitwarden = "latest"
+fnox = "latest"
+
+[shell_alias]
+icli = "node /Users/drew/programs/instant/client/packages/cli/dist/index.js"
+medit = "mise edit /Users/drew/dev-env/dots/.config/mise/config.toml"

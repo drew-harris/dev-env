@@ -18,20 +18,7 @@ log_batching = true
 # Set default to be the "current branch only"
 # revset = "current_branch()"
 
-# [custom_commands]
-# "diff" = {args = ["util", "exec", "difff", "$change_id"], key = ["O"]}
-# "diffedit" = {args = ["diffedit", "-r", "$change_id", "--tool", "zededit"]}
-# "open pr" = { args = ["pr"]}
-# "pick commit" = { key = ["C"], args = ["commit", "-i", "--tool", "gitpatch"], show = "interactive" }
-# "rebase all prs" = { args = ["rebase", "-r", "mutable() & mine()", "-d", "main"] }
-# "new main" = { args = ["new", "main"] }
-# "new after selected" = { key = ["N"], args = [
-#   "new",
-#   "-A",
-#   "$change_id",
-#   "--no-edit",
-# ] }
-# "edit file" = { key = ["e"], args = [ "util", "exec", "open-in-zed", "$file" ] }
+# Legacy custom_commands migrated to [[actions]] + [[bindings]] below
 
 [[actions]]
 name = "branch-switcher"
@@ -116,6 +103,104 @@ revisions.refresh({ keep_selections = false })
 '''
 
 [[actions]]
+name = "diff"
+desc = "open difff for selected change"
+lua = '''
+local id = context.change_id()
+if not id then
+  flash({ text = "No change selected", error = true })
+  return
+end
+
+local _, err = jj("util", "exec", "difff", id)
+if err then
+  flash({ text = "Diff failed: " .. err, error = true, sticky = true })
+  return
+end
+'''
+
+[[actions]]
+name = "diffedit"
+desc = "diffedit selected change with zededit"
+lua = '''
+local id = context.change_id()
+if not id then
+  flash({ text = "No change selected", error = true })
+  return
+end
+
+local _, err = jj("diffedit", "-r", id, "--tool", "zededit")
+if err then
+  flash({ text = "Diffedit failed: " .. err, error = true, sticky = true })
+  return
+end
+
+revisions.refresh({ keep_selections = true })
+flash("Diffedit complete")
+'''
+
+[[actions]]
+name = "open-pr"
+desc = "open PR for selected change"
+lua = '''
+local _, err = jj("pr")
+if err then
+  flash({ text = "PR failed: " .. err, error = true, sticky = true })
+  return
+end
+
+flash("Opened PR")
+'''
+
+[[actions]]
+name = "pick-commit"
+desc = "interactive commit with gitpatch"
+lua = '''
+local _, err = jj("commit", "-i", "--tool", "gitpatch")
+if err then
+  flash({ text = "Commit failed: " .. err, error = true, sticky = true })
+  return
+end
+
+revisions.refresh({ keep_selections = false })
+flash("Committed")
+'''
+
+[[actions]]
+name = "new-main"
+desc = "create new change on main"
+lua = '''
+local _, err = jj("new", "main")
+if err then
+  flash({ text = "New main failed: " .. err, error = true, sticky = true })
+  return
+end
+
+revisions.refresh({ keep_selections = false })
+flash("Created new change on main")
+'''
+
+[[actions]]
+name = "new-after-selected"
+desc = "create new change after selected (no edit)"
+lua = '''
+local id = context.change_id()
+if not id then
+  flash({ text = "No change selected", error = true })
+  return
+end
+
+local _, err = jj("new", "-A", id, "--no-edit")
+if err then
+  flash({ text = "New after failed: " .. err, error = true, sticky = true })
+  return
+end
+
+revisions.refresh({ keep_selections = true })
+flash("Created new change after " .. id)
+'''
+
+[[actions]]
 name = "edit-file"
 desc = "open selected file in zed"
 lua = '''
@@ -165,6 +250,36 @@ action = "revset-normal"
 seq = ["\\", "r"]
 scope = "revisions"
 desc = "toggle revset"
+
+[[bindings]]
+action = "diff"
+key = "O"
+scope = "revisions"
+desc = "open difff"
+
+[[bindings]]
+action = "diffedit"
+key = "D"
+scope = "revisions"
+desc = "diffedit with zededit"
+
+[[bindings]]
+action = "open-pr"
+key = "P"
+scope = "revisions"
+desc = "open PR"
+
+[[bindings]]
+action = "pick-commit"
+key = "C"
+scope = "revisions"
+desc = "interactive commit"
+
+[[bindings]]
+action = "new-after-selected"
+key = "N"
+scope = "revisions"
+desc = "new change after selected"
 
 [[bindings]]
 action = "edit-file"

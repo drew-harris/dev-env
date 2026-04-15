@@ -79,6 +79,33 @@ const rules: KarabinerRules[] = [
       },
     ],
   },
+  {
+    description: "Close focused window",
+    manipulators: [
+      {
+        description: "⌥⇧Q -> ⌘⇧W",
+        from: {
+          key_code: "q",
+          modifiers: {
+            mandatory: ["option", "shift"],
+          },
+        },
+        conditions: [
+          {
+            type: "frontmost_application_unless",
+            bundle_identifiers: ["^com\\.spotify\\.client$"],
+          },
+        ],
+        to: [
+          {
+            key_code: "w",
+            modifiers: ["command", "shift"],
+          },
+        ],
+        type: "basic",
+      },
+    ],
+  },
   ...createHyperSubLayers({
     spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 

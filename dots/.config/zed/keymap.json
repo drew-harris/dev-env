@@ -387,6 +387,7 @@
       "space d e": "debugger::OpenProjectDebugTasks",
       "space .": "editor::ToggleCodeActions",
       "space l r": "editor::Rename",
+      "space l R": "editor::RestartLanguageServer",
       "space z": "editor::Cancel",
       "g d": "editor::GoToDefinition",
       "g D": "editor::GoToDefinitionSplit",

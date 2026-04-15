@@ -1,5 +1,27 @@
 // settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 {
+  "language_models": {
+    "openai_compatible": {
+      "HACK": {
+        "api_url": "http://localhost:8000/v1",
+        "available_models": [
+          {
+            "name": "claude-opus-4-5-20250929",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": false,
+              "images": false,
+              "parallel_tool_calls": false,
+              "prompt_cache_key": false,
+              "chat_completions": true,
+            },
+          },
+        ],
+      },
+    },
+  },
   "debugger": {
     "dock": "right",
   },
@@ -34,17 +56,18 @@
     "enabled": true,
   },
   "agent": {
+    "dock": "right",
     "tool_permissions": {
       "default": "allow",
     },
-    "play_sound_when_agent_done": true,
+    "play_sound_when_agent_done": "always",
     "inline_assistant_model": {
-      "provider": "openrouter",
-      "model": "moonshotai/kimi-k2.5",
+      "provider": "zed.dev",
+      "model": "claude-sonnet-4-6",
     },
     "default_model": {
-      "provider": "openrouter",
-      "model": "anthropic/claude-sonnet-4.6",
+      "provider": "HACK",
+      "model": "claude-opus-4-6",
     },
   },
   "minimap": {
@@ -59,7 +82,6 @@
   "close_on_file_delete": true,
   "inline_code_actions": false,
   "when_closing_with_no_tabs": "keep_window_open",
-  "minimum_contrast_for_highlights": 42,
   "colorize_brackets": false,
   "current_line_highlight": "gutter",
   "gutter": {
@@ -67,7 +89,6 @@
   },
   "edit_predictions": {
     "mode": "subtle",
-    "enabled_in_text_threads": false,
   },
   "ssh_connections": [
     {
@@ -224,34 +245,29 @@
     },
   },
   "active_pane_modifiers": {
-    "border_size": 0,
-    // "inactive_opacity": 0.9,
+    "border_size": 1,
+    "inactive_opacity": 0.9,
   },
   "indent_guides": {
     "enabled": true,
-    // "background_coloring": "indent_aware",
     "active_line_width": 2,
     "line_width": 1,
     "coloring": "fixed",
   },
   "git": {
     "gutter_debounce": 120,
-    "inline_blame": {
-      "enabled": false,
-      "delay_ms": 1500,
-      "padding": 18,
-      "show_commit_summary": true,
-    },
     "branch_picker": {
       "show_author_name": true,
+    },
+    "inline_blame": {
+      "padding": 40,
+      "min_column": 110,
+      "delay_ms": 800,
+      "show_commit_summary": true,
     },
     "hunk_style": "staged_hollow",
     "path_style": "file_path_first",
     "git_gutter": "tracked_files",
-  },
-  "centered_layout": {
-    "left_padding": 0.25,
-    "right_padding": 0.25,
   },
   "inlay_hints": {
     "show_background": false,
@@ -263,7 +279,7 @@
     "enabled": false,
   },
   "file_finder": {
-    "modal_max_width": "small",
+    "modal_max_width": "medium",
   },
   "diagnostics": {
     "inline": {
@@ -331,11 +347,6 @@
       },
       "enable_lsp_tasks": true,
     },
-    "snippet-completion-server": {
-      "settings": {
-        "feature_paths": true,
-      },
-    },
     "typescript-language-server": {
       "initialization_options": {
         "vtsls": {
@@ -349,20 +360,18 @@
       },
     },
   },
-  // Use zed commit editor
   "terminal": {
     "font_family": "RobotoMono Nerd Font",
     "dock": "bottom",
     "line_height": { "custom": 1.2 },
   },
   "snippet_sort_order": "top",
-  // File syntax highlighting
   "file_types": {
     "Dockerfile": ["Dockerfile", "Dockerfile.*"],
     "JSON": ["json", "jsonc", "*.code-snippets"],
   },
   "search": {
-    // "center_on_match": true,
+    "center_on_match": true,
   },
   // File scan exclusions, hide on the file explorer and search
   "file_scan_exclusions": [
@@ -376,7 +385,7 @@
     "**/.settings",
     "**/node_modules",
   ],
-  "cursor_blink": false,
+  "cursor_blink": true,
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
@@ -414,11 +423,7 @@
     "dock": "left",
     "button": true,
   },
-  "semantic_tokens": "off",
-  // Move some unnecessary panels to the left
-  "notification_panel": {
-    "button": false,
-  },
+  "semantic_tokens": "combined",
   "theme_overrides": {
     "Kanagawa Wave": {
       "border.variant": "#3F3F38",
@@ -438,33 +443,6 @@
     },
     "Catppuccin Latte": {
       "border.variant": "#c9ccd1",
-    },
-    "One Dark": {
-      "border": "#FFFFFF5C",
-      "border.variant": "#333333FF",
-      "elevated_surface.background": "#030303FF",
-      "surface.background": "#030303FF",
-      "background": "#000000FF",
-      "element.background": "#0D0D0DFF",
-      "element.selected": "#363636FF",
-      "ghost_element.selected": "#363636FF",
-      "status_bar.background": "#000000FF",
-      "title_bar.background": "#000000FF",
-      "toolbar.background": "#000000FF",
-      "tab_bar.background": "#030303FF",
-      "tab.inactive_background": "#030303FF",
-      "tab.active_background": "#000000FF",
-      "panel.background": "#030303FF",
-      "editor.foreground": "#FCFDFFFF",
-      "editor.background": "#000000FF",
-      "editor.gutter.background": "#000000FF",
-      "editor.subheader.background": "#030303FF",
-      "editor.active_line.background": "#2F343E7D",
-      "editor.highlighted_line.background": "#030303FF",
-      "editor.line_number": "#878787FF",
-      "terminal.background": "#000000FF",
-      "panel.overlay_background": "#030303FF",
-      "panel.overlay_hover": "#000000FF",
     },
     "One Light": {
       "border": "#D6D6D6FF",
