@@ -42,7 +42,7 @@
   },
 
   "clock": {
-    "timezone": "America/Central",
+    "timezone": "America/Los_Angeles",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format": "{:%d/%m/%Y - %I:%M:%S %p}",
     "interval": 1,
@@ -92,7 +92,7 @@
     "format": "{}",
     "return-type": "json",
     "interval": 10,
-    "exec": "$(pwd)/scripts/docker-stats/docker-stats",
+    "exec": "$(pwd)/scripts/docker-stats/docker-stats 2>/dev/null | grep . || echo '{\"text\":\"\",\"tooltip\":\"\"}'",
     "tooltip": true,
   },
 
@@ -100,15 +100,15 @@
     "format": "{}",
     "tooltip": true,
     "interval": 1800,
-    "exec": "$(pwd)/scripts/weather-stats/weather-stats",
+    "exec": "$(pwd)/scripts/weather-stats/weather-stats 2>/dev/null | grep . || echo '{\"text\":\"\",\"tooltip\":\"\"}'",
     "return-type": "json",
   },
 
   "custom/airpods": {
     "format": "{}", // Waybar expects a JSON object, this will be filled by the script
-    "exec": "$HOME/dev-env/scripts/airpods --status", // Path to your script
+    "exec": "$HOME/dev-env/scripts/airpods --status 2>/dev/null | grep . || echo '{\"text\":\"\",\"tooltip\":\"\"}'", // Path to your script
     "on-click": "$HOME/dev-env/scripts/airpods --toggle",
-    "interval": 1, // How often to update in seconds
+    "interval": 5, // How often to update in seconds
     "return-type": "json",
     "tooltip": true, // Already handled by the script's JSON output
   },

@@ -1,7 +1,5 @@
 #:tombi toml-version = "v1.1.0-preview"
-
 theme = "drew"
-
 
 [editor]
 true-color = true
@@ -15,7 +13,7 @@ enable = true
 
 
 [editor.inline-diagnostics]
-cursor-line = "disable"
+cursor-line = "warning"
 
 [editor.cursor-shape]
 insert = "bar"

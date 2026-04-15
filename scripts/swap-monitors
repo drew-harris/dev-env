@@ -29,12 +29,12 @@ for name in $names; do
   niri msg action move-workspace-to-monitor --reference "$name" "$target"
 done
 
-# Re-check in case any were missed
-workspaces=$(niri msg -j workspaces)
-remaining=$(echo "$workspaces" | jq -r --arg target "$target" '.[] | select(.output != $target and .name != null) | .name')
-for name in $remaining; do
-  niri msg action move-workspace-to-monitor --reference "$name" "$target"
-done
+# # Re-check in case any were missed
+# workspaces=$(niri msg -j workspaces)
+# remaining=$(echo "$workspaces" | jq -r --arg target "$target" '.[] | select(.output != $target and .name != null) | .name')
+# for name in $remaining; do
+#   niri msg action move-workspace-to-monitor --reference "$name" "$target"
+# done
 
 # Reorder workspaces to the desired order
 for i in "${!ORDER[@]}"; do
@@ -49,6 +49,20 @@ pkill -f wl-mirror || true
 wl-mirror --fullscreen-output "$focused_output" "$target" &
 disown
 
-# Wait for wl-mirror to open, then reclaim focus on the target monitor
-sleep 0.5
+# Wait for wl-mirror to open, then ensure it's on the correct monitor
+# sleep 0.5
+# mirror_id=$(niri msg -j windows | jq -r '.[] | select(.app_id == "at.yrlf.wl_mirror") | .id')
+# if [[ -n "$mirror_id" ]]; then
+#   # Check if it ended up on the wrong monitor
+#   mirror_ws=$(niri msg -j windows | jq -r --argjson id "$mirror_id" '.[] | select(.id == $id) | .workspace_id')
+#   mirror_output=$(niri msg -j workspaces | jq -r --argjson wsid "$mirror_ws" '.[] | select(.id == $wsid) | .output')
+#   if [[ "$mirror_output" != "$focused_output" ]]; then
+#     niri msg action move-window-to-monitor --id "$mirror_id" "$focused_output"
+#     sleep 0.2
+#     niri msg action fullscreen-window --id "$mirror_id"
+#   fi
+# fi
+
+# Reclaim focus on the target monitor
+sleep 0.2
 niri msg action focus-monitor "$target"

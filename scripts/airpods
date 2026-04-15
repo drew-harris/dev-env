@@ -118,7 +118,6 @@ toggle_state() {
 
     if [[ ! $controller_on ]]; then
         btctl power on
-        sleep 0.2 # Give it a moment
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
             btctl unblock "$device"
