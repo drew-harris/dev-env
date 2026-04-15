@@ -1,0 +1,44 @@
+#!/bin/bash
+#MISE description="Launch mise tasks into you know what"
+
+tasks_arg="$1"
+
+cd "${MISE_ORIGINAL_CWD:-$PWD}"
+
+tmpfile=$(mktemp /tmp/mprocs-XXXXXX.json)
+
+if [ -n "$tasks_arg" ]; then
+  names_json=$(printf '%s' "$tasks_arg" | jq -R 'split(",") | map(select(length > 0))')
+  filter='select(.name as $n | $names | index($n))'
+else
+  filter='select(.description // "" | contains("mprocs"))'
+fi
+
+mise tasks --json \
+  | jq --argjson names "${names_json:-[]}" '
+      { procs: (
+          [ .[] | '"$filter"' | {
+              key: .name,
+              value: (
+                { cmd: ["mise", "run", .name] }
+                + ( if ((.run // []) | join(" ") | test("docker"))
+                    then { stop: { "send-keys": ["<C-c>"] } }
+                    else {} end )
+              )
+            }
+          ] | from_entries
+        )
+      }
+  ' > "$tmpfile"
+
+if [ "$(jq '.procs | length' "$tmpfile")" -eq 0 ]; then
+  if [ -n "$tasks_arg" ]; then
+    echo "error: none of the specified tasks were found" >&2
+  else
+    echo "error: no tasks found with 'mprocs' in their description" >&2
+  fi
+  rm -f "$tmpfile"
+  exit 1
+fi
+
+mprocs --config "$tmpfile"

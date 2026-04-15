@@ -12,7 +12,14 @@ pnpm = "latest"
 github-cli = "latest"
 bitwarden = "latest"
 fnox = "latest"
+jq = "latest"
+usage = "latest"
+
+[prepare]
+pnpm = {}
+bun = { auto = true }
 
 [shell_alias]
 icli = "node /Users/drew/programs/instant/client/packages/cli/dist/index.js"
-medit = "mise edit /Users/drew/dev-env/dots/.config/mise/config.toml"
+medit = "mise edit ~/dev-env/dots/.config/mise/config.toml"
+super = "mise super"
