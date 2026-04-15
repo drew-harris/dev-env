@@ -15,6 +15,7 @@ fnox = "latest"
 jq = "latest"
 usage = "latest"
 "github:mgood/tuisage" = "latest"
+pitchfork = "latest"
 
 [prepare]
 pnpm = {}
