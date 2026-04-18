@@ -121,6 +121,7 @@ const rules: KarabinerRules[] = [
     s: app("Spotify"),
     z: app("OpenCode"),
     v: app("FreeTube"),
+    f: app("OpenCode"),
 
     // b = "B"rowse
     b: {

@@ -1,9 +1,7 @@
 [tools]
 bun = "latest"
-fzf = "latest"
 helix = "latest"
 jj = "latest"
-jjui = "latest"
 just = "latest"
 lazydocker = "latest"
 node = "latest"

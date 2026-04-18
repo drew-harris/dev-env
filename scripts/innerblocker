@@ -220,9 +220,9 @@ fi
 
 # Prepare the command to run
 if [ "$QUICK_EXIT" = true ]; then
-    CMD="nu $TEMP_FILE"
+    CMD="mise x -- nu $TEMP_FILE"
 else
-    CMD="nu $TEMP_FILE; echo \"Press Enter to close\"; read -r"
+    CMD="mise x -- nu $TEMP_FILE; echo \"Press Enter to close\"; read -r"
 fi
 
 eval "$CMD"

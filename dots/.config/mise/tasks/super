@@ -5,13 +5,16 @@ tasks_arg="$1"
 
 cd "${MISE_ORIGINAL_CWD:-$PWD}"
 
-tmpfile=$(mktemp /tmp/mprocs-XXXXXX.json)
+tmpbase=$(mktemp -t mprocs)
+tmpfile="${tmpbase}.json"
+mv "$tmpbase" "$tmpfile"
+trap 'rm -f "$tmpfile"' EXIT
 
 if [ -n "$tasks_arg" ]; then
   names_json=$(printf '%s' "$tasks_arg" | jq -R 'split(",") | map(select(length > 0))')
   filter='select(.name as $n | $names | index($n))'
 else
-  filter='select(.description // "" | contains("mprocs"))'
+  filter='select((.description // "" | contains("mprocs")) or (.name | contains("dev:")))'
 fi
 
 mise tasks --json \
@@ -37,7 +40,6 @@ if [ "$(jq '.procs | length' "$tmpfile")" -eq 0 ]; then
   else
     echo "error: no tasks found with 'mprocs' in their description" >&2
   fi
-  rm -f "$tmpfile"
   exit 1
 fi
 

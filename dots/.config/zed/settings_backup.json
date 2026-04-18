@@ -1,27 +1,5 @@
 // settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 {
-  "language_models": {
-    "openai_compatible": {
-      "hack": {
-        "api_url": "http://localhost:8111",
-        "available_models": [
-          {
-            "name": "claude-opus-4",
-            "max_tokens": 200000,
-            "max_output_tokens": 32000,
-            "max_completion_tokens": 200000,
-            "capabilities": {
-              "tools": true,
-              "images": false,
-              "parallel_tool_calls": false,
-              "prompt_cache_key": false,
-              "chat_completions": true,
-            },
-          },
-        ],
-      },
-    },
-  },
   "debugger": {
     "dock": "right",
   },
@@ -56,8 +34,7 @@
     "enabled": true,
   },
   "agent": {
-    "flexible": false,
-    "dock": "left",
+    "dock": "right",
     "tool_permissions": {
       "default": "allow",
     },
@@ -404,7 +381,7 @@
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
-    "dock": "right",
+    "dock": "left",
     "button": true,
   },
   "tabs": {
@@ -435,7 +412,7 @@
     "dock": "right",
   },
   "collaboration_panel": {
-    "dock": "right",
+    "dock": "left",
     "button": true,
   },
   "semantic_tokens": "off",
@@ -462,33 +439,6 @@
     },
     "Catppuccin Latte": {
       "border.variant": "#c9ccd1",
-    },
-    "One Dark": {
-      "border": "#FFFFFF5C",
-      "border.variant": "#333333FF",
-      "elevated_surface.background": "#030303FF",
-      "surface.background": "#030303FF",
-      "background": "#000000FF",
-      "element.background": "#0D0D0DFF",
-      "element.selected": "#363636FF",
-      "ghost_element.selected": "#363636FF",
-      "status_bar.background": "#000000FF",
-      "title_bar.background": "#000000FF",
-      "toolbar.background": "#000000FF",
-      "tab_bar.background": "#030303FF",
-      "tab.inactive_background": "#030303FF",
-      "tab.active_background": "#000000FF",
-      "panel.background": "#030303FF",
-      "editor.foreground": "#FCFDFFFF",
-      "editor.background": "#000000FF",
-      "editor.gutter.background": "#000000FF",
-      "editor.subheader.background": "#030303FF",
-      "editor.active_line.background": "#2F343E7D",
-      "editor.highlighted_line.background": "#030303FF",
-      "editor.line_number": "#878787FF",
-      "terminal.background": "#000000FF",
-      "panel.overlay_background": "#030303FF",
-      "panel.overlay_hover": "#000000FF",
     },
     "One Light": {
       "border": "#D6D6D6FF",

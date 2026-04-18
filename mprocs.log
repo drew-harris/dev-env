@@ -1,1 +1,4 @@
 ERROR [mprocs::error] Error: channel closed
+ERROR [lib::mprocs] Got panic. @info:panicked at src/app.rs:1119:10:
+not yet implemented
+@stackTrace:disabled backtrace
