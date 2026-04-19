@@ -77,14 +77,31 @@ fi
 # Run split first to regenerate tasks from pad.nu
 mise run split 2>/dev/null
 
+# Cache task metadata so both the list and preview can use it
+tasks_json=$(mise tasks --json)
+
+# Build fzf input: name<tab>file<tab>description
+# Display columns 1 and 3 (name and description), hide column 2 (file path)
 selected=$(
-  mise tasks --json \
-    | jq -r '.[] | "\(.name)\t\(.description // "")"' \
-    | column -t -s $'\t' \
-    | fzf --reverse --prompt 'task: ' --bind change:top
+  echo "$tasks_json" \
+    | jq -r '.[] | "\(.name)\t\(.file // "")\t\(.description // "")"' \
+    | column -t -s $'\t' -o $'\t' \
+    | fzf --reverse --prompt 'task: ' --bind change:top \
+          --delimiter "\t" --with-nth '1,3' \
+          --preview 'file={2}; if [ -n "$file" ] && [ -f "$file" ]; then
+              echo -e "\033[1;34mTask:\033[0m {1}"
+              echo -e "\033[1;34mFile:\033[0m $file"
+              echo ""
+              bat --color=always --style=numbers --language=bash "$file" 2>/dev/null || cat "$file"
+          else
+              echo -e "\033[1;34mTask:\033[0m {1}"
+              echo ""
+              echo "(inline task — no file to preview)"
+          fi' \
+          --preview-window 'right:60%'
 ) || exit 0
 
 [[ -z "$selected" ]] && exit 0
 
-task_name=$(awk '{print $1}' <<< "$selected")
+task_name=$(echo "$selected" | cut -f1 | awk '{print $1}')
 exec mise run "$task_name"
