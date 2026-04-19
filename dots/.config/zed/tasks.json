@@ -205,7 +205,7 @@
   },
   {
     "label": "block",
-    "command": "innerblocker",
+    "command": "mise launch",
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh",

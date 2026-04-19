@@ -1,0 +1,11 @@
+#!/usr/bin/env nu
+# @generated-by-splitter
+#MISE description="say-hello"
+#MISE dir="dots"
+
+let $bit_from_start = "blake"
+
+print $env.TEST_ENV
+print $bit_from_start
+
+input --suppress-output "Press Enter to close"

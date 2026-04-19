@@ -15,15 +15,10 @@ usage = "latest"
 "github:mgood/tuisage" = "latest"
 pitchfork = "latest"
 
-[prepare]
-pnpm = {}
-bun = { auto = true }
+[tasks]
+tui = { description = "TUI to run mise tasks", run = 'tuisage --cmd "mise run" mise tasks ls --usage' }
 
 [shell_alias]
 icli = "node /Users/drew/programs/instant/client/packages/cli/dist/index.js"
 medit = "mise edit ~/dev-env/dots/.config/mise/config.toml"
 super = "mise super"
-
-[tasks.tui]
-description = "TUI to run mise tasks"
-run = 'tuisage --cmd "mise run" mise tasks ls --usage'

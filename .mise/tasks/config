@@ -1,0 +1,8 @@
+#!/usr/bin/env nu
+# @generated-by-splitter
+#MISE description="config"
+
+let $bit_from_start = "blake"
+
+./dev-env config
+exit

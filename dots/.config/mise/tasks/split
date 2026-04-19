@@ -1,0 +1,272 @@
+#!/usr/bin/env nu
+#MISE description="Split pad.nu blocks into mise file tasks"
+#MISE dir="{{cwd}}"
+#MISE silent=true
+
+# Walk up from start_dir until a .git directory is found
+def find-git-root [start_dir: string] {
+    mut current = $start_dir
+    mut found = false
+    mut result = ''
+    while not $found {
+        if ($current | path join '.git' | path exists) {
+            $result = $current
+            $found = true
+        } else {
+            let parent = ($current | path dirname)
+            if $parent == $current {
+                error make {msg: 'Not in a git repository'}
+            }
+            $current = $parent
+        }
+    }
+    $result
+}
+
+# Walk up from start_dir to git root looking for pad.nu
+def find-pad-file [start_dir: string] {
+    let git_root = find-git-root $start_dir
+    mut current = $start_dir
+    mut pad_path = ''
+    mut done = false
+    while not $done {
+        let candidate = ($current | path join 'pad.nu')
+        if ($candidate | path exists) {
+            $pad_path = $candidate
+            $done = true
+        } else if $current == $git_root {
+            $done = true
+        } else {
+            let parent = ($current | path dirname)
+            if $parent == $current {
+                $done = true
+            } else {
+                $current = $parent
+            }
+        }
+    }
+    if $pad_path == '' {
+        error make {msg: $'No pad.nu found searching from ($start_dir) up to ($git_root)'}
+    }
+    $pad_path
+}
+
+# Convert a block name to lowercase kebab-case for use as a filename
+def to-kebab-case []: string -> string {
+    $in
+    | str downcase
+    | str replace --all --regex '\s+' '-'
+    | str replace --all --regex '[^a-z0-9-]' ''
+}
+
+# Parse pad.nu content into frontmatter lines and a list of named blocks.
+# Frontmatter is everything before the first `###` line.
+# Blocks begin with `#@ Name` and are terminated by a blank line or the next `#@ ` header.
+# Lines not under any `#@ ` header are anonymous and are skipped.
+def parse-pad []: string -> record {
+    let all_lines = ($in | lines)
+
+    # Find the index of the first `###` separator line
+    let sep_idx = (
+        $all_lines
+        | enumerate
+        | where {|e| ($e.item | str trim) == '###'}
+        | get 0?
+        | get index?
+    )
+
+    let frontmatter = if $sep_idx != null {
+        $all_lines | first $sep_idx | where {|l| ($l | str trim) != ''}
+    } else {
+        []
+    }
+
+    let body_lines = if $sep_idx != null {
+        $all_lines | skip ($sep_idx + 1)
+    } else {
+        $all_lines
+    }
+
+    mut blocks = []
+    mut current_name = ''
+    mut current_lines: list<string> = []
+
+    for line in $body_lines {
+        if ($line | str starts-with '#@ ') {
+            # Save in-progress block before starting a new one
+            if ($current_name | str trim) != '' {
+                $blocks = ($blocks | append {name: $current_name, lines: $current_lines})
+            }
+            $current_name = ($line | str replace --regex '^#@ ' '')
+            $current_lines = []
+        } else if ($line | str trim) == '' {
+            # Blank line terminates the current block
+            if ($current_name | str trim) != '' {
+                $blocks = ($blocks | append {name: $current_name, lines: $current_lines})
+                $current_name = ''
+                $current_lines = []
+            }
+        } else if ($current_name | str trim) != '' {
+            $current_lines = ($current_lines | append $line)
+        }
+        # Lines outside any named block are silently skipped
+    }
+
+    # Flush the final block if it wasn't terminated by a blank line
+    if ($current_name | str trim) != '' {
+        $blocks = ($blocks | append {name: $current_name, lines: $current_lines})
+    }
+
+    {frontmatter: $frontmatter, blocks: $blocks}
+}
+
+# Assemble the content of a generated mise file task.
+# The block record is received via pipeline; frontmatter lines are passed as a parameter.
+def build-task-content [frontmatter: list<string>]: record -> string {
+    let block = $in
+    let name_kebab = ($block.name | to-kebab-case)
+
+    # Separate #MISE annotations from the executable body
+    let mise_lines = (
+        $block.lines
+        | where {|l| ($l | str starts-with '#MISE ') or ($l | str starts-with '# [MISE]')}
+    )
+    let body_lines = (
+        $block.lines
+        | where {|l| not (($l | str starts-with '#MISE ') or ($l | str starts-with '# [MISE]'))}
+    )
+
+    # Auto-generate a description if the block doesn't supply one
+    let has_description = ($mise_lines | any {|l| $l =~ 'description='})
+    let mise_header = if $has_description {
+        $mise_lines
+    } else {
+        [$'#MISE description="($name_kebab)"'] | append $mise_lines
+    }
+
+    # Build file line-by-line, inserting blank separators between sections
+    mut parts: list<string> = [
+        '#!/usr/bin/env nu'
+        '# @generated-by-splitter'
+    ]
+    $parts = ($parts | append $mise_header)
+
+    if ($frontmatter | length) > 0 {
+        $parts = ($parts | append '' | append $frontmatter)
+    }
+
+    if ($body_lines | length) > 0 {
+        $parts = ($parts | append '' | append $body_lines)
+    }
+
+    # If the last non-empty line is NOT 'exit', append a wait prompt
+    # so the task output stays visible until the user dismisses it
+    let last_non_empty = (
+        $body_lines
+        | where {|l| ($l | str trim) != ''}
+        | last
+        | default ''
+    )
+    if $last_non_empty != 'exit' {
+        $parts = ($parts | append '' | append 'input --suppress-output "Press Enter to close"')
+    }
+
+    $parts | str join "\n"
+}
+
+# Delete any files in tasks_dir (top-level only) that carry the splitter marker tag
+def clean-generated [tasks_dir: string, dry_run: bool] {
+    if not ($tasks_dir | path exists) { return }
+
+    let files = (ls $tasks_dir | where type == file | get name)
+
+    for file in $files {
+        let first_lines = (
+            try { open $file | lines | first 5 }
+            catch { [] }
+        )
+        let is_generated = ($first_lines | any {|l| $l == '# @generated-by-splitter'})
+        if $is_generated {
+            if $dry_run {
+                print $'  [dry-run] would delete: ($file)'
+            } else {
+                rm $file
+                print $'  deleted: ($file)'
+            }
+        }
+    }
+}
+
+def main [
+    --path (-p): string  # Explicit path to a pad.nu file
+    --dry-run (-d)       # Print what would happen without writing anything
+] {
+    let cwd = ($env.MISE_ORIGINAL_CWD? | default $env.PWD)
+
+    # Resolve pad.nu path
+    let pad_path = if $path != null {
+        let expanded = ($path | path expand)
+        if not ($expanded | path exists) {
+            error make {msg: $'File not found: ($path)'}
+        }
+        $expanded
+    } else {
+        find-pad-file $cwd
+    }
+
+    print $'pad file:  ($pad_path)'
+
+    # Output goes to .mise/tasks/ at the git root of the current working directory
+    let git_root = find-git-root $cwd
+    let tasks_dir = ($git_root | path join '.mise' 'tasks')
+
+    print $'tasks dir: ($tasks_dir)'
+
+    # Parse the pad file
+    let pad = (open $pad_path | parse-pad)
+    let named_blocks = $pad.blocks
+
+    print $'blocks:    (($named_blocks | length)) named'
+
+    # Clean stale generated tasks before rebuilding
+    print ''
+    print 'cleaning previously generated tasks...'
+    clean-generated $tasks_dir $dry_run
+
+    # Ensure the output directory exists
+    if not ($tasks_dir | path exists) {
+        if $dry_run {
+            print $'  [dry-run] would create: ($tasks_dir)'
+        } else {
+            mkdir $tasks_dir
+        }
+    }
+
+    # Generate and write one file per named block
+    print ''
+    print 'writing tasks...'
+    for block in $named_blocks {
+        let name = ($block.name | to-kebab-case)
+        let content = ($block | build-task-content $pad.frontmatter)
+        let out_path = ($tasks_dir | path join $name)
+
+        if $dry_run {
+            print $'  [dry-run] would write: ($out_path)'
+            print '  ---'
+            $content | lines | each {|l| print $'  ($l)'}
+            print '  ---'
+        } else {
+            $content | save --force $out_path
+            ^chmod +x $out_path
+            print $'  written: ($out_path)'
+        }
+    }
+
+    print ''
+    let count = ($named_blocks | length)
+    if $dry_run {
+        print $'dry-run complete — ($count) tasks would be generated.'
+    } else {
+        print $'done — ($count) tasks generated.'
+    }
+}

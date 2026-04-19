@@ -1,3 +1,4 @@
+let $bit_from_start = "blake"
 ###
 
 #@ Config
@@ -7,3 +8,11 @@ exit
 #@ Karabiner
 ./dev-env karabiner
 exit
+
+#@ say hello
+#MISE dir="dots"
+print $env.TEST_ENV
+print $bit_from_start
+
+
+print "testing123"

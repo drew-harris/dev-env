@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "nushell-pro": {
+      "source": "hustcer/nushell-pro",
+      "sourceType": "github",
+      "computedHash": "d32f2773a7d05ce85ae958747341ea15185f4bf9e14fa627318b0b85d8bdd0c4"
+    }
+  }
+}

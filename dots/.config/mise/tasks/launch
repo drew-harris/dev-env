@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+#MISE description="Pick and run a mise task with fzf"
+#MISE dir="{{cwd}}"
+#MISE quiet=true
+
+# --- Zed cursor mode ---
+# If the active Zed file is a pad.nu, extract the block at the cursor
+# position, combine it with frontmatter, and execute directly with nu.
+# This handles both named (#@) and anonymous blocks.
+if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW" ]]; then
+    pad_file="$ZED_FILENAME"
+
+    # Extract frontmatter (everything before the first ### line)
+    frontmatter=$(awk '/^###$/ {exit} {print}' "$pad_file" | sed '/^$/d')
+
+    # Find the block surrounding ZED_ROW (delimited by blank lines)
+    block_content=$(awk -v row="$ZED_ROW" '
+        BEGIN { start=0; end=0; found=0 }
+        /^[[:space:]]*$/ {
+            if (NR < row) {
+                start = NR
+            } else if (NR >= row && !found) {
+                end = NR
+                found = 1
+            }
+        }
+        END {
+            if (!found) end = NR + 1
+        }
+    ' "$pad_file")
+
+    # Re-extract: get lines between the blank-line boundaries around ZED_ROW
+    block_content=$(awk -v row="$ZED_ROW" '
+        BEGIN { buf=""; block_start=0 }
+        /^[[:space:]]*$/ {
+            if (NR < row) {
+                buf = ""
+                block_start = NR
+            } else {
+                exit
+            }
+            next
+        }
+        /^#@ / { next }
+        { buf = buf $0 "\n" }
+        END { printf "%s", buf }
+    ' "$pad_file")
+
+    if [[ -z "$block_content" ]]; then
+        echo "No block found at row $ZED_ROW"
+        exit 1
+    fi
+
+    # Check if the last non-empty line is 'exit'
+    quick_exit=false
+    last_line=$(echo "$block_content" | awk '/^[[:space:]]*$/ {next} {last=$0} END {print last}')
+    if [[ "$last_line" == "exit" ]]; then
+        quick_exit=true
+    fi
+
+    # Assemble the temp script: frontmatter + block
+    tmp_file=$(mktemp /tmp/pad-block-XXXXXX.nu)
+    trap 'rm -f "$tmp_file"' EXIT
+
+    {
+        printf "%s\n\n" "$frontmatter"
+        printf "%s\n" "$block_content"
+        if [[ "$quick_exit" == "false" ]]; then
+            printf '\ninput --suppress-output "Press Enter to close"\n'
+        fi
+    } > "$tmp_file"
+
+    exec mise x -- nu "$tmp_file"
+fi
+
+# --- Normal fzf mode ---
+# Run split first to regenerate tasks from pad.nu
+mise run split 2>/dev/null
+
+selected=$(
+  mise tasks --json \
+    | jq -r '.[] | "\(.name)\t\(.description // "")"' \
+    | column -t -s $'\t' \
+    | fzf --reverse --prompt 'task: ' --bind change:top
+) || exit 0
+
+[[ -z "$selected" ]] && exit 0
+
+task_name=$(awk '{print $1}' <<< "$selected")
+exec mise run "$task_name"
