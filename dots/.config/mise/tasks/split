@@ -162,13 +162,19 @@ def build-task-content [frontmatter: list<string>]: record -> string {
     $parts | str join "\n"
 }
 
-# Delete any files in tasks_dir (top-level only) that carry the splitter marker tag
-def clean-generated [tasks_dir: string, dry_run: bool] {
+# Delete generated files that are no longer in the expected set (stale tasks)
+def clean-stale [tasks_dir: string, expected_names: list<string>, dry_run: bool] {
     if not ($tasks_dir | path exists) { return }
 
     let files = (ls $tasks_dir | where type == file | get name)
 
     for file in $files {
+        let basename = ($file | path basename)
+        # Skip files that are in the expected set (still valid)
+        if ($expected_names | any {|n| $n == $basename}) {
+            continue
+        }
+        # Only delete if it carries the splitter marker tag
         let first_lines = (
             try { open $file | lines | first 5 }
             catch { [] }
@@ -216,11 +222,6 @@ def main [
 
     print $'blocks:    (($named_blocks | length)) named'
 
-    # Clean stale generated tasks before rebuilding
-    print ''
-    print 'cleaning previously generated tasks...'
-    clean-generated $tasks_dir $dry_run
-
     # Ensure the output directory exists
     if not ($tasks_dir | path exists) {
         if $dry_run {
@@ -230,7 +231,10 @@ def main [
         }
     }
 
-    # Generate and write one file per named block
+    # Build the set of expected file names from blocks
+    let expected_names = ($named_blocks | each {|b| $b.name | to-kebab-case})
+
+    # Write tasks — only if content changed (preserves mtime for mise source caching)
     print ''
     print 'writing tasks...'
     for block in $named_blocks {
@@ -244,11 +248,25 @@ def main [
             $content | lines | each {|l| print $'  ($l)'}
             print '  ---'
         } else {
-            $content | save --force $out_path
-            ^chmod +x $out_path
-            print $'  written: ($out_path)'
+            let existing = if ($out_path | path exists) {
+                open $out_path
+            } else {
+                ''
+            }
+            if $existing != $content {
+                $content | save --force $out_path
+                ^chmod +x $out_path
+                print $'  written: ($out_path)'
+            } else {
+                print $'  unchanged: ($out_path)'
+            }
         }
     }
+
+    # Remove stale generated files that no longer correspond to a block
+    print ''
+    print 'cleaning stale tasks...'
+    clean-stale $tasks_dir $expected_names $dry_run
 
     print ''
     let count = ($named_blocks | length)
