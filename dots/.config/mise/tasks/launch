@@ -59,8 +59,9 @@ if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW"
     fi
 
     # Assemble the temp script: frontmatter + block
-    tmp_file=$(mktemp /tmp/pad-block-XXXXXX.nu)
-    trap 'rm -f "$tmp_file"' EXIT
+    tmp_dir=$(mktemp -d)
+    tmp_file="$tmp_dir/pad-block.nu"
+    trap 'rm -rf "$tmp_dir"' EXIT
 
     {
         printf "%s\n\n" "$frontmatter"
