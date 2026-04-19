@@ -3,6 +3,20 @@
 #MISE dir="{{cwd}}"
 #MISE quiet=true
 
+# Helper: check if a block's last non-empty line is 'exit'
+is_quick_exit() {
+    local content="$1"
+    local last_line
+    last_line=$(echo "$content" | awk '/^[[:space:]]*$/ {next} {last=$0} END {print last}')
+    [[ "$last_line" == "exit" ]]
+}
+
+# Helper: wait for Enter after task completes (unless quick_exit)
+wait_after() {
+    echo ""
+    read -rp "Press Enter to close"
+}
+
 # --- Zed cursor mode ---
 # If the active Zed file is a pad.nu, extract the block at the cursor
 # position, combine it with frontmatter, and execute directly with nu.
@@ -13,23 +27,7 @@ if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW"
     # Extract frontmatter (everything before the first ### line)
     frontmatter=$(awk '/^###$/ {exit} {print}' "$pad_file" | sed '/^$/d')
 
-    # Find the block surrounding ZED_ROW (delimited by blank lines)
-    block_content=$(awk -v row="$ZED_ROW" '
-        BEGIN { start=0; end=0; found=0 }
-        /^[[:space:]]*$/ {
-            if (NR < row) {
-                start = NR
-            } else if (NR >= row && !found) {
-                end = NR
-                found = 1
-            }
-        }
-        END {
-            if (!found) end = NR + 1
-        }
-    ' "$pad_file")
-
-    # Re-extract: get lines between the blank-line boundaries around ZED_ROW
+    # Extract the block surrounding ZED_ROW (delimited by blank lines)
     block_content=$(awk -v row="$ZED_ROW" '
         BEGIN { buf=""; block_start=0 }
         /^[[:space:]]*$/ {
@@ -51,27 +49,18 @@ if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW"
         exit 1
     fi
 
-    # Check if the last non-empty line is 'exit'
-    quick_exit=false
-    last_line=$(echo "$block_content" | awk '/^[[:space:]]*$/ {next} {last=$0} END {print last}')
-    if [[ "$last_line" == "exit" ]]; then
-        quick_exit=true
-    fi
-
     # Assemble the temp script: frontmatter + block
     tmp_dir=$(mktemp -d)
-    tmp_file="$tmp_dir/pad-block.nu"
     trap 'rm -rf "$tmp_dir"' EXIT
 
     {
         printf "%s\n\n" "$frontmatter"
         printf "%s\n" "$block_content"
-        if [[ "$quick_exit" == "false" ]]; then
-            printf '\ninput --suppress-output "Press Enter to close"\n'
-        fi
-    } > "$tmp_file"
+    } > "$tmp_dir/script.nu"
 
-    exec mise x -- nu "$tmp_file"
+    mise x -- nu "$tmp_dir/script.nu"
+    is_quick_exit "$block_content" || wait_after
+    exit 0
 fi
 
 # --- Normal fzf mode ---
@@ -105,4 +94,15 @@ selected=$(
 [[ -z "$selected" ]] && exit 0
 
 task_name=$(echo "$selected" | cut -f1 | awk '{print $1}')
-exec mise run "$task_name"
+task_file=$(echo "$tasks_json" | jq -r --arg name "$task_name" '.[] | select(.name == $name) | .file // ""')
+
+# Run the task
+mise run "$task_name"
+
+# Check the task's source file for the exit sentinel
+if [[ -n "$task_file" && -f "$task_file" ]]; then
+    file_content=$(cat "$task_file")
+    is_quick_exit "$file_content" || wait_after
+else
+    wait_after
+fi

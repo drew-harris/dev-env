@@ -1,0 +1,7 @@
+#!/usr/bin/env nu
+# @generated-by-splitter
+#MISE description="add-numbers"
+
+let $bit_from_start = "blake"
+
+1 + 1

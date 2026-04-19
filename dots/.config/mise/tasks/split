@@ -159,18 +159,6 @@ def build-task-content [frontmatter: list<string>]: record -> string {
         $parts = ($parts | append '' | append $body_lines)
     }
 
-    # If the last non-empty line is NOT 'exit', append a wait prompt
-    # so the task output stays visible until the user dismisses it
-    let last_non_empty = (
-        $body_lines
-        | where {|l| ($l | str trim) != ''}
-        | last
-        | default ''
-    )
-    if $last_non_empty != 'exit' {
-        $parts = ($parts | append '' | append 'input --suppress-output "Press Enter to close"')
-    }
-
     $parts | str join "\n"
 }
 

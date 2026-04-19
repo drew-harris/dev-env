@@ -16,3 +16,6 @@ print $bit_from_start
 
 
 print "testing123"
+
+#@ add numbers
+1 + 1
