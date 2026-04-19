@@ -18,22 +18,51 @@ wait_after() {
 }
 
 # --- Zed cursor mode ---
-# If the active Zed file is a pad.nu, extract the block at the cursor
-# position, combine it with frontmatter, and execute directly with nu.
-# This handles both named (#@) and anonymous blocks.
+# If the active Zed file is a pad.nu, find the block at the cursor.
+# Named blocks (#@ Name) are run as mise tasks; anonymous blocks are
+# assembled with frontmatter into a temp file and run directly with nu.
 if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW" ]]; then
     pad_file="$ZED_FILENAME"
 
-    # Extract frontmatter (everything before the first ### line)
-    frontmatter=$(awk '/^###$/ {exit} {print}' "$pad_file" | sed '/^$/d')
+    # Find the #@ block name at or above ZED_ROW (within blank-line boundaries)
+    block_name=$(awk -v row="$ZED_ROW" '
+        /^#@ / {
+            name = substr($0, 4)
+        }
+        /^[[:space:]]*$/ {
+            name = ""
+        }
+        NR == row {
+            if (name != "") print name
+            exit
+        }
+    ' "$pad_file")
 
-    # Extract the block surrounding ZED_ROW (delimited by blank lines)
+    if [[ -n "$block_name" ]]; then
+        # Named block — run split to ensure tasks are up to date, then run via mise
+        mise run split 2>/dev/null
+
+        # Convert block name to kebab-case (must match split's to-kebab-case)
+        task_name=$(echo "$block_name" | tr '[:upper:]' '[:lower:]' | sed 's/[[:space:]]\+/-/g; s/[^a-z0-9-]//g')
+
+        mise run "$task_name"
+
+        # Check source file for exit sentinel
+        task_file=$(mise tasks --json | jq -r --arg name "$task_name" '.[] | select(.name == $name) | .file // ""')
+        if [[ -n "$task_file" && -f "$task_file" ]]; then
+            is_quick_exit "$(cat "$task_file")" || wait_after
+        else
+            wait_after
+        fi
+        exit 0
+    fi
+
+    # Anonymous block — extract content and run directly with nu
     block_content=$(awk -v row="$ZED_ROW" '
-        BEGIN { buf=""; block_start=0 }
+        BEGIN { buf="" }
         /^[[:space:]]*$/ {
             if (NR < row) {
                 buf = ""
-                block_start = NR
             } else {
                 exit
             }
@@ -49,7 +78,9 @@ if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW"
         exit 1
     fi
 
-    # Assemble the temp script: frontmatter + block
+    # Extract frontmatter (everything before the first ### line)
+    frontmatter=$(awk '/^###$/ {exit} {print}' "$pad_file" | sed '/^$/d')
+
     tmp_dir=$(mktemp -d)
     trap 'rm -rf "$tmp_dir"' EXIT
 
