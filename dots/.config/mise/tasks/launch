@@ -43,7 +43,7 @@ if [[ "$(basename "${ZED_FILENAME:-}" 2>/dev/null)" == "pad.nu" && -n "$ZED_ROW"
         mise run split 2>/dev/null
 
         # Convert block name to kebab-case (must match split's to-kebab-case)
-        task_name=$(echo "$block_name" | tr '[:upper:]' '[:lower:]' | sed 's/[[:space:]]\+/-/g; s/[^a-z0-9-]//g')
+        task_name=$(echo "$block_name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[[:space:]]+/-/g; s/[^a-z0-9-]//g')
 
         mise run "$task_name"
 
