@@ -108,14 +108,6 @@ status_json() {
 
 # --- toggle_state function ---
 toggle_state() {
-    if [[ ! $service_running ]]; then
-        # Try to start the service if it's not running
-        systemctl start bluetooth.service
-        sleep 1 # Give it a moment
-        controller_on=$(btctl show | grep "Powered: yes")
-        # Fall through to power on logic if service starts
-    fi
-
     if [[ ! $controller_on ]]; then
         btctl power on
         # If device was previously paired and blocked, unblock and connect

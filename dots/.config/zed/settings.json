@@ -216,7 +216,7 @@
   "vertical_scroll_margin": 3,
   "theme": {
     "mode": "dark",
-    "dark": "Sonokai",
+    "dark": "Drewh Wolf Theme (Blurred)",
     "light": "One Light",
   },
   "base_keymap": "VSCode",

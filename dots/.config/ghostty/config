@@ -3,6 +3,8 @@
 # theme=Hopscotch
 # theme=Jellybeans
 # theme = BluLocoLight
+#
+
 
 font-size=14
 window-inherit-font-size=true
@@ -22,9 +24,9 @@ font-thicken = true
 # quit-after-last-window-closed=false
 # adjust-underline-thickness=-20%
 
-background-opacity = 1.00
+background-opacity = 0.9
 unfocused-split-opacity=0.8
-background-blur-radius=40
+background-blur-radius=20
 
 macos-titlebar-style=hidden
 macos-icon=blueprint
@@ -47,7 +49,7 @@ quick-terminal-animation-duration=0.1
 #
 # # Create a new window
 # keybind = ctrl+a>c=new_tab
-keybind = super+r=reload_config
+keybind = ctrl+b>r=reload_config
 keybind = super+t=new_tab
 # keybind = ctrl+a>s=new_split:right
 #

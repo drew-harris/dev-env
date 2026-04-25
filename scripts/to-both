@@ -1,4 +1,5 @@
 #!/bin/bash
+$HOME/programs/home/activate-computer.nu
 
 # PC monitor
 niri msg output DP-1 on

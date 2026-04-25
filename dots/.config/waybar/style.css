@@ -9,7 +9,7 @@
 }
 
 #waybar {
-    background: #242424;
+    background: rgba(18, 18, 18, 0.6);
     color: #c6d0f5;
     margin: 0px 2px;
 }
@@ -56,7 +56,7 @@ button {
 #custom-uptime,
 #custom-airpods,
 #custom-docker {
-  background-color: #242424;
+  background-color: transparent;
   padding: 0.4rem 0.8rem;
 }
 

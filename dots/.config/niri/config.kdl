@@ -119,6 +119,31 @@ layer-rule {
     match namespace="^wallpaper$"
     place-within-backdrop true
 }
+layer-rule {
+    match namespace="waybar"
+    background-effect {
+        blur true
+    }
+}
+
+window-rule {
+    match app-id="dev.zed.Zed-Preview"
+    background-effect {
+        blur true
+    }
+}
+window-rule {
+    match app-id="w"
+    background-effect {
+        blur true
+    }
+}
+window-rule {
+    match app-id="com.mitchellh.ghostty"
+    background-effect {
+        blur true
+    }
+}
 
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
@@ -129,7 +154,7 @@ layout {
     // empty-workspace-above-first
 
     // Set gaps around windows in logical pixels.
-    gaps 8
+    gaps 4
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -176,7 +201,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 2
+        width 1
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -184,13 +209,13 @@ layout {
         // - CSS-like notation: "rgb(255, 127, 0)", rgba(), hsl() and a few others.
 
         // Color of the ring on the active monitor.
-        active-color "#74B9E3"
+        active-color "#74B9E3b0"
 
         // Color of the ring on inactive monitors.
         //
         // The focus ring only draws around the active window, so the only place
         // where you can see its inactive-color is on other monitors.
-        inactive-color "#505050"
+        inactive-color "#50505000"
 
         // You can also use gradients. They take precedence over solid colors.
         // Gradients are rendered the same as CSS linear-gradient(angle, from, to).
@@ -298,7 +323,7 @@ spawn-at-startup "waybar"
 // spawn-at-startup "wlsunset"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
-spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
+spawn-sh-at-startup "swaybg -i /home/drew/Downloads/paper2.jpeg -o '*'"
 spawn-sh-at-startup "xdg-settings set default-web-browser helium-browser.desktop"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
