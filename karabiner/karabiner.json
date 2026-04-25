@@ -466,10 +466,10 @@
               {
                 "to": [
                   {
-                    "shell_command": "open -a 'Discord.app'"
+                    "shell_command": "open -a 'Legcord.app'"
                   }
                 ],
-                "description": "Open -a 'Discord.app'",
+                "description": "Open -a 'Legcord.app'",
                 "type": "basic",
                 "from": {
                   "key_code": "q",
@@ -2825,10 +2825,10 @@
               {
                 "to": [
                   {
-                    "shell_command": "open -a 'Discord.app'"
+                    "shell_command": "open -a 'Legcord.app'"
                   }
                 ],
-                "description": "Open -a 'Discord.app'",
+                "description": "Open -a 'Legcord.app'",
                 "type": "basic",
                 "from": {
                   "key_code": "q",

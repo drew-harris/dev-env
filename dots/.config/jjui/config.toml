@@ -156,7 +156,7 @@ flash("Opened PR")
 name = "pick-commit"
 desc = "interactive commit with gitpatch"
 lua = '''
-local _, err = jj("commit", "-i", "--tool", "gitpatch")
+local _, err = jj_interactive("commit", "-i", "--tool", "gitpatch")
 if err then
   flash({ text = "Commit failed: " .. err, error = true, sticky = true })
   return

@@ -109,7 +109,7 @@ const rules: KarabinerRules[] = [
   ...createHyperSubLayers({
     spacebar: open("raycast://extensions/reboot/hypersonic/index"),
 
-    q: app("Discord"),
+    q: app("Legcord"),
     i: app("Zed Preview"),
     w: app("Slack"),
     a: app(BROWSER),
@@ -137,7 +137,7 @@ const rules: KarabinerRules[] = [
 
     // o = "Open" applications
     o: {
-      q: app("Discord"),
+      q: app("Legcord"),
       p: app("Claude"),
       f: app("Finder"),
       // i: app(TERMINAL),

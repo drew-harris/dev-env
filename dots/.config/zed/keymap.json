@@ -212,6 +212,11 @@
       "space g d": "editor::ToggleSelectedDiffHunks",
       "space g t": "editor::ToggleSplitDiff",
       "space g s": "git::Diff",
+      "space V": "editor::ToggleBookmark",
+      "space v h": "editor::ToggleBookmark",
+      "space v s": "editor::ViewBookmarks",
+      "space v j": "editor::GoToNextBookmark",
+      "space v k": "editor::GoToPreviousBookmark",
       "g .": "vim::ChangeListOlder",
       "g ,": "vim::ChangeListNewer",
       "g x": "pane::CloseActiveItem",
@@ -575,6 +580,12 @@
           "reveal_target": "center",
         },
       ],
+      "cmd-r": [
+        "task::Spawn",
+        {
+          "task_name": "termblock",
+        },
+      ],
       "ctrl-a J": [
         "task::Spawn",
         {
@@ -782,6 +793,18 @@
   {
     "bindings": {
       "cmd-shift-d": "debug_panel::Toggle",
+    },
+  },
+  {
+    "context": "(vim_mode == helix_normal || vim_mode == helix_select) && !menu",
+    "bindings": {
+      "g .": [
+        "action::Sequence",
+        [
+          "vim::HelixGotoLastModification",
+          ["workspace::SendKeystrokes", "z z"],
+        ],
+      ],
     },
   },
 ]

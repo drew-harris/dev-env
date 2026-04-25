@@ -64,7 +64,7 @@ edit-args = [
 [ui]
 default-command = ["log", "-T", "builtin_log_comfortable"]
 # pager = ["delta", "--pager", "less -FRX"]
-# editor = ["zed", "-w"]
+editor = ["zed", "-w"]
 conflict-marker-style = "git"
 diff-formatter = [
   "delta",

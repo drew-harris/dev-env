@@ -1,5 +1,7 @@
 // settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 {
+  "diff_view_style": "unified",
+  "cli_default_open_behavior": "new_window",
   "auto_update_extensions": {
     "tombi": false,
   },
@@ -34,6 +36,10 @@
   "which_key": {
     "enabled": true,
     "delay_ms": 200,
+  },
+  "title_bar": {
+    "show_branch_name": false,
+    "show_user_picture": false,
   },
   "ui_font_weight": 400.0,
   "icon_theme": {
@@ -251,8 +257,7 @@
     },
   },
   "active_pane_modifiers": {
-    "border_size": 1,
-    "inactive_opacity": 0.9,
+    "border_size": 0,
   },
   "indent_guides": {
     "enabled": true,
@@ -268,7 +273,7 @@
     "inline_blame": {
       "padding": 40,
       "min_column": 110,
-      "delay_ms": 800,
+      "delay_ms": 8000000,
       "show_commit_summary": true,
     },
     "hunk_style": "staged_hollow",
@@ -366,6 +371,10 @@
       },
     },
   },
+  "toolbar": {
+    "quick_actions": false,
+    "breadcrumbs": true,
+  },
   "terminal": {
     "toolbar": {
       "breadcrumbs": false,
@@ -399,7 +408,7 @@
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
-    "dock": "right",
+    "dock": "left",
     "button": true,
   },
   "tabs": {
@@ -517,11 +526,11 @@
     },
     "Sonokai": {
       "background.appearance": "opaque",
-      "panel.background": "#252525",
+      "panel.background": "#242424",
       "border.selected": "#737373",
       "border.variant": "#4a4a4a",
       "tab_bar.background": "#242424",
-      "toolbar.background": "#303030",
+      "toolbar.background": "#242424",
       "title_bar.background": "#242424",
       "editor.active_line.background": "#303030",
       "background": "#242425",

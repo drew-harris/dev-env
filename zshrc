@@ -31,7 +31,7 @@ function zvm_after_init() {
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='zed'
+  export EDITOR='zed -w'
 fi
 # Compilation flags
 
@@ -47,7 +47,7 @@ alias b="blocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
-alias oc="opencode"
+alias oc="OPENCODE_EXPERIMENTAL=true opencode"
 alias j='jjui'
 if [[ `uname -s` != Darwin ]]; then
   alias hx='helix'
@@ -103,4 +103,3 @@ function y() {
 }
 
 export MISE_EXPERIMENTAL=1
-
