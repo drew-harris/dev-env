@@ -4,6 +4,9 @@
 name = "Drew Harris"
 email = "drew@drewh.net"
 
+[merge-tools]
+delta.diff-expected-exit-codes = [0, 1]
+
 [merge-tools.zed]
 program = "zed"
 diff-args = [
@@ -63,13 +66,14 @@ edit-args = [
 
 [ui]
 default-command = ["log", "-T", "builtin_log_comfortable"]
-# pager = ["delta", "--pager", "less -FRX"]
 editor = ["zed", "-w"]
 conflict-marker-style = "git"
 diff-formatter = [
   "delta",
   "$left",
   "$right",
+  "--side-by-side",
+  "--width=$width",
   "--file-transformation",
   "s|.*/jj-diff-[^/]*/[^/]*/||",
 ]

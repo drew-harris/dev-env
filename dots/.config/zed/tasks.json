@@ -6,6 +6,7 @@
   {
     "command": "/Users/drew/programs/parzed/zed-eval.sh",
     "label": "eval",
+    "save": "none",
     "shell": {
       "program": "/bin/sh",
     },
@@ -154,8 +155,8 @@
   },
   {
     "label": "ff",
-    "command": "zask",
-    "args": ["smarterold"],
+    "command": "fff",
+    "args": [],
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh",
@@ -164,6 +165,23 @@
     "allow_concurrent_runs": true,
     "reveal": "always",
     "use_new_terminal": true,
+  },
+  {
+    "label": "fff-gpui: Files",
+    "command": "/opt/homebrew/bin/fff-gpui",
+    "args": ["."],
+    "env": { "EDITOR": "zed" },
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "shell": {
+      "program": "/bin/sh",
+    },
+    "reveal": "never",
+    "reveal_target": "dock",
+    "hide": "always",
+    "show_summary": false,
+    "show_command": false,
+    "save": "none",
   },
   {
     "label": "Choose File",

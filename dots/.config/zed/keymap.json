@@ -94,7 +94,7 @@
     "context": "vim_mode==helix_normal && !menu",
     "bindings": {
       "shift-r": ["workspace::SendKeystrokes", "\" _ d h p y"],
-      "g shift-r": "vim::PushReplaceWithRegister",
+      // "g shift-r": "vim::PushReplaceWithRegister",
       "escape": [
         "action::Sequence",
         ["vim::SwitchToHelixNormalMode", "buffer_search::Dismiss"],
@@ -153,18 +153,11 @@
         ],
       ],
       "space c e": [
-        "action::Sequence",
-        [
-          "workspace::SaveWithoutFormat",
-          [
-            "task::Spawn",
-            {
-              "task_name": "eval",
-              "reveal_target": "dock",
-            },
-          ],
-          "editor::ReloadFile",
-        ],
+        "task::Spawn",
+        {
+          "task_name": "eval",
+          "reveal_target": "dock",
+        },
       ],
       "space c s": [
         "action::Sequence",
@@ -216,6 +209,7 @@
       "space v h": "editor::ToggleBookmark",
       "space v s": "editor::ViewBookmarks",
       "space v j": "editor::GoToNextBookmark",
+      "space v x": "workspace::ClearBookmarks",
       "space v k": "editor::GoToPreviousBookmark",
       "g .": "vim::ChangeListOlder",
       "g ,": "vim::ChangeListNewer",

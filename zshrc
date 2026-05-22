@@ -47,7 +47,7 @@ alias b="blocker"
 alias updates="npx npm-check-updates --interactive --format group"
 alias jj st='jj st--no-pager'
 alias oldvim='NVIM_APPNAME=old-nvim nvim'
-alias oc="OPENCODE_EXPERIMENTAL=true opencode"
+alias oc="opencode"
 alias j='jjui'
 if [[ `uname -s` != Darwin ]]; then
   alias hx='helix'
@@ -71,12 +71,11 @@ eval "$(zoxide init zsh)"
 source <(fzf --zsh)
 
 
-autoload -Uz compinit && compinit
+autoload -U compinit && compinit
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
 
-# # Carapace
-# export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
-# zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-# source <(carapace _carapace)
 
 export HELIX_RUNTIME=/Users/drew/clones/helix/runtime
 
@@ -103,3 +102,5 @@ function y() {
 }
 
 export MISE_EXPERIMENTAL=1
+eval "$(mise activate zsh)"
+eval "$(mise activate zsh)"

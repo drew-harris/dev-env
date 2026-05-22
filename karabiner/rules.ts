@@ -142,7 +142,7 @@ const rules: KarabinerRules[] = [
       f: app("Finder"),
       // i: app(TERMINAL),
       w: app("Slack"),
-      a: app("Zen"),
+      // a: app("Zen"),
       m: app("Messages"),
       n: app("Notion"),
       r: app("AI"),
