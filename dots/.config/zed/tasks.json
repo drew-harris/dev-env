@@ -244,6 +244,7 @@
     "allow_concurrent_runs": true,
     "reveal": "always",
     "use_new_terminal": true,
+    "show_command": false,
   },
   {
     "label": "nvim",

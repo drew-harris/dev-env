@@ -104,7 +104,7 @@
   "close_on_file_delete": true,
   "inline_code_actions": false,
   "when_closing_with_no_tabs": "keep_window_open",
-  "colorize_brackets": true,
+  "colorize_brackets": false,
   "current_line_highlight": "all",
   "gutter": {
     "min_line_number_digits": 3,
@@ -246,7 +246,7 @@
   "vertical_scroll_margin": 3,
   "theme": {
     "mode": "dark",
-    "dark": "One Dark",
+    "dark": "Sonokai",
     "light": "One Light",
   },
   "base_keymap": "VSCode",
@@ -603,7 +603,10 @@
           "color": "#EF8F62",
         },
       },
-      "players": [{ "background": "#ff00ff", "selection": "#4A4A4A" }],
+
+      // "players": [{ "background": "#ff00ff", "selection": "#ffffff3f" }],
+      // "players": [{ "background": "#ff00ff", "selection": "#4f4f4f" }],
+      "players": [{ "background": "#ff00ff", "selection": "#ffd04f50" }],
       "error.background": "#793336",
       "tab.active_background": "#404040",
       "editor.subheader.background": "#3B3D42",
@@ -626,6 +629,9 @@
       "terminal.ansi.bright_magenta": "#ae81ff",
       "terminal.ansi.bright_cyan": "#a1efe4",
       "terminal.ansi.bright_white": "#f9f8f5",
+    },
+    "Smooth Dark": {
+      "status_bar.background": "#383838",
     },
   },
 }

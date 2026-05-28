@@ -1,0 +1,156 @@
+#!/usr/bin/env nu
+
+def target-info [file: path] {
+    let target = ($file | path expand)
+
+    if not ($target | path exists) {
+        error make { msg: $"File not found: ($target)" }
+    }
+
+    let is_module = (open --raw $target | lines | any {|line| ($line | str trim) starts-with "export " })
+    let module_prefix = $"($target | path parse | get stem) "
+    let def_names = (
+        open --raw $target
+        | lines
+        | each { str trim }
+        | parse -r '^def(?:\s+--[\w-]+)*\s+(?:"(?P<quoted>[^"]+)"|(?P<bare>[^\s\[\(]+))'
+        | each {|row| if ($row.quoted | is-empty) { $row.bare } else { $row.quoted } }
+    )
+
+    {
+        path: $target,
+        literal: ($target | to nuon),
+        is_module: $is_module,
+        module_prefix: $module_prefix,
+        module_prefix_literal: ($module_prefix | to nuon),
+        def_names_literal: ($def_names | to nuon),
+    }
+}
+
+def command-setup [info: record] {
+    if $info.is_module {
+        [
+            $'use ($info.literal)'
+            $'let module_prefix = ($info.module_prefix_literal)'
+            'let commands = ('
+            '    scope commands'
+            '    | where type == "custom"'
+            '    | where name starts-with $module_prefix'
+            ')'
+        ]
+    } else {
+        [
+            $'let def_names = ($info.def_names_literal)'
+            $'source ($info.literal)'
+            'let commands = ('
+            '    scope commands'
+            '    | where type == "custom"'
+            '    | where name in $def_names'
+            ')'
+        ]
+    }
+}
+
+def "main list" [file: path] {
+    let info = target-info $file
+    let code = ((command-setup $info) ++ [
+        'if ($commands | is-empty) {'
+        $'    error make { msg: "No custom functions found in ($info.path)" }'
+        '}'
+        '$commands | sort-by name | select name signatures description'
+    ] | str join "\n")
+
+    nu -n -c $code
+}
+
+def "main run" [
+    file: path,
+    command: string,
+    args: string = "",
+    --prompt-args (-p)
+] {
+    let info = target-info $file
+    let resolved_command = if ($info.is_module and not ($command starts-with $info.module_prefix)) {
+        $"($info.module_prefix)($command)"
+    } else {
+        $command
+    }
+    let args = if $prompt_args {
+        ^bash -c 'IFS= read -r -p "$1" value; printf "%s" "$value"' -- "Args (optional, as Nushell source): "
+    } else {
+        $args
+    }
+    let resolved_command_literal = ($resolved_command | to nuon)
+    let args_literal = ($args | to nuon)
+    let loader = if $info.is_module { $"use ($info.literal)" } else { $"source ($info.literal)" }
+
+    let code = ((command-setup $info) ++ [
+        $'let command = ($resolved_command_literal)'
+        $'let args = ($args_literal)'
+        'let found = ($commands | where name == $command)'
+        'if ($found | is-empty) {'
+        '    error make { msg: $"Command not found: ($command)" }'
+        '}'
+        'let call = if (($args | str trim) == "") {'
+        '    $command'
+        '} else {'
+        '    $"($command) ($args)"'
+        '}'
+        ('nu -n -c $"' + $loader + '; ($call)"')
+    ] | str join "\n")
+
+    nu -n -c $code
+}
+
+def "main pick" [
+    file: path,
+    --with-args: string
+] {
+    let info = target-info $file
+    let loader = if $info.is_module { $"use ($info.literal)" } else { $"source ($info.literal)" }
+    let with_args_literal = ($with_args | to nuon)
+
+    let code = ((command-setup $info) ++ [
+        $'let provided_args = ($with_args_literal)'
+        'if ($commands | is-empty) {'
+        $'    error make { msg: "No custom functions found in ($info.path)" }'
+        '}'
+        'let command = ('
+        '    $commands'
+        '    | get name'
+        '    | sort'
+        '    | str join (char nl)'
+        '    | fzf --prompt "Run custom function> " --height 40% --reverse'
+        ')'
+        'if (($command | str trim) == "") {'
+        '    return'
+        '}'
+        'let has_args = ('
+        '    $commands'
+        '    | where name == $command'
+        '    | first'
+        '    | get signatures.any'
+        '    | where parameter_type not-in [input output]'
+        '    | is-not-empty'
+        ')'
+        'let args = if not $has_args {'
+        '    ""'
+        '} else if $provided_args != null {'
+        '    $provided_args'
+        '} else {'
+        '    input "Args (optional, as Nushell source): "'
+        '}'
+        'let call = if (($args | str trim) == "") {'
+        '    $command'
+        '} else {'
+        '    $"($command) ($args)"'
+        '}'
+        ('nu -n -c $"' + $loader + '; ($call)"')
+    ] | str join "\n")
+
+    nu -n -c $code
+}
+
+def main [] {
+    help i
+}
