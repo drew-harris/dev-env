@@ -39,7 +39,6 @@ $env.config = {
         external: {
             enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up may be very slow
             max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
-            completer: null # check 'carapace_completer' above as an example
         }
         use_ls_colors: true # set this to true to enable file/path/directory completions using LS_COLORS
     }
@@ -104,23 +103,7 @@ $env.config = {
     }
 
     hooks: {
-            # pre_prompt: [
-            #     {
-            #         condition: {|| ("mod.nu" | path exists) and ($env.PROJECT_MTIME? != (ls mod.nu | first | get modified)) }
-            #         code: "
-            #             $env.PROJECT_MTIME = (ls mod.nu | first | get modified)
-            #             overlay use --reload mod.nu as project
-            #         "
-            #     }
-            #     {
-            #         condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list)) }
-            #         code: "
-            #             overlay hide project
-            #             hide-env PROJECT_MTIME
-            #         "
-            #     }
-            # ]
-            pre_execution: [
+            pre_prompt: [
                 {
                     condition: {|| ("mod.nu" | path exists) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
                     code: "
@@ -131,7 +114,7 @@ $env.config = {
                 {
                     condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list)) }
                     code: "
-                        overlay hide project
+                        overlay hide --keep-env [ PWD ] project
                         hide-env PROJECT_MTIME
                     "
                 }
@@ -143,7 +126,6 @@ $env.config = {
 
 use ~/.cache/starship/init.nu
 
-source ~/.cache/carapace/init.nu
 
 source ~/.zoxide.nu
 
@@ -151,3 +133,7 @@ source ~/.zoxide.nu
 # ^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
 
 export alias l = ^eza -lah
+
+source ($nu.cache-dir | path join "carapace.nu")
+
+alias oc = opencode;
