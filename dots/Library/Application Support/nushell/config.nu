@@ -122,9 +122,9 @@ $env.config = {
             # ]
             pre_execution: [
                 {
-                    condition: {|| ("mod.nu" | path exists) and ($env.PROJECT_MTIME? != (ls mod.nu | first | get modified)) }
+                    condition: {|| ("mod.nu" | path exists) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
                     code: "
-                        $env.PROJECT_MTIME = (ls mod.nu | first | get modified)
+                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
                         overlay use --reload mod.nu as project
                     "
                 }
