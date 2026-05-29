@@ -4,7 +4,6 @@
     "@ex-machina/opencode-anthropic-auth"
   ],
   "autoupdate": true,
-  "lsp": true,
   "agent": {
     "ask": {
       "mode": "primary",

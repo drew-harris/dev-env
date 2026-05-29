@@ -14,7 +14,6 @@ exit
 print $env.TEST_ENV
 print $bit_from_start
 
-
 print "testing123"
 
 #@ add numbers

@@ -51,7 +51,7 @@ def command-setup [info: record] {
     }
 }
 
-def "main list" [file: path] {
+def "main list" [file: path = "mod.nu"] {
     let info = target-info $file
     let code = ((command-setup $info) ++ [
         'if ($commands | is-empty) {'
@@ -63,12 +63,24 @@ def "main list" [file: path] {
     nu -n -c $code
 }
 
-def "main run" [
-    file: path,
-    command: string,
-    args: string = "",
-    --prompt-args (-p)
+def --wrapped "main run" [
+    --prompt-args (-p),
+    ...rest
 ] {
+    if ($rest | is-empty) {
+        error make { msg: "Usage: i run [file.nu] command [...args]" }
+    }
+
+    let first = ($rest | first)
+    let has_file = ($first | str ends-with ".nu")
+    let file = if $has_file { $first } else { "mod.nu" }
+    let command = if $has_file { $rest | get 1? } else { $first }
+
+    if $command == null {
+        error make { msg: "Usage: i run [file.nu] command [...args]" }
+    }
+
+    let rest_args = if $has_file { $rest | skip 2 } else { $rest | skip 1 }
     let info = target-info $file
     let resolved_command = if ($info.is_module and not ($command starts-with $info.module_prefix)) {
         $"($info.module_prefix)($command)"
@@ -78,7 +90,7 @@ def "main run" [
     let args = if $prompt_args {
         ^bash -c 'IFS= read -r -p "$1" value; printf "%s" "$value"' -- "Args (optional, as Nushell source): "
     } else {
-        $args
+        $rest_args | str join " "
     }
     let resolved_command_literal = ($resolved_command | to nuon)
     let args_literal = ($args | to nuon)
@@ -103,7 +115,7 @@ def "main run" [
 }
 
 def "main pick" [
-    file: path,
+    file: path = "mod.nu",
     --with-args: string
 ] {
     let info = target-info $file

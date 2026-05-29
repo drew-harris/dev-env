@@ -328,6 +328,14 @@
   },
   // LSP
   "languages": {
+    "Nu": {
+      "formatter": {
+        "external": {
+          "command": "nufmt",
+          "arguments": ["--stdin"],
+        },
+      },
+    },
     "TypeScript": {
       "formatter": [
         {
@@ -389,15 +397,20 @@
         },
       },
     },
-    "biome": {
-      "settings": {
-        "require_config_file": true,
-      },
-    },
+    // "biome": {
+    //   "settings": {
+    //     "require_config_file": true,
+    //   },
+    // },
   },
   "toolbar": {
     "quick_actions": false,
     "breadcrumbs": true,
+  },
+  "macos": {
+    "terminal": {
+      "shell": { "program": "/opt/homebrew/bin/nu" },
+    },
   },
   "terminal": {
     "toolbar": {
