@@ -445,7 +445,7 @@
   "git_panel": {
     "tree_view": true,
     "sort_by_path": false,
-    "dock": "left",
+    "dock": "right",
     "button": true,
   },
   "tabs": {

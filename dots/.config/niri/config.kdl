@@ -44,8 +44,8 @@ input {
     mouse {
         // off
         natural-scroll
-        // accel-speed 33
-        // accel-profile "flat"
+        // accel-speed -0.3
+        accel-profile "flat"
         // scroll-method "no-scroll"
     }
 
@@ -154,7 +154,7 @@ layout {
     // empty-workspace-above-first
 
     // Set gaps around windows in logical pixels.
-    gaps 4
+    gaps 8
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -323,7 +323,7 @@ spawn-at-startup "waybar"
 // spawn-at-startup "wlsunset"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
-spawn-sh-at-startup "swaybg -i /home/drew/Downloads/paper2.jpeg -o '*'"
+spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
 spawn-sh-at-startup "xdg-settings set default-web-browser helium-browser.desktop"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:

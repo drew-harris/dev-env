@@ -5,30 +5,41 @@
 device="BC:80:4E:88:79:08" # Replace with your device's MAC address
 controller="E0:D3:62:64:87:87" # dongle controller MAC address
 
-# Helper to run bluetoothctl commands on the correct controller
+# Helper to run bluetoothctl commands.
+# IMPORTANT: We invoke bluetoothctl in one-shot subcommand mode rather than
+# piping commands via stdin. The stdin/interactive mode waits ~2.5s for the
+# agent to idle before exiting, which made every call slow and the whole
+# script take >20s. One-shot mode returns immediately.
+#
+# Note: one-shot mode doesn't support `select <ctrl>` chaining, so we rely on
+# the default controller. The dongle should be set as default via
+# `bluetoothctl select <mac>` once (persisted in /var/lib/bluetooth).
 btctl() {
-    echo -e "select $controller\n$*" | bluetoothctl 2>/dev/null
+    bluetoothctl "$@" 2>/dev/null
 }
 
 # Connect with retry logic (Bluetooth connections can be flaky)
 connect_with_retry() {
     local attempts=3
     local delay=0.3
-    
+
     for ((i=1; i<=attempts; i++)); do
-        btctl connect "$device"
+        # `connect` blocks until success/failure in one-shot mode, so we
+        # don't strictly need the post-sleep, but keep a small delay so the
+        # daemon settles before we re-query state.
+        btctl connect "$device" >/dev/null
         sleep "$delay"
-        
+
         # Check if connection succeeded
         if btctl info "$device" | grep -q "Connected: yes"; then
             return 0
         fi
-        
+
         if ((i < attempts)); then
-            sleep 0.5
+            sleep 0.2
         fi
     done
-    
+
     return 1
 }
 
@@ -109,21 +120,21 @@ status_json() {
 # --- toggle_state function ---
 toggle_state() {
     if [[ ! $controller_on ]]; then
-        btctl power on
+        btctl power on >/dev/null
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
-            btctl unblock "$device"
+            btctl unblock "$device" >/dev/null
             sleep 0.2
             connect_with_retry
         fi
     elif [[ $device_connected ]]; then
-        btctl disconnect "$device"
+        btctl disconnect "$device" >/dev/null
         sleep 0.2
-        btctl block "$device"
+        btctl block "$device" >/dev/null
     elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
-        connect_with_retry || btctl block "$device" # Try connect with retries, if fails, block
+        connect_with_retry || btctl block "$device" >/dev/null # Try connect with retries, if fails, block
     elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked
-        btctl unblock "$device"
+        btctl unblock "$device" >/dev/null
         sleep 0.2
         connect_with_retry
     else # Controller on, but device not paired (or some other state)
@@ -138,7 +149,7 @@ toggle_state() {
 # --- maybe_block function ---
 maybe_block() {
     if [[ $controller_on ]] && [[ $device_paired ]] && [[ ! $device_connected ]] && [[ ! $device_blocked ]]; then
-        btctl block "$device"
+        btctl block "$device" >/dev/null
     fi
 }
 

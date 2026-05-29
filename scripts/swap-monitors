@@ -2,6 +2,7 @@
 
 # Move ALL workspaces to the other monitor, then focus it.
 # Lets you walk between rooms and pull everything to where you are.
+$HOME/programs/home/activate-computer.nu
 
 # Ensure both monitors are active
 both_active=$(niri msg -j outputs | jq '[to_entries[] | select(.value.logical != null)] | length')
@@ -62,6 +63,10 @@ disown
 #     niri msg action fullscreen-window --id "$mirror_id"
 #   fi
 # fi
+# 
+niri msg output HDMI-A-1 on
+niri msg output HDMI-A-1 mode 1920x1080@60.00
+niri msg output HDMI-A-1 scale 1.4
 
 # Reclaim focus on the target monitor
 sleep 0.2
