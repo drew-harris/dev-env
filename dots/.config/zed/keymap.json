@@ -411,20 +411,13 @@
       "[ g": "editor::GoToPreviousHunk",
       // TODO: git diff is not ready yet, refer https://github.com/zed-industries/zed/issues/8665#issuecomment-2194000497
       // + Buffers
-      // Switch between buffers
-      "shift-h": "pane::ActivatePreviousItem",
-      "shift-l": "pane::ActivateNextItem",
       // Close active panel
-      "shift-q": "pane::CloseActiveItem",
-      "ctrl-q": "pane::CloseActiveItem",
       "space x": "workspace::CloseItemInAllPanes",
       // Close other items
       "space o": "pane::CloseOtherItems",
       // Save file
       // Project search
       "space /": "pane::DeploySearch",
-      // TODO: Open other files
-      // Show project panel with current file
       // "cmd-e": "pane::RevealInProjectPanel"
     },
   },

@@ -272,7 +272,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": true,
+    "show": false,
   },
   "scrollbar": {
     "axes": {
@@ -397,11 +397,11 @@
         },
       },
     },
-    // "biome": {
-    //   "settings": {
-    //     "require_config_file": true,
-    //   },
-    // },
+    "biome": {
+      "settings": {
+        "require_config_file": true,
+      },
+    },
   },
   "toolbar": {
     "quick_actions": false,

@@ -134,7 +134,10 @@
     "command": "jjui",
     "reveal_target": "dock",
     "shell": {
-      "program": "/bin/sh",
+      "with_arguments": {
+        "program": "/usr/bin/env",
+        "args": ["nu", "-n", "--no-std-lib", "-c"],
+      },
     },
     "reveal": "always",
     "show_command": false,
@@ -188,7 +191,10 @@
     "command": "~/dev-env/scripts/chooser",
     "reveal_target": "center",
     "shell": {
-      "program": "/bin/sh",
+      "with_arguments": {
+        "program": "/usr/bin/env",
+        "args": ["nu", "-n", "--no-std-lib", "-c"],
+      },
     },
     "hide": "on_success",
     "allow_concurrent_runs": true,
@@ -298,5 +304,13 @@
     "allow_concurrent_runs": true,
     "reveal": "always",
     "use_new_terminal": true,
+  },
+  {
+    "label": "nu: $ZED_CUSTOM_name",
+    "command": "nu",
+    "args": ["-c", "\"overlay use $ZED_FILE; $ZED_CUSTOM_name\""],
+    "tags": ["nu-run"],
+    "reveal_target": "dock",
+    "save": "current",
   },
 ]
