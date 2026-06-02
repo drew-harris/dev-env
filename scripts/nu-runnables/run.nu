@@ -12,6 +12,15 @@ def main [file: path, command: string] {
         error make { msg: $"File not found: ($target)" }
     }
 
+    # `decl_def` quoted-name forms like `export def 'swarm list-services'` arrive
+    # here with their surrounding quotes intact (the tree-sitter capture spans the
+    # whole `val_string` node). Strip them so the name matches how nu stores it
+    # in `scope commands` and how it must be invoked at the call site.
+    let bare = (
+        $command
+        | str replace -r "^['\"](.*)['\"]$" '$1'
+    )
+
     let is_module = (
         open --raw $target
         | lines
@@ -24,9 +33,9 @@ def main [file: path, command: string] {
     }
     let resolved = if $is_module {
         let prefix = $"($target | path parse | get stem) "
-        if ($command | str starts-with $prefix) { $command } else { $"($prefix)($command)" }
+        if ($bare | str starts-with $prefix) { $bare } else { $"($prefix)($bare)" }
     } else {
-        $command
+        $bare
     }
 
     let probe = $"($loader); scope commands | where name == ($resolved | to nuon) | first | get signatures.any | where parameter_type not-in [input output] | is-not-empty | into string"

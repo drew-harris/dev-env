@@ -5,5 +5,5 @@
 ; so the runnable is detected when the cursor is anywhere inside the function
 ; body. @name is exposed to tasks as $ZED_CUSTOM_name.
 ((decl_def
-   (cmd_identifier) @run @name) @_full
+   [(cmd_identifier) (val_string)] @run @name) @_full
   (#set! tag nu-run))

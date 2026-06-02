@@ -59,10 +59,16 @@ echo "next: ensure ~/.config/zed/tasks.json has a task tagged 'nu-run', e.g.:"
 cat <<EOF
   {
     "label": "nu: \$ZED_CUSTOM_name",
-    "command": "$SRC_DIR/run.nu '\$ZED_FILE' '\$ZED_CUSTOM_name'",
+    "command": "$SRC_DIR/run.nu \"\$ZED_FILE\" \"\$ZED_CUSTOM_name\"",
     "tags": ["nu-run"]
   }
 EOF
+echo
+echo "double-quote the substituted vars (not single) — subcommand"
+echo "definitions like \`export def 'swarm list-services' []\` produce"
+echo "a \$ZED_CUSTOM_name containing single quotes, which would collide"
+echo "with single-quote wrapping at the shell level. run.nu strips the"
+echo "surrounding quotes before invoking."
 echo
 echo "run.nu probes the function's signature: it only prompts for"
 echo "arguments when the function actually declares parameters. The"
