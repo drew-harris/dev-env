@@ -1,7 +1,6 @@
-; Mark zero-argument `def` (and `export def`) declarations as runnable.
+; Mark every `def` (and `export def`) declaration as runnable. Arguments
+; are collected interactively by the runner script — see run.nu.
 ; @run positions the gutter button; @name is exposed to tasks as $ZED_CUSTOM_name.
 ((decl_def
-   (cmd_identifier) @run @name
-   (parameter_bracks) @_params)
-  (#match? @_params "^\\[\\s*\\]$")
+   (cmd_identifier) @run @name)
   (#set! tag nu-run))

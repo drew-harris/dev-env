@@ -56,14 +56,18 @@ cp "$SRC" "$DEST"
 echo "patched ($variant variant): $DEST"
 echo
 echo "next: ensure ~/.config/zed/tasks.json has a task tagged 'nu-run', e.g.:"
-cat <<'EOF'
+cat <<EOF
   {
-    "label": "nu: $ZED_CUSTOM_name",
-    "command": "nu",
-    "args": ["-c", "source $ZED_FILE; $ZED_CUSTOM_name"],
+    "label": "nu: \$ZED_CUSTOM_name",
+    "command": "$SRC_DIR/run.nu '\$ZED_FILE' '\$ZED_CUSTOM_name'",
     "tags": ["nu-run"]
   }
 EOF
+echo
+echo "run.nu probes the function's signature: it only prompts for"
+echo "arguments when the function actually declares parameters. The"
+echo "prompt accepts arbitrary nushell source, so quote strings as you"
+echo "would when calling the command at the REPL."
 echo
 echo "note: \$ZED_RUNNABLE_SYMBOL is declared in Zed but never populated;"
 echo "use the @name capture exposed as \$ZED_CUSTOM_name instead."
