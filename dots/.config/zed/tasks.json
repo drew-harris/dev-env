@@ -309,7 +309,8 @@
     "label": "nu: $ZED_CUSTOM_name",
     "command": "/Users/drew/dev-env/scripts/nu-runnables/run.nu \"$ZED_FILE\" \"$ZED_CUSTOM_name\"",
     "tags": ["nu-run"],
+    "reveal": "no_focus",
     "show_command": false,
-    "show_summary": false,
+    "show_summary": true,
   },
 ]

@@ -794,4 +794,43 @@
       ],
     },
   },
+  {
+    "context": "(Editor && (vim_mode == normal || vim_mode == helix_normal) && !VimWaiting && !menu) || DebugPanel",
+    "bindings": {
+      "cmd-shift-j": [
+        "task::Rerun",
+        {
+          "reevaluate_context": true
+        }
+      ]
+    }
+  },
+  {
+    "context": "Workspace && !Terminal",
+    "bindings": {
+      "cmd-shift-j": [
+        "task::Rerun",
+        {
+          "reevaluate_context": true
+        }
+      ]
+    }
+  },
+  {
+    "context": "Workspace && !Terminal",
+    "unbind": {
+      "alt-cmd-r": [
+        "task::Rerun",
+        {
+          "reevaluate_context": false
+        }
+      ]
+    }
+  },
+  {
+    "context": "Terminal",
+    "bindings": {
+      "cmd-shift-j": "terminal::RerunTask"
+    }
+  }
 ]
