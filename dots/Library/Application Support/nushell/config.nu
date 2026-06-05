@@ -24,7 +24,7 @@ $env.config = {
         quick: true # set this to false to prevent auto-selecting completions when only one remains
         partial: true # set this to false to prevent partial filling of the prompt
         algorithm: "fuzzy" # prefix or fuzzy
-        sort: "smart" # "smart" (alphabetical for prefix matching, fuzzy score for fuzzy matching) or "alphabetical", 
+        sort: "smart" # "smart" (alphabetical for prefix matching, fuzzy score for fuzzy matching) or "alphabetical",
         external: {enable: true, max_results: 100}
         use_ls_colors: true # set this to true to enable file/path/directory completions using LS_COLORS
     }
@@ -138,3 +138,135 @@ export alias l = ^eza -lah
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
+
+export def "from env" []: string -> record {
+    lines
+    | split column '#'
+    | get column1
+    | where {($in | str length) > 0}
+    | parse "{key}={value}"
+    | update value {str trim -c '"'}
+    | transpose -r -d
+}
+
+# $env.config.menus ++= [
+#     {
+#         name: vars_menu
+#         only_buffer_difference: true
+#         marker: "󰊕 "
+#         type: {layout: list, page_size: 10, columns: 4}
+#         style: {text: green, selected_text: green_reverse, description_text: yellow}
+#         source: {|buffer, position|
+#             let recent = (
+#                 history
+#                 | get command
+#                 | reverse
+#                 | first 50
+#                 | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
+#             )
+#             scope commands
+#             | where type == "custom"
+#             | where name =~ $buffer
+#             | sort-by decl_id --reverse
+#             | sort-by {|row|
+#                 let hits = (
+#                     $recent
+#                     | enumerate
+#                     | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
+#                 )
+#                 if ($hits | is-empty) { 999999 } else { $hits | first | get index }
+#             }
+#             | each {|row| {value: $row.name, extra: [$row.description $row.search_terms]}}
+#         }
+#     }
+# ]
+
+# $env.config.keybindings ++= [
+#     {
+#         name: vars_menu
+#         modifier: control
+#         keycode: char_d
+#         mode: [vi_insert vi_normal emacs]
+#         event: {
+#             until: [
+#                 {send: menu, name: vars_menu}
+#                 {send: menupagenext}
+#             ]
+#         }
+#     }
+# ]
+
+$env.config.keybindings ++= [
+    {
+        name: menu_next
+        modifier: control
+        keycode: char_n
+        mode: [vi_insert vi_normal emacs]
+        event: {
+            until: [
+                {send: menunext}
+                {send: down}
+            ]
+        }
+    }
+    {
+        name: menu_previous
+        modifier: control
+        keycode: char_p
+        mode: [vi_insert vi_normal emacs]
+        event: {
+            until: [
+                {send: menuprevious}
+                {send: up}
+            ]
+        }
+    }
+]
+
+source ~/.local/share/atuin/init.nu
+
+def pick-command [] {
+    let recent = (
+        history
+        | get command
+        | reverse
+        | first 50
+        | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
+    )
+
+    let candidates = (
+        scope commands
+        | where type == "custom"
+        | sort-by decl_id --reverse
+        | sort-by {|row|
+            let hits = (
+                $recent
+                | enumerate
+                | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
+            )
+            if ($hits | is-empty) { 999999 } else { $hits | first | get index }
+        }
+        | each {|row| $"($row.name)(char tab)($row.description)" }
+        | str join (char nl)
+    )
+
+    let picked = (
+        $candidates
+        | fzf --delimiter (char tab) --with-nth "1,2" --height "40%" --reverse --no-multi
+        | complete
+    )
+
+    if $picked.exit_code != 0 { return "" }
+
+    $picked.stdout | str trim | split row (char tab) | first
+}
+
+$env.config.keybindings ++= [
+    {
+        name: cmd_menu_fzf
+        modifier: control
+        keycode: char_d
+        mode: [emacs vi_normal vi_insert]
+        event: {send: executehostcommand, cmd: "commandline edit --insert (pick-command)"}
+    }
+]

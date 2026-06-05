@@ -104,7 +104,7 @@
   "close_on_file_delete": true,
   "inline_code_actions": false,
   "when_closing_with_no_tabs": "keep_window_open",
-  "colorize_brackets": false,
+  "colorize_brackets": true,
   "current_line_highlight": "all",
   "gutter": {
     "min_line_number_digits": 3,
@@ -246,7 +246,7 @@
   "vertical_scroll_margin": 3,
   "theme": {
     "mode": "dark",
-    "dark": "Sonokai",
+    "dark": "Drewh Lion Theme",
     "light": "One Light",
   },
   "base_keymap": "VSCode",
@@ -410,6 +410,7 @@
   "macos": {
     "terminal": {
       "shell": { "program": "/opt/homebrew/bin/nu" },
+      "show_count_badge": true,
     },
   },
   "terminal": {
