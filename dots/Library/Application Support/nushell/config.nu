@@ -74,51 +74,44 @@ $env.config = {
         }
         plugins: {}
     }
+    # Per-directory `project` overlay: when the current folder has a `mod.nu`,
+    # load it as the `project` overlay (and reload it when the file changes).
+    # These hooks are LOAD-ONLY on purpose. An overlay applied from inside a
+    # hook is invisible to Nushell's parser, so `overlay hide project` errors
+    # with `active_overlay_not_found` (an uncatchable parse error) — there is no
+    # way to auto-unload it. It therefore persists across subfolders. To drop a
+    # stale overlay, use the `unproject` command below.
     hooks: {
         pre_prompt: [
             {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list))) }
+                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
                 code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use mod.nu as project
-                    "
+                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                            try {overlay use mod.nu as project } catch {}
+                        "
             }
             {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
+                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
                 code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use --reload mod.nu as project
-                    "
-            }
-            {
-                condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list)) }
-                code: "
-                        overlay hide --keep-env [ PWD ] project
-                        hide-env PROJECT_MTIME
-                    "
+                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                            try {overlay use --reload mod.nu as project } catch {}
+                        "
             }
         ]
         pre_execution: [
             {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list))) }
+                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
                 code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use mod.nu as project
-                    "
+                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                            try {overlay use mod.nu as project } catch {}
+                        "
             }
             {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
+                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
                 code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use --reload mod.nu as project
-                    "
-            }
-            {
-                condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list)) }
-                code: "
-                        overlay hide --keep-env [ PWD ] project
-                        hide-env PROJECT_MTIME
-                    "
+                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                            try {overlay use --reload mod.nu as project } catch {}
+                        "
             }
         ]
         display_output: "if (term size).columns >= 100 { table -e } else { table -e -w 999 }"
@@ -132,9 +125,6 @@ source ~/.zoxide.nu
 
 # mkdir ($nu.data-dir | path join "vendor/autoload")
 # ^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
-
-export alias l = ^eza -lah
-
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
@@ -234,7 +224,7 @@ def pick-command [] {
         | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
     )
 
-    let candidates = (
+    let cmds = (
         scope commands
         | where type == "custom"
         | sort-by decl_id --reverse
@@ -246,19 +236,52 @@ def pick-command [] {
             )
             if ($hits | is-empty) { 999999 } else { $hits | first | get index }
         }
-        | each {|row| $"($row.name)(char tab)($row.description)" }
+    )
+
+    if ($cmds | is-empty) { return "" }
+
+    let w = (
+        $cmds
+        | get name
+        | each {|n| $n | str length}
+        | math max
+    )
+
+    let dir = (mktemp --directory)
+    let lines = (
+        $cmds
+        | enumerate
+        | each {|e|
+            let src = try { view source $e.item.name } catch {|err| $"# source unavailable\n# ($err.msg)" }
+            $"# ($e.item.name) — ($e.item.description)\n\n($src)"
+            | nu-highlight
+            | save --force --raw ($dir | path join $"($e.index).nu")
+            let display = $"($e.item.name | fill --alignment left --width $w)  ($e.item.description)"
+            [$e.index $e.item.name $display] | str join (char tab)
+        }
         | str join (char nl)
     )
 
-    let picked = (
-        $candidates
-        | fzf --delimiter (char tab) --with-nth "1,2" --height "40%" --reverse --no-multi
-        | complete
-    )
+    let preview = $"cat ($dir)/{1}.nu"
+
+    let fzf_args = [
+        "--delimiter"
+        (char tab)
+        "--with-nth" "3"
+        "--preview" $preview
+        "--preview-window" "right,60%,wrap,border-left"
+        "--height" "90%"
+        "--layout" "reverse"
+        "--prompt" "cmd ❯ "
+        "--ansi" # render the ANSI colors nu-highlight emitted
+        "--no-multi"
+    ]
+
+    let picked = $lines | fzf ...$fzf_args | complete
+    rm --recursive --force $dir
 
     if $picked.exit_code != 0 { return "" }
-
-    $picked.stdout | str trim | split row (char tab) | first
+    $picked.stdout | str trim | split row (char tab) | get 1
 }
 
 $env.config.keybindings ++= [
@@ -270,3 +293,27 @@ $env.config.keybindings ++= [
         event: {send: executehostcommand, cmd: "commandline edit --insert (pick-command)"}
     }
 ]
+
+def dockerj-completer [spans: list<string>] {
+
+    # spans = [dockerj run --r ...]; make carapace think it's docker
+    do $env.config.completions.external.completer ($spans | update 0 docker)
+}
+
+@complete dockerj-completer
+def --wrapped dockerj [...args] {
+    docker ...$args --format=json | from json --objects
+}
+
+def lsg [] {
+    print ""
+    ls | sort-by type name -i | grid name -c -i
+}
+
+alias l = lsg
+
+# Drop the per-directory `project` overlay. Hook-loaded overlays can't be hidden
+# (`overlay hide` is a parser keyword that never sees them), so the only reliable
+# way to clear one is to re-exec the shell. This keeps your cwd and reloads only
+# the current directory's overlay — so `cd` out of the project first, then run it.
+def unproject [] { exec nu }
