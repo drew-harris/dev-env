@@ -84,8 +84,18 @@ $env.config = {
     hooks: {
         pre_prompt: [
             {
-                condition: {|| "mod.nu" |path exists}
-                code: " try {overlay use mod.nu as project } catch {} "
+                condition: {|| ("mod.nu" | path exists)}
+                code: "
+                        overlay use --reload mod.nu as project
+                    "
+            }
+        ]
+        pre_execution: [
+            {
+                condition: {|| ("mod.nu" | path exists)}
+                code: "
+                        overlay use --reload mod.nu as project
+                    "
             }
         ]
         display_output: "if (term size).columns >= 100 { table -e } else { table -e -w 999 }"
