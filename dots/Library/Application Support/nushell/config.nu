@@ -84,34 +84,8 @@ $env.config = {
     hooks: {
         pre_prompt: [
             {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
-                code: "
-                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                            try {overlay use mod.nu as project } catch {}
-                        "
-            }
-            {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
-                code: "
-                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                            try {overlay use --reload mod.nu as project } catch {}
-                        "
-            }
-        ]
-        pre_execution: [
-            {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
-                code: "
-                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                            try {overlay use mod.nu as project } catch {}
-                        "
-            }
-            {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
-                code: "
-                            $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                            try {overlay use --reload mod.nu as project } catch {}
-                        "
+                condition: {|| "mod.nu" |path exists}
+                code: " try {overlay use mod.nu as project } catch {} "
             }
         ]
         display_output: "if (term size).columns >= 100 { table -e } else { table -e -w 999 }"
