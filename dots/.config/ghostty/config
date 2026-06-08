@@ -49,7 +49,6 @@ quick-terminal-animation-duration=0.1
 #
 # # Create a new window
 # keybind = ctrl+a>c=new_tab
-keybind = ctrl+b>r=reload_config
 keybind = super+t=new_tab
 # keybind = ctrl+a>s=new_split:right
 #

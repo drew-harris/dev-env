@@ -417,6 +417,7 @@
     "toolbar": {
       "breadcrumbs": false,
     },
+    "shell": {"program": "/usr/bin/nu"},
     "button": false,
     "font_family": "RobotoMono Nerd Font",
     "dock": "bottom",

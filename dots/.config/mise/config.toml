@@ -20,8 +20,8 @@ portless = "latest"
 deno = "latest"
 java = "26"
 codex = "latest"
-"go:github.com/hetznercloud/cli/cmd/hcloud" = "latest"
 "aqua:asciinema/asciinema" = "latest"
+hcloud = "latest"
 
 [tasks]
 tui = { description = "TUI to run mise tasks", run = 'tuisage --cmd "mise run" mise tasks ls --usage' }

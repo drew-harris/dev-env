@@ -102,5 +102,3 @@ function y() {
 }
 
 export MISE_EXPERIMENTAL=1
-eval "$(mise activate zsh)"
-eval "$(mise activate zsh)"
