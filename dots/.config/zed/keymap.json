@@ -800,10 +800,10 @@
       "cmd-shift-j": [
         "task::Rerun",
         {
-          "reevaluate_context": true
-        }
-      ]
-    }
+          "reevaluate_context": true,
+        },
+      ],
+    },
   },
   {
     "context": "Workspace && !Terminal",
@@ -811,10 +811,10 @@
       "cmd-shift-j": [
         "task::Rerun",
         {
-          "reevaluate_context": true
-        }
-      ]
-    }
+          "reevaluate_context": true,
+        },
+      ],
+    },
   },
   {
     "context": "Workspace && !Terminal",
@@ -822,15 +822,15 @@
       "alt-cmd-r": [
         "task::Rerun",
         {
-          "reevaluate_context": false
-        }
-      ]
-    }
+          "reevaluate_context": false,
+        },
+      ],
+    },
   },
   {
     "context": "Terminal",
     "bindings": {
-      "cmd-shift-j": "terminal::RerunTask"
-    }
-  }
+      "cmd-shift-j": "terminal::RerunTask",
+    },
+  },
 ]

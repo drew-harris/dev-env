@@ -84,7 +84,7 @@ $env.config = {
     hooks: {
         pre_prompt: [
             {
-                condition: {|| ("mod.nu" | path exists)}
+                condition: {|| ("mod.nu" | path exists) }
                 code: "
                         overlay use --reload mod.nu as project
                     "
@@ -92,7 +92,7 @@ $env.config = {
         ]
         pre_execution: [
             {
-                condition: {|| ("mod.nu" | path exists)}
+                condition: {|| ("mod.nu" | path exists) }
                 code: "
                         overlay use --reload mod.nu as project
                     "
@@ -107,8 +107,8 @@ use ~/.cache/starship/init.nu
 
 source ~/.zoxide.nu
 
-# mkdir ($nu.data-dir | path join "vendor/autoload")
-# ^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
+mkdir ($nu.data-dir | path join "vendor/autoload")
+^mise activate nu | save -f ($nu.data-dir | path join "vendor/autoload/mise.nu")
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
@@ -123,52 +123,52 @@ export def "from env" []: string -> record {
     | transpose -r -d
 }
 
-# $env.config.menus ++= [
-#     {
-#         name: vars_menu
-#         only_buffer_difference: true
-#         marker: "󰊕 "
-#         type: {layout: list, page_size: 10, columns: 4}
-#         style: {text: green, selected_text: green_reverse, description_text: yellow}
-#         source: {|buffer, position|
-#             let recent = (
-#                 history
-#                 | get command
-#                 | reverse
-#                 | first 50
-#                 | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
-#             )
-#             scope commands
-#             | where type == "custom"
-#             | where name =~ $buffer
-#             | sort-by decl_id --reverse
-#             | sort-by {|row|
-#                 let hits = (
-#                     $recent
-#                     | enumerate
-#                     | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
-#                 )
-#                 if ($hits | is-empty) { 999999 } else { $hits | first | get index }
-#             }
-#             | each {|row| {value: $row.name, extra: [$row.description $row.search_terms]}}
-#         }
-#     }
-# ]
+$env.config.menus ++= [
+    {
+        name: vars_menu
+        only_buffer_difference: true
+        marker: "󰊕 "
+        type: {layout: list, page_size: 10, columns: 4}
+        style: {text: green, selected_text: green_reverse, description_text: yellow}
+        source: {|buffer, position|
+            let recent = (
+                history
+                | get command
+                | reverse
+                | first 50
+                | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
+            )
+            scope commands
+            | where type == "custom"
+            | where name =~ $buffer
+            | sort-by decl_id --reverse
+            | sort-by {|row|
+                let hits = (
+                    $recent
+                    | enumerate
+                    | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
+                )
+                if ($hits | is-empty) { 999999 } else { $hits | first | get index }
+            }
+            | each {|row| {value: $row.name, extra: [$row.description $row.search_terms]}}
+        }
+    }
+]
 
-# $env.config.keybindings ++= [
-#     {
-#         name: vars_menu
-#         modifier: control
-#         keycode: char_d
-#         mode: [vi_insert vi_normal emacs]
-#         event: {
-#             until: [
-#                 {send: menu, name: vars_menu}
-#                 {send: menupagenext}
-#             ]
-#         }
-#     }
-# ]
+$env.config.keybindings ++= [
+    {
+        name: vars_menu
+        modifier: control
+        keycode: char_d
+        mode: [vi_insert vi_normal emacs]
+        event: {
+            until: [
+                {send: menu, name: vars_menu}
+                {send: menupagenext}
+            ]
+        }
+    }
+]
 
 $env.config.keybindings ++= [
     {
@@ -197,86 +197,84 @@ $env.config.keybindings ++= [
     }
 ]
 
-source ~/.local/share/atuin/init.nu
+# def pick-command [] {
+#     let recent = (
+#         history
+#         | get command
+#         | reverse
+#         | first 50
+#         | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
+#     )
 
-def pick-command [] {
-    let recent = (
-        history
-        | get command
-        | reverse
-        | first 50
-        | each {|line| $line | str trim | str replace --all --regex '\s+' ' '}
-    )
+#     let cmds = (
+#         scope commands
+#         | where type == "custom"
+#         | sort-by decl_id --reverse
+#         | sort-by {|row|
+#             let hits = (
+#                 $recent
+#                 | enumerate
+#                 | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
+#             )
+#             if ($hits | is-empty) { 999999 } else { $hits | first | get index }
+#         }
+#     )
 
-    let cmds = (
-        scope commands
-        | where type == "custom"
-        | sort-by decl_id --reverse
-        | sort-by {|row|
-            let hits = (
-                $recent
-                | enumerate
-                | where {|e| $e.item == $row.name or ($e.item | str starts-with $"($row.name) ")}
-            )
-            if ($hits | is-empty) { 999999 } else { $hits | first | get index }
-        }
-    )
+#     if ($cmds | is-empty) { return "" }
 
-    if ($cmds | is-empty) { return "" }
+#     let w = (
+#         $cmds
+#         | get name
+#         | each {|n| $n | str length}
+#         | math max
+#     )
 
-    let w = (
-        $cmds
-        | get name
-        | each {|n| $n | str length}
-        | math max
-    )
+#     let dir = (mktemp --directory)
+#     let lines = (
+#         $cmds
+#         | enumerate
+#         | each {|e|
+#             let src = try { view source $e.item.name } catch {|err| $"# source unavailable\n# ($err.msg)" }
+#             $"# ($e.item.name) — ($e.item.description)\n\n($src)"
+#             | nu-highlight
+#             | save --force --raw ($dir | path join $"($e.index).nu")
+#             let display = $"($e.item.name | fill --alignment left --width $w)  ($e.item.description)"
+#             [$e.index $e.item.name $display] | str join (char tab)
+#         }
+#         | str join (char nl)
+#     )
 
-    let dir = (mktemp --directory)
-    let lines = (
-        $cmds
-        | enumerate
-        | each {|e|
-            let src = try { view source $e.item.name } catch {|err| $"# source unavailable\n# ($err.msg)" }
-            $"# ($e.item.name) — ($e.item.description)\n\n($src)"
-            | nu-highlight
-            | save --force --raw ($dir | path join $"($e.index).nu")
-            let display = $"($e.item.name | fill --alignment left --width $w)  ($e.item.description)"
-            [$e.index $e.item.name $display] | str join (char tab)
-        }
-        | str join (char nl)
-    )
+#     let preview = $"cat ($dir)/{1}.nu"
 
-    let preview = $"cat ($dir)/{1}.nu"
+#     let fzf_args = [
+#         "--delimiter"
+#         (char tab)
+#         "--with-nth" "3"
+#         "--preview" $preview
+#         "--preview-window" "right,60%,wrap,border-left"
+#         "--height" "90%"
+#         "--layout" "reverse"
+#         "--prompt" "cmd ❯ "
+#         "--ansi" # render the ANSI colors nu-highlight emitted
+#         "--no-multi"
+#     ]
 
-    let fzf_args = [
-        "--delimiter"
-        (char tab)
-        "--with-nth" "3"
-        "--preview" $preview
-        "--preview-window" "right,60%,wrap,border-left"
-        "--height" "90%"
-        "--layout" "reverse"
-        "--prompt" "cmd ❯ "
-        "--ansi" # render the ANSI colors nu-highlight emitted
-        "--no-multi"
-    ]
+#     let picked = $lines | fzf ...$fzf_args | complete
+#     rm --recursive --force $dir
 
-    let picked = $lines | fzf ...$fzf_args | complete
-    rm --recursive --force $dir
+#     if $picked.exit_code != 0 { return "" }
+#     $picked.stdout | str trim | split row (char tab) | get 1
+# }
 
-    if $picked.exit_code != 0 { return "" }
-    $picked.stdout | str trim | split row (char tab) | get 1
-}
-
-$env.config.keybindings ++= [
-    {
-        name: cmd_menu_fzf
-        modifier: control
-        keycode: char_d
-        mode: [emacs vi_normal vi_insert]
-        event: {send: executehostcommand, cmd: "commandline edit --insert (pick-command)"}
-    }
-]
+# $env.config.keybindings ++= [
+#     {
+#         name: cmd_menu_fzf
+#         modifier: control
+#         keycode: char_d
+#         mode: [emacs vi_normal vi_insert]
+#         event: {send: executehostcommand, cmd: "commandline edit --insert (pick-command)"}
+#     }
+# ]
 
 def dockerj-completer [spans: list<string>] {
 
@@ -291,13 +289,21 @@ def --wrapped dockerj [...args] {
 
 def lsg [] {
     print ""
-    ls | sort-by type name -i | grid name -c -i
+    ls | sort-by type name -i | grid name -c -i -w 60
 }
 
 alias l = lsg
+alias lg = lazygit
 
 # Drop the per-directory `project` overlay. Hook-loaded overlays can't be hidden
 # (`overlay hide` is a parser keyword that never sees them), so the only reliable
 # way to clear one is to re-exec the shell. This keeps your cwd and reloads only
 # the current directory's overlay — so `cd` out of the project first, then run it.
 def unproject [] { exec nu }
+
+def make-template [name: string] {
+    let dest = $nu.home-dir | path join interviews $name
+    cp -r ($nu.home-dir | path join interviews template) $dest
+}
+
+alias icli = instant-cli

@@ -62,6 +62,19 @@ alias sqlite='/opt/homebrew/opt/sqlite/bin/sqlite3'
 
 eval "$(starship init zsh)"
 
+# Inside slow FUSE mounts (JuiceFS at ~/jfs), git status + language detection make
+# the prompt laggy. Swap to a lightweight starship config that does no filesystem
+# scanning while we're under ~/jfs, and restore the normal one everywhere else.
+_starship_config_by_dir() {
+  case "$PWD/" in
+    "$HOME"/jfs/*) export STARSHIP_CONFIG="$HOME/.config/starship-fast.toml" ;;
+    *)             unset STARSHIP_CONFIG ;;
+  esac
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd _starship_config_by_dir
+_starship_config_by_dir   # run once for the current dir (e.g. shells started in ~/jfs)
+
 path+=("$HOME/.config/scripts/")
 
 path+=("/opt/homebrew/bin/")

@@ -1,0 +1,10 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Lightweight prompt for slow FUSE mounts (e.g. JuiceFS at ~/jfs).
+# It renders ONLY modules that don't scan the filesystem, so the prompt stays
+# instant even when readdir/stat over the network is slow. Activated per-dir by a
+# chpwd hook in ~/dev-env/zshrc that points STARSHIP_CONFIG here under ~/jfs.
+format = "$directory$line_break$character"
+
+[directory]
+truncate_to_repo = false   # skip git-repo discovery, which is slow over FUSE

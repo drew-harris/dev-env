@@ -22,6 +22,7 @@ java = "26"
 codex = "latest"
 "aqua:asciinema/asciinema" = "latest"
 hcloud = "latest"
+yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
 
 [tasks]
 tui = { description = "TUI to run mise tasks", run = 'tuisage --cmd "mise run" mise tasks ls --usage' }
