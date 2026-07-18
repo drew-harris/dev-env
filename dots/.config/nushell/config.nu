@@ -31,7 +31,7 @@ $env.config = {
     cursor_shape: {emacs: line, vi_insert: block, vi_normal: underscore}
     footer_mode: 25 # always, never, number_of_rows, auto
     float_precision: 2 # the precision for displaying floats in tables
-    buffer_editor: hx
+    buffer_editor: ['zed', '-w']
     use_ansi_coloring: true
     bracketed_paste: true # enable bracketed paste, currently useless on windows
     edit_mode: emacs # emacs, vi
