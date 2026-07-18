@@ -1,0 +1,20 @@
+{
+  "theme": {
+    "name": "sonokai"
+  },
+  "diffs": {
+    "wrap": "word"
+  },
+  "terminal": {
+    "title": false
+  },
+  "session": {
+    "sidebar": "auto",
+    "scrollbar": false,
+    "thinking": "show"
+  },
+  "hints": {
+    "tips": true
+  },
+  "animations": false
+}
