@@ -7,6 +7,6 @@ if [ -f "$TEMP_FILE" ]; then
     CHOSEN_FILE=$(cat "$TEMP_FILE")
     rm "$TEMP_FILE"
     if [ -n "$CHOSEN_FILE" ]; then
-        zed "$CHOSEN_FILE"
+        zed -a -e "$CHOSEN_FILE"
     fi
 fi
