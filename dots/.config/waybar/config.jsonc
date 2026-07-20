@@ -74,7 +74,7 @@
   },
 
   "pulseaudio": {
-    "format": "{icon} {volume}%",
+    "format": "<span size=\"18pt\">{icon}</span> {volume}%",
     "format-muted": "",
     "format-icons": {
       "default": ["", "", " "],
