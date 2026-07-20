@@ -7,12 +7,8 @@
   "agent": {
     "ask": {
       "mode": "primary",
-      "tools": {
-        "write": true,
-        "edit": true,
-        "bash": true
-      },
       "permission": {
+        "*": "ask",
         "edit": "ask",
         "bash": "ask",
         "webfetch": "allow"
