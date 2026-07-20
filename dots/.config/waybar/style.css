@@ -1,44 +1,59 @@
+@define-color bar_bg rgba(15, 17, 24, 0.90);
+@define-color module_bg rgba(37, 40, 54, 0.78);
+@define-color module_hover rgba(52, 56, 74, 0.92);
+@define-color border rgba(198, 208, 245, 0.11);
+@define-color text #c6d0f5;
+@define-color red #ea999c;
+@define-color green #a6d189;
+@define-color yellow #e5c890;
+@define-color blue #8caaee;
+@define-color cyan #99d1db;
+@define-color purple #ca9ee6;
+
 * {
-  font-family: Berkeley Mono;
-  font-size: 14px;
   min-height: 0;
-  padding-right: 2px;
-  padding-left: 2px;
-  padding-bottom: 2px;
-  padding-top: 2px;
+  border: none;
+  border-radius: 0;
+  font-family: "Berkeley Mono", "Symbols Nerd Font";
+  font-size: 14px;
 }
 
-#waybar {
-    background: rgba(18, 18, 18, 0.6);
-    color: #c6d0f5;
-    margin: 0px 2px;
+window#waybar {
+  background: @bar_bg;
+  border-bottom: 1px solid @border;
+  color: @text;
 }
 
-/*#workspaces {
-  border-radius: 5px;
-  margin: 5px;
-  background: #101010;
-  margin-left: 2px;
-}*/
-
-#workspaces button {
-  color: #ea999c;
-  border-radius: 5px;
-  padding: 0.4rem;
+tooltip {
+  background: rgba(20, 22, 31, 0.97);
+  border: 1px solid @border;
+  border-radius: 8px;
 }
 
-#workspaces button.active {
-  color: #99d1db;
-  border-radius: 5px;
+tooltip label {
+  color: @text;
+  padding: 8px;
 }
 
 button {
   background: transparent;
+  box-shadow: none;
+}
+
+#workspaces button {
+  color: @red;
+  margin: 5px 2px;
+  padding: 0 9px;
+  border-radius: 8px;
+}
+
+#workspaces button.active {
+  background: @module_bg;
+  color: @cyan;
 }
 
 #workspaces button:hover {
-  background: #1e1e1e;
-  border: 0px solid transparent;
+  background: @module_hover;
 }
 
 #custom-music,
@@ -56,84 +71,98 @@ button {
 #custom-uptime,
 #custom-airpods,
 #custom-docker {
-  background-color: transparent;
-  padding: 0.4rem 0.8rem;
+  background: @module_bg;
+  border: 1px solid @border;
+  border-radius: 8px;
+  margin: 5px 3px;
+  padding: 0 11px;
 }
 
-#custom-music {
-  margin-left: 10px;
-}
-
-#custom-airpods {
-  font-size: 18px;
-  margin-right: 10px;
-  border-radius: 5px;
-}
-
-#custom-airpods.disconnected {
-  color: #EA999C;
-}
-
-#custom-airpods.connected {
-  color: #a6d189;
+#clock:hover,
+#custom-music:hover,
+#custom-weather:hover,
+#custom-airpods:hover,
+#pulseaudio:hover {
+  background: @module_hover;
 }
 
 #clock {
-  color: #76CCE0;
-  border-radius: 5px;
-}
-
-#custom-weather {
-  color: #8caaee;
-  margin-left: 0.5rem;
-  border-radius: 5px;
-}
-
-#battery {
-  color: #a6d189;
-}
-
-#battery.charging {
-  color: #a6d189;
-}
-
-#battery.warning:not(.charging) {
-  color: #e78284;
-}
-
-#backlight {
-  color: #e5c890;
-}
-
-#backlight,
-#battery {
-  border-radius: 0;
-}
-
-#pulseaudio {
-  color: #ea999c;
-  border-radius: 5px 0px 0px 5px;
-}
-
-#custom-docker {
-  color: #85c1dc;
+  color: @cyan;
+  font-weight: 600;
 }
 
 #custom-music {
-  color: #ca9ee6;
-  border-radius: 5px;
+  color: @purple;
 }
 
-#custom-lock {
-  color: #babbf1;
+#custom-weather {
+  color: @blue;
 }
 
-#custom-power {
-  margin-right: 1rem;
-  border-radius: 0px 5px 5px 0px;
-  color: #e78284;
+#custom-airpods {
+  color: @yellow;
+  font-size: 20px;
+  padding: 0 10px;
 }
 
+#custom-airpods.connected {
+  color: @green;
+}
+
+#custom-airpods.disconnected,
+#custom-airpods.off {
+  color: @red;
+}
+
+#pulseaudio {
+  color: @red;
+  padding: 0 12px 0 10px;
+}
+
+#pulseaudio.muted {
+  color: rgba(198, 208, 245, 0.55);
+}
+
+#battery,
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning:not(.charging) {
+  color: @red;
+}
+
+#backlight,
+#custom-weather.clear {
+  color: @yellow;
+}
+
+#custom-weather.cloud {
+  color: @cyan;
+}
+
+#custom-weather.rain {
+  color: @blue;
+}
+
+#custom-weather.snow {
+  color: @text;
+}
+
+#custom-weather.thunder {
+  color: @purple;
+}
+
+#custom-weather.fog {
+  color: #b0b4bc;
+}
+
+#custom-weather.error,
+#custom-docker.docker-error {
+  color: @red;
+}
+
+#custom-docker,
 #custom-docker.docker {
   color: #85c1dc;
 }
@@ -142,36 +171,18 @@ button {
   color: #737994;
 }
 
-#custom-docker.docker-error {
-  color: #e78284;
+#custom-lock {
+  color: #babbf1;
 }
 
-#custom-weather.clear {
-  color: #e5c890; /* Sunny yellow */
+#custom-power {
+  color: @red;
+  margin-right: 6px;
 }
 
-#custom-weather.cloud {
-  color: #99d1db; /* Light blue */
-}
-
-#custom-weather.rain {
-  color: #8caaee; /* Blue */
-}
-
-#custom-weather.snow {
-  color: #c6d0f5; /* White-ish */
-}
-
-#custom-weather.thunder {
-  color: #ca9ee6; /* Purple */
-}
-
-#custom-weather.fog {
-  color: #b0b4bc; /* Gray */
-}
-
-#custom-weather.error {
-  color: #e78284; /* Red */
+#tray {
+  margin-right: 6px;
+  padding: 0 9px;
 }
 
 .niri-taskbar button {
@@ -179,6 +190,5 @@ button {
 }
 
 .niri-taskbar button.focused {
-  background:  rgba(0, 0, 0, 0.3);
-
+  background: rgba(0, 0, 0, 0.3);
 }

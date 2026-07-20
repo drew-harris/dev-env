@@ -27,8 +27,8 @@
   },
 
   "tray": {
-    "icon-size": 16,
-    "spacing": 10,
+    "icon-size": 17,
+    "spacing": 8,
   },
 
   "custom/music": {
@@ -44,8 +44,8 @@
   "clock": {
     "timezone": "America/Los_Angeles",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format": "{:%d/%m/%Y - %I:%M:%S %p}",
-    "interval": 1,
+    "format": "{:%a %d %b  ·  %I:%M %p}",
+    "interval": 30,
   },
 
   "network": {
@@ -74,10 +74,10 @@
   },
 
   "pulseaudio": {
-    "format": "<span size=\"18pt\">{icon}</span> {volume}%",
-    "format-muted": "",
+    "format": "<span size=\"16pt\">{icon}</span>  {volume}%",
+    "format-muted": "<span size=\"16pt\"></span>  muted",
     "format-icons": {
-      "default": ["", "", " "],
+      "default": ["", "", ""],
     },
     "on-click": "pavucontrol",
   },
