@@ -114,6 +114,8 @@ export alias l = ^eza -lah
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
+alias oca = opencode attach http://localhost:9923 --dir .
+alias lg = lazygit
 
 # Hook-loaded overlays cannot be hidden reliably because `overlay hide` is a
 # parser keyword. Leave the project directory, then use this to clear one.

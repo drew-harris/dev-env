@@ -1,6 +1,8 @@
 # [ui.colors]
 # "selected" = { bg = "#52c8ff", fg = "#000000" }
 #
+[ui]
+auto_refresh_interval = 2
 [ui.theme]
 light = "light"
 
