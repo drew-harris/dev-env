@@ -37,13 +37,27 @@ if [[ "$variant" == "body" ]]; then
 else
   SRC="$SRC_DIR/runnables.scm"
 fi
-DEST_DIR="$HOME/Library/Application Support/Zed/extensions/installed/nu/languages/nu"
+case "$(uname -s)" in
+  Darwin)
+    ZED_DATA_DIR="$HOME/Library/Application Support/Zed"
+    ;;
+  Linux)
+    ZED_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/zed"
+    ;;
+  *)
+    echo "error: unsupported operating system: $(uname -s)" >&2
+    exit 1
+    ;;
+esac
+
+DEST_DIR="${ZED_EXTENSIONS_DIR:-$ZED_DATA_DIR/extensions/installed}/nu/languages/nu"
 DEST="$DEST_DIR/runnables.scm"
 
 if [[ ! -d "$DEST_DIR" ]]; then
   echo "error: nu extension not installed at:" >&2
   echo "  $DEST_DIR" >&2
   echo "install the 'nu' extension from Zed's extension marketplace first." >&2
+  echo "set ZED_EXTENSIONS_DIR if Zed uses a nonstandard data directory." >&2
   exit 1
 fi
 

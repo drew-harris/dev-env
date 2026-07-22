@@ -1,7 +1,7 @@
 {
   "layer": "top",
   "position": "top",
-  // "modules-left": ["cffi/niri-taskbar"],
+  "modules-left": ["custom/keychron-battery"],
 
   "modules-center": ["clock", "custom/weather", "custom/music"],
 
@@ -32,7 +32,7 @@
   },
 
   "custom/music": {
-    "format": "  {}",
+    "format": "<span size=\"7pt\"></span>  {}",
     "escape": true,
     "interval": 5,
     "tooltip": false,
@@ -74,8 +74,8 @@
   },
 
   "pulseaudio": {
-    "format": "<span size=\"16pt\">{icon}</span>  {volume}%",
-    "format-muted": "<span size=\"16pt\"></span>  muted",
+    "format": "<span size=\"12pt\">{icon}</span>  {volume}%",
+    "format-muted": "<span size=\"12pt\"></span>  muted",
     "format-icons": {
       "default": ["", "", ""],
     },
@@ -111,6 +111,14 @@
     "interval": 5, // How often to update in seconds
     "return-type": "json",
     "tooltip": true, // Already handled by the script's JSON output
+  },
+  "custom/keychron-battery": {
+    "format": "{}",
+    "exec": "$HOME/dev-env/scripts/keychron-battery",
+    "exec-if": "$HOME/dev-env/scripts/keychron-battery --connected",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true,
   },
   "cffi/niri-taskbar": {
     "module_path": "/home/drew/clones/niri-taskbar/target/release/libniri_taskbar.so"

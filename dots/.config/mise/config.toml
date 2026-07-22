@@ -19,7 +19,6 @@ watchexec = "latest"
 portless = "latest"
 deno = "latest"
 java = "26"
-codex = "latest"
 "aqua:asciinema/asciinema" = "latest"
 hcloud = "latest"
 yt-dlp = { version = "latest", rename_exe = "yt-dlp" }

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+device_path="/org/bluez/hci0/dev_D6_F1_E4_C8_CC_7C"
+
+is_connected() {
+    [[ $(busctl get-property org.bluez "$device_path" org.bluez.Device1 Connected 2>/dev/null) == "b true" ]]
+}
+
+if [[ $1 == "--connected" ]]; then
+    is_connected
+    exit
+fi
+
+is_connected || exit 1
+
+battery=$(busctl get-property org.bluez "$device_path" org.bluez.Battery1 Percentage 2>/dev/null) || exit 1
+[[ $battery =~ ^y\ ([0-9]+)$ ]] || exit 1
+percentage=${BASH_REMATCH[1]}
+
+if ((percentage <= 15)); then
+    class="critical"
+elif ((percentage <= 30)); then
+    class="warning"
+else
+    class="good"
+fi
+
+printf '{"text":"  %d%%","tooltip":"Keychron K3 battery: %d%%","class":"%s","percentage":%d}\n' \
+    "$percentage" "$percentage" "$class" "$percentage"

@@ -74,51 +74,28 @@ $env.config = {
         }
         plugins: {}
     }
+    # Per-directory `project` overlay: when the current folder has a `mod.nu`,
+    # load it as the `project` overlay and reload it when the file changes.
+    #
+    # Do not try to hide the overlay from a hook. `overlay hide` is a parser
+    # keyword, and its parser scope cannot see an overlay activated by an earlier
+    # hook, causing `active_overlay_not_found`. Use `unproject` below after
+    # leaving the project when a stale overlay needs to be cleared.
     hooks: {
         pre_prompt: [
             {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
-                code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use mod.nu as project
-                    "
-            }
-            {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
-                code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                condition: {|| ('mod.nu' | path exists) }
+                code: '
                         overlay use --reload mod.nu as project
-                    "
-            }
-            {
-                condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list | get name)) }
-                code: "
-                        overlay hide --keep-env [ PWD ] project
-                        hide-env PROJECT_MTIME
-                    "
+                    '
             }
         ]
         pre_execution: [
             {
-                condition: {|| ("mod.nu" | path exists) and (not ("project" in (overlay list | get name))) }
-                code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
-                        overlay use mod.nu as project
-                    "
-            }
-            {
-                condition: {|| ("mod.nu" | path exists) and ("project" in (overlay list | get name)) and ($env.PROJECT_MTIME? != ((ls mod.nu | first).modified)) }
-                code: "
-                        $env.PROJECT_MTIME = ((ls mod.nu | first).modified)
+                condition: {|| ('mod.nu' | path exists) }
+                code: '
                         overlay use --reload mod.nu as project
-                    "
-            }
-            {
-                condition: {|| (not ("mod.nu" | path exists)) and ("project" in (overlay list | get name)) }
-                code: "
-                        overlay hide --keep-env [ PWD ] project
-                        hide-env PROJECT_MTIME
-                    "
+                    '
             }
         ]
         display_output: "if (term size).columns >= 100 { table -e } else { table -e -w 999 }"
@@ -137,6 +114,10 @@ export alias l = ^eza -lah
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
+
+# Hook-loaded overlays cannot be hidden reliably because `overlay hide` is a
+# parser keyword. Leave the project directory, then use this to clear one.
+def unproject [] { exec nu }
 
 export def "from env" []: string -> record {
     lines

@@ -1,6 +1,4 @@
-@define-color bar_bg rgba(15, 17, 24, 0.90);
-@define-color module_bg rgba(37, 40, 54, 0.78);
-@define-color module_hover rgba(52, 56, 74, 0.92);
+@define-color bar_bg rgba(15, 17, 24, 0.58);
 @define-color border rgba(198, 208, 245, 0.11);
 @define-color text #c6d0f5;
 @define-color red #ea999c;
@@ -20,7 +18,6 @@
 
 window#waybar {
   background: @bar_bg;
-  border-bottom: 1px solid @border;
   color: @text;
 }
 
@@ -44,16 +41,14 @@ button {
   color: @red;
   margin: 5px 2px;
   padding: 0 9px;
-  border-radius: 8px;
 }
 
 #workspaces button.active {
-  background: @module_bg;
   color: @cyan;
 }
 
 #workspaces button:hover {
-  background: @module_hover;
+  background: transparent;
 }
 
 #custom-music,
@@ -69,11 +64,9 @@ button {
 #custom-power,
 #custom-weather,
 #custom-uptime,
+#custom-keychron-battery,
 #custom-airpods,
 #custom-docker {
-  background: @module_bg;
-  border: 1px solid @border;
-  border-radius: 8px;
   margin: 5px 3px;
   padding: 0 11px;
 }
@@ -81,9 +74,10 @@ button {
 #clock:hover,
 #custom-music:hover,
 #custom-weather:hover,
+#custom-keychron-battery:hover,
 #custom-airpods:hover,
 #pulseaudio:hover {
-  background: @module_hover;
+  background: transparent;
 }
 
 #clock {
@@ -101,7 +95,7 @@ button {
 
 #custom-airpods {
   color: @yellow;
-  font-size: 20px;
+  font-size: 14px;
   padding: 0 10px;
 }
 
@@ -111,6 +105,18 @@ button {
 
 #custom-airpods.disconnected,
 #custom-airpods.off {
+  color: @red;
+}
+
+#custom-keychron-battery {
+  color: @green;
+}
+
+#custom-keychron-battery.warning {
+  color: @yellow;
+}
+
+#custom-keychron-battery.critical {
   color: @red;
 }
 

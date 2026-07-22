@@ -45,11 +45,11 @@
   "title_bar": {
     "show_branch_status_icon": false,
     "show_branch_name": false,
-    "show_user_picture": false,
+    "show_user_picture": true,
   },
   "ui_font_weight": 400.0,
   "icon_theme": {
-    "mode": "light",
+    "mode": "dark",
     "light": "VSCode Icons for Zed (Dark)",
     "dark": "VSCode Icons for Zed (Dark)",
   },
@@ -64,7 +64,7 @@
     },
     "opencode": {
       "default_config_options": {
-        "model": "openai/gpt-5.6-sol"
+        "model": "openai/gpt-5.6-sol",
       },
       "type": "registry",
     },
@@ -121,125 +121,91 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"],
         },
         {
-          "paths": [
-            "/root/enterprises"
-          ]
+          "paths": ["/root/enterprises"],
         },
         {
-          "paths": [
-            "/root/rustical"
-          ]
+          "paths": ["/root/rustical"],
         },
         {
-          "paths": [
-            "/root/timerbot"
-          ]
-        }
-      ]
+          "paths": ["/root/timerbot"],
+        },
+      ],
     },
     {
       "host": "hetzner",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root"
-          ]
+          "paths": ["/root"],
         },
         {
-          "paths": [
-            "/root/n8n"
-          ]
+          "paths": ["/root/n8n"],
         },
         {
-          "paths": [
-            "/root/sites/cookery/./"
-          ]
+          "paths": ["/root/sites/cookery/./"],
         },
         {
-          "paths": [
-            "/root/wealth"
-          ]
-        }
-      ]
+          "paths": ["/root/wealth"],
+        },
+      ],
     },
     {
       "host": "dell",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew"
-          ]
+          "paths": ["/home/drew"],
         },
         {
-          "paths": [
-            "/home/drew/benwrong"
-          ]
+          "paths": ["/home/drew/benwrong"],
         },
         {
-          "paths": [
-            "/home/drew/home"
-          ]
+          "paths": ["/home/drew/home"],
         },
         {
-          "paths": [
-            "/home/drew/movies"
-          ]
+          "paths": ["/home/drew/movies"],
         },
         {
-          "paths": [
-            "/home/drew/plex"
-          ]
-        }
-      ]
+          "paths": ["/home/drew/plex"],
+        },
+      ],
     },
     {
       "host": "mbp",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/Users/drew/programs/instant/./"
-          ]
-        }
-      ]
+          "paths": ["/Users/drew/programs/instant/./"],
+        },
+      ],
     },
     {
       "host": "arch",
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/home/drew/programs/arch-instant/./"
-          ]
+          "paths": ["/home/drew/programs/arch-instant/./"],
         },
         {
-          "paths": [
-            "/home/drew/programs/hourhand"
-          ]
+          "paths": ["/home/drew/programs/hourhand"],
         },
         {
-          "paths": [
-            "/home/drew/programs/money-bot"
-          ]
-        }
+          "paths": ["/home/drew/programs/money-bot"],
+        },
       ],
       "port_forwards": [
         {
           "local_port": 3000,
-          "remote_port": 3000
+          "remote_port": 3000,
         },
         {
           "local_port": 4000,
-          "remote_port": 4000
-        }
-      ]
+          "remote_port": 4000,
+        },
+      ],
     },
     {
       "host": "5.78.94.31",
@@ -247,27 +213,19 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root/caddy"
-          ]
+          "paths": ["/root/caddy"],
         },
         {
-          "paths": [
-            "/root/chat"
-          ]
+          "paths": ["/root/chat"],
         },
         {
-          "paths": [
-            "/root/manhunt"
-          ]
+          "paths": ["/root/manhunt"],
         },
         {
-          "paths": [
-            "/root/minecraft/./"
-          ]
-        }
+          "paths": ["/root/minecraft/./"],
+        },
       ],
-      "nickname": "minecraft-server"
+      "nickname": "minecraft-server",
     },
     {
       "host": "5.78.74.140",
@@ -275,11 +233,9 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root/instant/server"
-          ]
-        }
-      ]
+          "paths": ["/root/instant/server"],
+        },
+      ],
     },
     {
       "host": "5.78.74.140",
@@ -287,12 +243,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root/instant/./"
-          ]
-        }
+          "paths": ["/root/instant/./"],
+        },
       ],
-      "nickname": "testing-instant-temp"
+      "nickname": "testing-instant-temp",
     },
     {
       "host": "5.78.226.134",
@@ -300,12 +254,10 @@
       "args": [],
       "projects": [
         {
-          "paths": [
-            "/root"
-          ]
-        }
-      ]
-    }
+          "paths": ["/root"],
+        },
+      ],
+    },
   ],
   "vertical_scroll_margin": 3,
   "theme": {

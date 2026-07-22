@@ -6,3 +6,9 @@ border-size=1
 
 default-timeout=2000
 ignore-timeout=0
+
+[actionable]
+border-color=#a995e6ff
+border-size=3
+format=<b>[ACTION] %s</b>\n%b
+on-button-left=exec makoctl menu -n "$id" -- fuzzel --dmenu --prompt "Action: "

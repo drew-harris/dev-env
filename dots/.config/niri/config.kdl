@@ -3,8 +3,8 @@
 // https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
-        repeat-delay 250
-        repeat-rate 20
+        repeat-delay 200
+        repeat-rate 30
         xkb {
             // You can set rules, model, layout, variant and options.
             // For more information, see xkeyboard-config(7).
@@ -127,7 +127,7 @@ layer-rule {
 }
 
 window-rule {
-    match app-id="dev.zed.Zed-Preview"
+    match app-id="dev.zed.Zed"
     background-effect {
         blur true
     }
@@ -363,7 +363,7 @@ animations {
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 0.4
+    slowdown 0.25
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -667,7 +667,7 @@ binds {
     // Focus or launch!
     Alt+S { spawn-sh "/home/drew/dev-env/scripts/fol Spotify spotify-launcher"; }
     Alt+A { spawn-sh "/home/drew/dev-env/scripts/fol helium helium-browser"; }
-    Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed-Preview /home/drew/.local/bin/zed"; }
+    Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed /home/drew/.local/bin/zed"; }
     Alt+G { spawn-sh "/home/drew/dev-env/scripts/fol com.mitchellh.ghostty ghostty"; }
     Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol vesktop vesktop"; }
 

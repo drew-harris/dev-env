@@ -213,7 +213,6 @@
       "space v k": "editor::GoToPreviousBookmark",
       "g .": "vim::ChangeListOlder",
       "g ,": "vim::ChangeListNewer",
-      "g x": "pane::CloseActiveItem",
       "space c r": [
         "task::Spawn",
         {
