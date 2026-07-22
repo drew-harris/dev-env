@@ -1,6 +1,6 @@
 // settings.json, generated at Thu Nov 08 2024 18:01:50 GMT+0800 (Singapore Standard Time)
 {
-  "diff_view_style": "split",
+  "diff_view_style": "unified",
   "cli_default_open_behavior": "new_window",
   "auto_update_extensions": {
     "tombi": false,
@@ -187,7 +187,7 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/drew/programs/arch-instant/./"],
+          "paths": ["/home/drew/programs/arch-instant"],
         },
         {
           "paths": ["/home/drew/programs/hourhand"],
@@ -196,16 +196,21 @@
           "paths": ["/home/drew/programs/money-bot"],
         },
       ],
-      "port_forwards": [
-        {
-          "local_port": 3000,
-          "remote_port": 3000,
-        },
-        {
-          "local_port": 4000,
-          "remote_port": 4000,
-        },
-      ],
+      "nickname": "Arch",
+      // "port_forwards": [
+      //   {
+      //     "local_port": 3000,
+      //     "remote_port": 3000,
+      //   },
+      //   {
+      //     "local_port": 4000,
+      //     "remote_port": 4000,
+      //   },
+      //   {
+      //     "local_port": 8888,
+      //     "remote_port": 8888,
+      //   },
+      // ],
     },
     {
       "host": "5.78.94.31",
