@@ -271,6 +271,8 @@
     "reveal_target": "center",
     "env": {
       "OPENCODE_EXPERIMENTAL": "1",
+      "ZED_TERM": "false",
+      "TERM_PROGRAM": "",
     },
     "shell": {
       "program": "/bin/sh",
