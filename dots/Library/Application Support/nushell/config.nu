@@ -112,6 +112,7 @@ mkdir ($nu.data-dir | path join "vendor/autoload")
 source ($nu.cache-dir | path join "carapace.nu")
 
 alias oc = opencode
+alias oca = opencode attach http://localhost:9923 --dir .
 
 export def "from env" []: string -> record {
     lines
