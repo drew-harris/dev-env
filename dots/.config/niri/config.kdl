@@ -3,8 +3,8 @@
 // https://yalter.github.io/niri/Configuration:-Input
 input {
     keyboard {
-        repeat-delay 200
-        repeat-rate 30
+        repeat-delay 250
+        repeat-rate 24
         xkb {
             // You can set rules, model, layout, variant and options.
             // For more information, see xkeyboard-config(7).
@@ -315,7 +315,7 @@ workspace "aux" {
 }
 
 recent-windows {
-    off
+    // off
 }
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
@@ -324,6 +324,10 @@ spawn-at-startup "waybar"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
 spawn-sh-at-startup "swaybg -i /home/drew/Downloads/hills.png -o '*'"
+// Screensaver: after 5 min idle, fade to black (screen-fade + wl-gammarelay-rs)
+// then power off monitors. No lock on idle; still lock before sleep.
+spawn-sh-at-startup "command -v wl-gammarelay-rs >/dev/null && exec wl-gammarelay-rs"
+spawn-at-startup "swayidle" "-w" "timeout" "300" "/home/drew/dev-env/scripts/screen-fade out && niri msg action power-off-monitors" "resume" "pkill -f 'screen-fade out'; /home/drew/dev-env/scripts/screen-fade in" "before-sleep" "swaylock -f"
 spawn-sh-at-startup "xdg-settings set default-web-browser helium.desktop"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
@@ -355,15 +359,16 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
 
     // workspace-switch {
-    //     duration-ms 50
-    //     // spring damping-ratio=0.9 stiffness=400 epsilon=0.0001
+    //     // duration-ms 50
+    //     // // spring damping-ratio=0.9 stiffness=400 epsilon=0.0001
+    //     off
     // }
 
     // Uncomment to turn off all animations.
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 0.25
+    slowdown 0.4
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -422,7 +427,8 @@ binds {
     // For example, this is a standard bind to toggle the screen reader (orca).
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
-    Mod+Ctrl+Shift+L { spawn "swaylock";}
+    // Toggle the Dell monitor (DP-1) off/on.
+    Mod+Ctrl+Shift+L { spawn-sh "if niri msg outputs | grep -A1 '(DP-1)' | grep -q Disabled; then niri msg output DP-1 on; else niri msg output DP-1 off; fi"; }
 
     Mod+Shift+A { spawn-sh "~/dev-env/scripts/airpods --toggle";}
 
@@ -520,10 +526,10 @@ binds {
     // To avoid scrolling through workspaces really fast, you can use
     // the cooldown-ms property. The bind will be rate-limited to this value.
     // You can set a cooldown on any bind, but it's most useful for the wheel.
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollDown         cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp           cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown    cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp      cooldown-ms=150 { move-column-to-workspace-up; }
 
     Mod+WheelScrollRight      { focus-column-right; }
     Mod+WheelScrollLeft       { focus-column-left; }

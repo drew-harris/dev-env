@@ -16,5 +16,9 @@
   "hints": {
     "tips": true
   },
-  "animations": false
+  "animations": false,
+  "tabs": {
+    "enabled": true,
+    "vertical": false
+  }
 }

@@ -267,7 +267,7 @@
   },
   {
     "label": "oc",
-    "command": "opencode attach http://localhost:9923 --dir .",
+    "command": "opencode attach http://localhost:9923 --dir . -c",
     "reveal_target": "center",
     "env": {
       "OPENCODE_EXPERIMENTAL": "1",

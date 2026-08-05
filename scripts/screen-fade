@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Fade the screen to black (out) or restore brightness (in) via wl-gammarelay-rs.
+# Used by swayidle as an idle "screensaver" fade before powering off monitors.
+#
+# Usage: screen-fade out [duration-seconds]   (default 8)
+#        screen-fade in
+#
+# Exit codes for `out`: 0 = faded (or daemon unavailable, so caller should
+# proceed to power off anyway); non-zero = killed mid-fade (user activity).
+
+GAMMARELAY=(busctl --user set-property rs.wl-gammarelay / rs.wl.gammarelay)
+
+set_brightness() {
+    "${GAMMARELAY[@]}" Brightness d "$1"
+}
+
+case "${1:-out}" in
+in)
+    set_brightness 1.0
+    ;;
+out)
+    duration="${2:-8}"
+    steps=40
+
+    # Daemon not running: skip the fade but let the caller power off.
+    if ! set_brightness 1.0 2>/dev/null; then
+        exit 0
+    fi
+
+    interval=$(awk -v d="$duration" -v s="$steps" 'BEGIN { printf "%.4f", d / s }')
+    for ((i = steps - 1; i >= 0; i--)); do
+        set_brightness "$(awk -v i="$i" -v s="$steps" 'BEGIN { printf "%.4f", i / s }')"
+        sleep "$interval"
+    done
+    ;;
+*)
+    echo "usage: screen-fade [out [duration]|in]" >&2
+    exit 1
+    ;;
+esac
