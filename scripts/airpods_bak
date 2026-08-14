@@ -3,39 +3,19 @@
 # Dependencies: Materials Icon font for the glyphs (ensure your Waybar font config includes it)
 
 device="BC:80:4E:88:79:08" # Replace with your device's MAC address
-controller="8C:68:8B:C2:CA:B3" # dongle controller MAC address
+controller="E0:D3:62:64:87:87" # dongle controller MAC address
 
-# IMPORTANT: This machine has two controllers (built-in + dongle) and the
-# AirPods are paired to the dongle. bluetoothctl's one-shot mode always uses
-# the *default* controller and offers no way to pick another, so we talk to
-# BlueZ over D-Bus with busctl instead, resolving the dongle's adapter path
-# by MAC at runtime (hci index can change across boots).
-
-adapter_path=""
-for path in $(busctl tree org.bluez --list 2>/dev/null | grep -E '^/org/bluez/hci[0-9]+$'); do
-    addr=$(busctl get-property org.bluez "$path" org.bluez.Adapter1 Address 2>/dev/null)
-    if [[ $addr == *"$controller"* ]]; then
-        adapter_path="$path"
-        break
-    fi
-done
-device_path="$adapter_path/dev_${device//:/_}"
-
-# Read a D-Bus property; booleans print "true"/"false", missing objects print "".
-get_prop() {
-    busctl get-property org.bluez "$1" "$2" "$3" 2>/dev/null | awk '{print $2}'
-}
-
-dev_prop() {
-    get_prop "$device_path" org.bluez.Device1 "$1"
-}
-
-dev_call() {
-    busctl call org.bluez "$device_path" org.bluez.Device1 "$@" >/dev/null 2>&1
-}
-
-set_blocked() {
-    busctl set-property org.bluez "$device_path" org.bluez.Device1 Blocked b "$1" 2>/dev/null
+# Helper to run bluetoothctl commands.
+# IMPORTANT: We invoke bluetoothctl in one-shot subcommand mode rather than
+# piping commands via stdin. The stdin/interactive mode waits ~2.5s for the
+# agent to idle before exiting, which made every call slow and the whole
+# script take >20s. One-shot mode returns immediately.
+#
+# Note: one-shot mode doesn't support `select <ctrl>` chaining, so we rely on
+# the default controller. The dongle should be set as default via
+# `bluetoothctl select <mac>` once (persisted in /var/lib/bluetooth).
+btctl() {
+    bluetoothctl "$@" 2>/dev/null
 }
 
 # Connect with retry logic (Bluetooth connections can be flaky)
@@ -44,12 +24,14 @@ connect_with_retry() {
     local delay=0.3
 
     for ((i=1; i<=attempts; i++)); do
-        # Connect blocks until success/failure, but keep a small delay so the
+        # `connect` blocks until success/failure in one-shot mode, so we
+        # don't strictly need the post-sleep, but keep a small delay so the
         # daemon settles before we re-query state.
-        dev_call Connect
+        btctl connect "$device" >/dev/null
         sleep "$delay"
 
-        if [[ $(dev_prop Connected) == true ]]; then
+        # Check if connection succeeded
+        if btctl info "$device" | grep -q "Connected: yes"; then
             return 0
         fi
 
@@ -77,19 +59,22 @@ glyph_off="⭘"
 # --- Get Bluetooth Status ---
 service_running=$(systemctl is-active "bluetooth.service")
 # Ensure we don't proceed if the service isn't even running
-if [[ $service_running != active ]] || [[ -z $adapter_path ]]; then
+if [[ ! $service_running ]]; then
     echo "{\"text\": \"$glyph_off\", \"tooltip\": \"Bluetooth Service Off\", \"class\": \"$off_class\"}"
     exit 0
 fi
 
-controller_on=""
-[[ $(get_prop "$adapter_path" org.bluez.Adapter1 Powered) == true ]] && controller_on=1
-device_paired=""
+controller_on=$(btctl show | grep "Powered: yes")
+device_paired=$(btctl devices Paired | grep "$device")
+# Initialize device_connected and device_blocked to avoid errors if device not paired
 device_connected=""
 device_blocked=""
-[[ $(dev_prop Paired) == true ]] && device_paired=1
-[[ $(dev_prop Connected) == true ]] && device_connected=1
-[[ $(dev_prop Blocked) == true ]] && device_blocked=1
+
+if [[ $device_paired ]]; then
+    device_info=$(btctl info "$device")
+    device_connected=$(echo "$device_info" | grep "Connected: yes")
+    device_blocked=$(echo "$device_info" | grep "Blocked: yes")
+fi
 
 # --- status_json function ---
 status_json() {
@@ -97,7 +82,7 @@ status_json() {
     local tooltip=""
     local class=""
 
-    if [[ $controller_on ]]; then
+    if [[ $service_running ]] && [[ $controller_on ]]; then
         if [[ $device_paired ]]; then
             if [[ $device_connected ]]; then
                 text="$glyph_connected"
@@ -117,9 +102,13 @@ status_json() {
             tooltip="Controller On\nDevice: $device not paired"
             class="$default_class"
         fi
-    else # Controller off
+    elif [[ $service_running ]] && [[ ! $controller_on ]]; then # Service running, controller off
         text="$glyph_off"
         tooltip="Bluetooth Controller Off"
+        class="$off_class"
+    else # Service not running
+        text="$glyph_off"
+        tooltip="Bluetooth Service Off"
         class="$off_class"
     fi
 
@@ -131,21 +120,21 @@ status_json() {
 # --- toggle_state function ---
 toggle_state() {
     if [[ ! $controller_on ]]; then
-        busctl set-property org.bluez "$adapter_path" org.bluez.Adapter1 Powered b true 2>/dev/null
+        btctl power on >/dev/null
         # If device was previously paired and blocked, unblock and connect
         if [[ $device_paired ]]; then
-            set_blocked false
+            btctl unblock "$device" >/dev/null
             sleep 0.2
             connect_with_retry
         fi
     elif [[ $device_connected ]]; then
-        dev_call Disconnect
+        btctl disconnect "$device" >/dev/null
         sleep 0.2
-        set_blocked true
-    elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then # Paired but not connected, not blocked
-        connect_with_retry || set_blocked true # Try connect with retries, if fails, block
-    elif [[ $device_paired ]] && [[ $device_blocked ]]; then   # Paired and blocked
-        set_blocked false
+        btctl block "$device" >/dev/null
+    elif [[ $device_paired ]] && [[ ! $device_blocked ]]; then         # Paired but not connected, not blocked
+        connect_with_retry || btctl block "$device" >/dev/null # Try connect with retries, if fails, block
+    elif [[ $device_paired ]] && [[ $device_blocked ]]; then           # Paired and blocked
+        btctl unblock "$device" >/dev/null
         sleep 0.2
         connect_with_retry
     else # Controller on, but device not paired (or some other state)
@@ -160,7 +149,7 @@ toggle_state() {
 # --- maybe_block function ---
 maybe_block() {
     if [[ $controller_on ]] && [[ $device_paired ]] && [[ ! $device_connected ]] && [[ ! $device_blocked ]]; then
-        set_blocked true
+        btctl block "$device" >/dev/null
     fi
 }
 

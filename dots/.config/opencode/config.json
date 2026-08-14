@@ -3,12 +3,20 @@
   "autoupdate": true,
   "agent": {
     "ask": {
-      "mode": "primary",
+      "mode": "all",
       "permission": {
         "*": "ask",
         "edit": "ask",
         "bash": "ask",
         "webfetch": "allow"
+      },
+      "options": {}
+    },
+    "auto": {
+      "mode": "primary",
+      "color": "success",
+      "permission": {
+        "*": "allow"
       },
       "options": {}
     }

@@ -1,5 +1,17 @@
 #!/bin/bash
 
-niri msg output HDMI-A-1 off
-niri msg output DP-1 on
-niri msg output DP-1 mode 3840x2160@59.997
+# Resolve connector names by monitor model. Connector numbering shifts when
+# the eGPU dock is attached (the Dell moved DP-1 -> DP-2), so never hardcode.
+outputs=$(niri msg -j outputs)
+PC=$(echo "$outputs" | jq -r 'to_entries[] | select(.value.model == "DELL S2725QS") | .key')
+TV=$(echo "$outputs" | jq -r 'to_entries[] | select(.value.model == "TCL") | .key')
+
+[[ -n "$TV" ]] && niri msg output "$TV" off
+
+if [[ -z "$PC" ]]; then
+  echo "to-pc: Dell monitor not found" >&2
+  exit 1
+fi
+
+niri msg output "$PC" on
+niri msg output "$PC" mode 3840x2160@120

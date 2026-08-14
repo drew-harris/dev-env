@@ -1,6 +1,7 @@
 ---
 description: >-
   Makes small adjustments to code as a replacement for typing manually
+hidden: true
 tools:
   write: true
   edit: true

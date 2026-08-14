@@ -1,6 +1,13 @@
 // This config is in the KDL format: https://kdl.dev "/-" comments out the following node. Check the wiki for a full description of the configuration: https://yalter.github.io/niri/Configuration:-Introduction Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
+
+environment {
+    // Java AWT/Swing apps (ATLauncher, etc.) render blank on non-reparenting
+    // compositors like niri without this.
+    _JAVA_AWT_WM_NONREPARENTING "1"
+}
+
 input {
     keyboard {
         repeat-delay 250
@@ -368,7 +375,7 @@ animations {
     // off
 
     // Slow down all animations by this factor. Values below 1 speed them up instead.
-    slowdown 0.4
+    slowdown 0.5
 }
 
 // Window rules let you adjust behavior for individual windows.
@@ -428,7 +435,7 @@ binds {
     Super+Alt+S allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill orca || exec orca"; }
 
     // Toggle the Dell monitor (DP-1) off/on.
-    Mod+Ctrl+Shift+L { spawn-sh "if niri msg outputs | grep -A1 '(DP-1)' | grep -q Disabled; then niri msg output DP-1 on; else niri msg output DP-1 off; fi"; }
+    Mod+Ctrl+Shift+L { spawn-sh "/home/drew/dev-env/scripts/toggle-pc-monitor"; }
 
     Mod+Shift+A { spawn-sh "~/dev-env/scripts/airpods --toggle";}
 
@@ -681,4 +688,13 @@ binds {
 
     Mod+Shift+T { spawn-sh "/home/drew/dev-env/scripts/to-tv"; }
     Mod+Shift+P { spawn-sh "/home/drew/dev-env/scripts/to-pc"; }
+}
+
+debug {
+    // Render on the RX 9060 XT in the eGPU dock rather than the 780M iGPU.
+    // Without this, niri picks the iGPU and copies every composited frame
+    // across USB4 just to scan out, which saturates the link at 4K120.
+    // Use the by-path node: renderD* numbering swaps depending on probe order.
+    // Comment this out when the dock is disconnected.
+    render-drm-device "/dev/dri/by-path/pci-0000:08:00.0-render"
 }

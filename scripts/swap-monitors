@@ -17,11 +17,22 @@ ORDER=("chat" "main" "aux")
 workspaces=$(niri msg -j workspaces)
 focused_output=$(niri msg -j focused-output | jq -r '.name')
 
+# Resolve connector names by monitor model. Connector numbering shifts when
+# the eGPU dock is attached (the Dell moved DP-1 -> DP-2), so never hardcode.
+outputs=$(niri msg -j outputs)
+PC=$(echo "$outputs" | jq -r 'to_entries[] | select(.value.model == "DELL S2725QS") | .key')
+TV=$(echo "$outputs" | jq -r 'to_entries[] | select(.value.model == "TCL") | .key')
+
 # Determine target: the other monitor
-if [[ "$focused_output" == "DP-1" ]]; then
-  target="HDMI-A-1"
+if [[ "$focused_output" == "$PC" ]]; then
+  target="$TV"
 else
-  target="DP-1"
+  target="$PC"
+fi
+
+if [[ -z "$target" ]]; then
+  echo "swap-monitors: target monitor not found" >&2
+  exit 1
 fi
 
 # Move all named workspaces to the target
@@ -64,9 +75,12 @@ disown
 #   fi
 # fi
 # 
-niri msg output HDMI-A-1 on
-niri msg output HDMI-A-1 mode 1920x1080@60.00
-niri msg output HDMI-A-1 scale 1.4
+if [[ -n "$TV" ]]; then
+  niri msg output "$TV" on
+  niri msg output "$TV" mode 1920x1080@60.00
+  niri msg output "$TV" scale 1.4
+fi
+
 
 # Reclaim focus on the target monitor
 sleep 0.2

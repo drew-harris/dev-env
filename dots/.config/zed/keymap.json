@@ -27,7 +27,7 @@
     },
   },
   {
-    "context": "os==linux && Workspace > (Pane || Dock) > (Editor || ProjectPanel || KeyContextView || Terminal || Diagnostics || ProjectPanel)",
+    "context": "os==linux && Workspace > (Pane || Dock) > (Editor || ProjectPanel || KeyContextView || Terminal || Diagnostics || ProjectPanel) || EmptyPane",
     "bindings": {
       "alt-b": "workspace::ToggleRightDock",
       "alt-;": "workspace::ToggleZoom",

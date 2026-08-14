@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Toggle the Dell monitor off/on. Resolves the connector by model because
+# numbering shifts when the eGPU dock is attached (Dell moved DP-1 -> DP-2).
+pc=$(niri msg -j outputs | jq -r 'to_entries[] | select(.value.model == "DELL S2725QS") | .key')
+
+if [[ -z "$pc" ]]; then
+  echo "toggle-pc-monitor: Dell monitor not found" >&2
+  exit 1
+fi
+
+# A disabled output has no logical layout.
+if [[ "$(niri msg -j outputs | jq -r --arg pc "$pc" '.[$pc].logical')" == "null" ]]; then
+  niri msg output "$pc" on
+else
+  niri msg output "$pc" off
+fi
