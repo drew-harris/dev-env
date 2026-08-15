@@ -6,7 +6,7 @@
     "wrap": "word"
   },
   "terminal": {
-    "title": false
+    "title": true
   },
   "session": {
     "sidebar": "auto",

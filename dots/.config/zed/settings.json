@@ -1,5 +1,5 @@
 {
-  "diff_view_style": "unified",
+  "diff_view_style": "split",
   "cli_default_open_behavior": "new_window",
   "auto_update_extensions": {
     "tombi": false,
@@ -186,6 +186,9 @@
       "args": [],
       "projects": [
         {
+          "paths": ["/home/drew/programs/agent"],
+        },
+        {
           "paths": ["/home/drew/programs/arch-instant"],
         },
         {
@@ -196,12 +199,6 @@
         },
       ],
       "nickname": "Arch",
-      "port_forwards": [
-        {
-          "local_port": 3000,
-          "remote_port": 3000,
-        },
-      ],
     },
     {
       "host": "5.78.94.31",
@@ -293,7 +290,8 @@
     },
   },
   "active_pane_modifiers": {
-    "border_size": 0,
+    "border_size": 0.5,
+    "inactive_opacity": 0.9,
   },
   "indent_guides": {
     "enabled": true,
@@ -302,6 +300,7 @@
     "coloring": "fixed",
   },
   "git": {
+    "diff_base": "default_branch",
     "gutter_debounce": 120,
     "branch_picker": {
       "show_author_name": true,
