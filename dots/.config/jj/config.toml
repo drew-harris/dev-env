@@ -151,6 +151,7 @@ work = "active(@) | active(prev)"
 # Private and WIP commits that should never be pushed anywhere. Often part of
 # work-in-progress merge stacks.
 'wip()' = 'description(glob-i:"wip:*") | description(glob-i:"[[]WIP[]]*")'
+'pi()' = 'description(glob-i:"pi:*") | description(glob-i:"[[]pi[]]*")'
 'private()' = 'description(glob-i:"private:*") | description(glob-i:"[[]PRIVATE[]]*")'
 'blacklist()' = "wip() | private()"
 
@@ -174,6 +175,7 @@ label("node",
     if(conflict, label("conflict", "✕")),
     if(immutable, label("immutable", "◆")),
     if(description.starts_with("wip: "), label("wip", "󱍼")),
+    if(description.starts_with("pi: "), label("pi", "◌")),
     if(!mine, label("others", "○")),
     label("normal", "○")
   )
