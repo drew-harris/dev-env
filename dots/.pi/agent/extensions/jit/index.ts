@@ -79,6 +79,14 @@ interface PromptBaseline {
   assistantText: string;
 }
 
+interface TreeRestorePlan {
+  restoreFiles: boolean;
+  repoRoot: string;
+  targetState: ResolvedState;
+  targetCommitId?: string;
+  keepFilesState: EnabledStateData;
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -348,6 +356,7 @@ function isEmptyChildOf(workingCopy: WorkingCopy, commitId: string): boolean {
 export default function (pi: ExtensionAPI) {
   let activePrompt: PromptBaseline | undefined;
   let awaitingInitialUserMessage = false;
+  let pendingTreeRestore: TreeRestorePlan | undefined;
   let statusError: string | undefined;
 
   const runJj = async (args: string[], cwd: string) => {
@@ -480,6 +489,98 @@ export default function (pi: ExtensionAPI) {
       throw new Error("the tracked Jujutsu base has no parent commits");
     }
     await runJj(["new", ...state.baseParentCommitIds], repoRoot);
+  };
+
+  const checkpointForWorkingCopy = (
+    repoRoot: string,
+    workingCopy: WorkingCopy,
+    sourceState: ResolvedState,
+  ): EnabledStateData => {
+    if (
+      sourceState.enabled &&
+      sourceState.repoRoot === repoRoot &&
+      workingCopyMatchesState(workingCopy, sourceState)
+    ) {
+      return {
+        version: DATA_VERSION,
+        enabled: true,
+        repoRoot,
+        baseParents: sourceState.baseParentCommitIds,
+        headCommitId: sourceState.headCommitId,
+        allowEmptyChild:
+          !!sourceState.headCommitId && isEmptyChildOf(workingCopy, sourceState.headCommitId),
+      };
+    }
+
+    if (workingCopy.described) {
+      return {
+        version: DATA_VERSION,
+        enabled: true,
+        repoRoot,
+        baseParents: workingCopy.parentCommitIds,
+        headCommitId: workingCopy.commitId,
+        allowEmptyChild: false,
+      };
+    }
+
+    return {
+      version: DATA_VERSION,
+      enabled: true,
+      repoRoot,
+      baseParents: workingCopy.parentCommitIds,
+      allowEmptyChild: false,
+    };
+  };
+
+  const treeRestorePreview = async (
+    repoRoot: string,
+    targetCommitId: string,
+  ): Promise<{ changeId: string; preview: string }> => {
+    const changeId = (
+      await runJj(
+        [
+          "log",
+          "--no-graph",
+          "--revisions",
+          targetCommitId,
+          "--template",
+          "change_id.shortest(8)",
+        ],
+        repoRoot,
+      )
+    ).trim();
+    const description = (
+      await runJj(
+        [
+          "log",
+          "--no-graph",
+          "--revisions",
+          targetCommitId,
+          "--template",
+          "description.first_line()",
+        ],
+        repoRoot,
+      )
+    ).trim();
+    const changedFiles = (await runJj(
+      ["diff", "--from", "@", "--to", targetCommitId, "--summary"],
+      repoRoot,
+    ))
+      .split("\n")
+      .map((line) => line.trimEnd())
+      .filter(Boolean);
+    const shownFiles = changedFiles.slice(0, 6);
+    const preview = [
+      description || "(no description)",
+      "",
+      changedFiles.length === 0 ? "No file changes from the current @." : "File changes from the current @:",
+      ...shownFiles,
+      ...(changedFiles.length > shownFiles.length
+        ? [`… ${changedFiles.length - shownFiles.length} more files`]
+        : []),
+    ].join("\n");
+
+    return { changeId, preview };
   };
 
   const prepareWorkingCopyForPrompt = async (
@@ -626,6 +727,7 @@ export default function (pi: ExtensionAPI) {
       const current = resolveState(ctx);
       activePrompt = undefined;
       awaitingInitialUserMessage = false;
+      pendingTreeRestore = undefined;
       statusError = undefined;
 
       if (current.enabled) {
@@ -677,6 +779,7 @@ export default function (pi: ExtensionAPI) {
   pi.on("session_start", async (_event, ctx) => {
     activePrompt = undefined;
     awaitingInitialUserMessage = false;
+    pendingTreeRestore = undefined;
     statusError = undefined;
     const state = resolveState(ctx);
 
@@ -692,6 +795,7 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("before_agent_start", async (event, ctx) => {
+    pendingTreeRestore = undefined;
     if (activePrompt && !(await finalizePrompt(ctx))) return;
     awaitingInitialUserMessage = await beginPrompt(ctx, event.prompt);
   });
@@ -727,10 +831,12 @@ export default function (pi: ExtensionAPI) {
 
   pi.on("session_shutdown", async (_event, ctx) => {
     awaitingInitialUserMessage = false;
+    pendingTreeRestore = undefined;
     await finalizePrompt(ctx);
   });
 
   pi.on("session_before_switch", async (_event, ctx) => {
+    pendingTreeRestore = undefined;
     const state = resolveState(ctx);
     if (!state.enabled) return;
 
@@ -745,20 +851,63 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("session_before_tree", async (event, ctx) => {
-    const currentState = resolveState(ctx);
-    const targetState = resolveState(ctx, targetLeafId(ctx, event.preparation.targetId));
+    pendingTreeRestore = undefined;
+    const leafId = targetLeafId(ctx, event.preparation.targetId);
+    let currentState = resolveState(ctx);
+    let targetState = resolveState(ctx, leafId);
     if (!currentState.enabled && !targetState.enabled) return;
 
     try {
       if (activePrompt && !(await finalizePrompt(ctx))) return { cancel: true };
-      if (currentState.enabled) await ensureCanLeaveState(ctx, resolveState(ctx));
-      else if (targetState.enabled) {
-        const repoRoot = await ensureRepo(ctx, targetState);
-        const workingCopy = await readWorkingCopy(repoRoot);
-        if (!workingCopy.empty && !workingCopy.described) {
-          throw new Error("the jj working copy has undescribed changes; refusing to switch Pi branches");
-        }
+      currentState = resolveState(ctx);
+      targetState = resolveState(ctx, leafId);
+
+      if (currentState.enabled) await ensureCanLeaveState(ctx, currentState);
+      if (!targetState.enabled) return;
+
+      const repoRoot = await ensureRepo(ctx, targetState);
+      const workingCopy = await readWorkingCopy(repoRoot);
+      if (!currentState.enabled && !workingCopy.empty && !workingCopy.described) {
+        throw new Error("the jj working copy has undescribed changes; refusing to switch Pi branches");
       }
+
+      const keepFilesState = checkpointForWorkingCopy(repoRoot, workingCopy, currentState);
+      const targetCommitId =
+        targetState.headCommitId ??
+        (targetState.baseParentCommitIds.length === 1
+          ? targetState.baseParentCommitIds[0]
+          : undefined);
+
+      if (!targetCommitId) {
+        pendingTreeRestore = {
+          restoreFiles: false,
+          repoRoot,
+          targetState,
+          keepFilesState,
+        };
+        return;
+      }
+
+      const { changeId, preview } = await treeRestorePreview(repoRoot, targetCommitId);
+      let restoreFiles = false;
+      if (ctx.hasUI) {
+        const restoreOption = `also restore files to rev: ${changeId}`;
+        const keepOption = "only reset the conversation (keep files unchanged)";
+        const choice = await ctx.ui.select(`Restore this tree point?\n\n${preview}`, [
+          restoreOption,
+          keepOption,
+        ]);
+        if (!choice) return { cancel: true };
+        restoreFiles = choice === restoreOption;
+      }
+
+      pendingTreeRestore = {
+        restoreFiles,
+        repoRoot,
+        targetState,
+        targetCommitId,
+        keepFilesState,
+      };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       reportError(ctx, message);
@@ -767,6 +916,8 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("session_tree", async (_event, ctx) => {
+    const restorePlan = pendingTreeRestore;
+    pendingTreeRestore = undefined;
     activePrompt = undefined;
     awaitingInitialUserMessage = false;
     statusError = undefined;
@@ -774,25 +925,71 @@ export default function (pi: ExtensionAPI) {
 
     if (state.enabled) {
       try {
-        await alignWorkingCopy(ctx, state);
-        const checkpoint: EnabledStateData = {
-          version: DATA_VERSION,
-          enabled: true,
-          repoRoot: state.repoRoot!,
-          baseParents: state.baseParentCommitIds,
-          headCommitId: state.headCommitId,
-          allowEmptyChild: state.allowEmptyChild,
-        };
+        let checkpoint: EnabledStateData;
+        if (restorePlan?.restoreFiles && restorePlan.targetCommitId) {
+          if (restorePlan.targetState.headCommitId) {
+            // This is the only file-restoring operation for a mapped Pi commit.
+            await runJj(["edit", restorePlan.targetCommitId], restorePlan.repoRoot);
+            const restored = await readWorkingCopy(restorePlan.repoRoot);
+            if (restored.commitId !== restorePlan.targetCommitId) {
+              throw new Error("jj edit did not land on the selected Pi revision");
+            }
+            checkpoint = {
+              version: DATA_VERSION,
+              enabled: true,
+              repoRoot: restorePlan.repoRoot,
+              baseParents: restorePlan.targetState.baseParentCommitIds,
+              headCommitId: restorePlan.targetCommitId,
+              allowEmptyChild: false,
+            };
+          } else {
+            await runJj(
+              ["new", ...restorePlan.targetState.baseParentCommitIds],
+              restorePlan.repoRoot,
+            );
+            const restored = await readWorkingCopy(restorePlan.repoRoot);
+            if (
+              !restored.empty ||
+              restored.described ||
+              !sameCommitIds(
+                restored.parentCommitIds,
+                restorePlan.targetState.baseParentCommitIds,
+              )
+            ) {
+              throw new Error("jj new did not land on the selected Pi base revision");
+            }
+            checkpoint = {
+              version: DATA_VERSION,
+              enabled: true,
+              repoRoot: restorePlan.repoRoot,
+              baseParents: restorePlan.targetState.baseParentCommitIds,
+              allowEmptyChild: false,
+            };
+          }
+        } else if (restorePlan) {
+          // The user explicitly chose conversation-only navigation. Do not run a
+          // mutating jj command; make the current files the checkpoint instead.
+          checkpoint = restorePlan.keepFilesState;
+        } else {
+          // Never restore files from /tree without the confirmation hook.
+          const repoRoot = await ensureRepo(ctx, state);
+          const workingCopy = await readWorkingCopy(repoRoot);
+          if (!workingCopy.empty && !workingCopy.described) {
+            throw new Error("the jj working copy has undescribed changes after tree navigation");
+          }
+          checkpoint = checkpointForWorkingCopy(repoRoot, workingCopy, state);
+        }
         pi.appendEntry(STATE_ENTRY, checkpoint);
       } catch (error) {
         reportError(ctx, error instanceof Error ? error.message : String(error));
         return;
       }
     }
-    showStatus(ctx, state);
+    showStatus(ctx);
   });
 
   pi.on("session_before_fork", async (event, ctx) => {
+    pendingTreeRestore = undefined;
     const selected = ctx.sessionManager.getEntry(event.entryId);
     const leafId =
       event.position === "before" &&
