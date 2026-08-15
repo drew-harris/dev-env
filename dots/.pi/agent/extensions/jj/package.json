@@ -1,5 +1,5 @@
 {
-  "name": "jit",
+  "name": "jj",
   "version": "1.0.0",
   "description": "Mirror Pi user-message branches into Jujutsu commits",
   "private": true,

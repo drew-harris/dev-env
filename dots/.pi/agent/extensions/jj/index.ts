@@ -4,8 +4,11 @@ import type {
   SessionEntry,
 } from "@earendil-works/pi-coding-agent";
 
-const STATE_ENTRY = "jit-state";
-const COMMIT_ENTRY = "jit-commit";
+const STATE_ENTRY = "jj-state";
+const COMMIT_ENTRY = "jj-commit";
+const LEGACY_STATE_ENTRY = "jit-state";
+const LEGACY_COMMIT_ENTRY = "jit-commit";
+const LEGACY_STATUS_ID = "jit";
 const DATA_VERSION = 2;
 const JJ_TIMEOUT_MS = 30_000;
 const COMMIT_ID_PATTERN = /^[0-9a-f]{16,128}$/;
@@ -170,7 +173,12 @@ function resolveState(
   const commitsByConversationEntry = new Map<string, ParsedCommitData>();
 
   for (const entry of ctx.sessionManager.getEntries()) {
-    if (entry.type !== "custom" || entry.customType !== COMMIT_ENTRY) continue;
+    if (
+      entry.type !== "custom" ||
+      (entry.customType !== COMMIT_ENTRY && entry.customType !== LEGACY_COMMIT_ENTRY)
+    ) {
+      continue;
+    }
     const commit = parseCommitData(entry.data);
     if (commit?.conversationEntryId) {
       commitsByConversationEntry.set(commit.conversationEntryId, commit);
@@ -191,7 +199,10 @@ function resolveState(
   };
 
   for (const entry of branch) {
-    if (entry.type === "custom" && entry.customType === STATE_ENTRY) {
+    if (
+      entry.type === "custom" &&
+      (entry.customType === STATE_ENTRY || entry.customType === LEGACY_STATE_ENTRY)
+    ) {
       const saved = parseStateData(entry.data);
       if (saved?.enabled) {
         // Version 1 used a state entry after /tree as a checkpoint whose sole
@@ -229,7 +240,10 @@ function resolveState(
     const conversationCommit = commitsByConversationEntry.get(entry.id);
     if (conversationCommit) setHead(conversationCommit);
 
-    if (entry.type === "custom" && entry.customType === COMMIT_ENTRY) {
+    if (
+      entry.type === "custom" &&
+      (entry.customType === COMMIT_ENTRY || entry.customType === LEGACY_COMMIT_ENTRY)
+    ) {
       const commit = parseCommitData(entry.data);
       if (commit) setHead(commit);
     }
@@ -315,6 +329,7 @@ export default function (pi: ExtensionAPI) {
   let awaitingInitialUserMessage = false;
   let pendingTreeRestore: TreeRestorePlan | undefined;
   let statusError: string | undefined;
+  let describeQueue: Promise<void> = Promise.resolve();
 
   const runJj = async (args: string[], cwd: string) => {
     const result = await pi.exec(
@@ -392,23 +407,23 @@ export default function (pi: ExtensionAPI) {
   const showStatus = (ctx: ExtensionContext, state = resolveState(ctx)) => {
     const theme = ctx.ui.theme;
     if (statusError) {
-      ctx.ui.setStatus("jit", theme.fg("error", "jit: error"));
+      ctx.ui.setStatus("jj", theme.fg("error", "jj: error"));
     } else if (state.enabled) {
-      ctx.ui.setStatus("jit", theme.fg("success", "jit: enabled"));
+      ctx.ui.setStatus("jj", theme.fg("success", "jj: enabled"));
     } else {
-      ctx.ui.setStatus("jit", theme.fg("dim", "jit: disabled"));
+      ctx.ui.setStatus("jj", theme.fg("dim", "jj: disabled"));
     }
   };
 
   const reportError = (ctx: ExtensionContext, message: string) => {
     statusError = message;
     showStatus(ctx);
-    ctx.ui.notify(`JIT: ${message}`, "error");
+    ctx.ui.notify(`JJ: ${message}`, "error");
   };
 
   const ensureRepo = async (ctx: ExtensionContext, state: ResolvedState): Promise<string> => {
     if (!state.enabled || !state.repoRoot) {
-      throw new Error("the active Pi branch does not have JIT enabled");
+      throw new Error("the active Pi branch does not have JJ tracking enabled");
     }
     const actualRoot = await findRepoRoot(ctx.cwd);
     if (actualRoot !== state.repoRoot) {
@@ -593,11 +608,9 @@ export default function (pi: ExtensionAPI) {
 
     try {
       const workingCopy = await prepareWorkingCopyForPrompt(ctx, state);
-      await runJj(["describe", "--message", promptDescription(prompt)], state.repoRoot);
-      const described = await readWorkingCopy(state.repoRoot);
       activePrompt = {
         repoRoot: state.repoRoot,
-        changeId: described.changeId,
+        changeId: workingCopy.changeId,
         prompt,
       };
       statusError = undefined;
@@ -607,6 +620,46 @@ export default function (pi: ExtensionAPI) {
       activePrompt = undefined;
       reportError(ctx, error instanceof Error ? error.message : String(error));
       return false;
+    }
+  };
+
+  const describePromptIfNonEmpty = async (ctx: ExtensionContext): Promise<boolean> => {
+    const baseline = activePrompt;
+    if (!baseline) return false;
+
+    const state = resolveState(ctx);
+    if (!state.enabled || state.repoRoot !== baseline.repoRoot) return false;
+
+    let workingCopy = await readWorkingCopy(baseline.repoRoot);
+    if (workingCopy.empty) return false;
+    if (workingCopy.described) {
+      baseline.changeId = workingCopy.changeId;
+      return true;
+    }
+
+    // A tool has made @ non-empty. Describe it immediately, but keep editing
+    // the same change until another user message starts the next one.
+    await runJj(
+      ["describe", "--message", promptDescription(baseline.prompt)],
+      baseline.repoRoot,
+    );
+    workingCopy = await readWorkingCopy(baseline.repoRoot);
+    if (workingCopy.empty || !workingCopy.described) {
+      throw new Error("jj describe did not produce a non-empty described change");
+    }
+    baseline.changeId = workingCopy.changeId;
+    return true;
+  };
+
+  const queueDescribeIfNonEmpty = async (ctx: ExtensionContext) => {
+    const queued = describeQueue.then(async () => {
+      await describePromptIfNonEmpty(ctx);
+    });
+    describeQueue = queued.catch(() => {});
+    try {
+      await queued;
+    } catch (error) {
+      reportError(ctx, error instanceof Error ? error.message : String(error));
     }
   };
 
@@ -621,17 +674,6 @@ export default function (pi: ExtensionAPI) {
         return true;
       }
 
-      let workingCopy = await readWorkingCopy(baseline.repoRoot);
-      if (workingCopy.changeId !== baseline.changeId || !workingCopy.described) {
-        // If the user moved around with jj while the agent was running, adopt
-        // the current change instead of blocking their workflow.
-        await runJj(
-          ["describe", "--message", promptDescription(baseline.prompt)],
-          baseline.repoRoot,
-        );
-        workingCopy = await readWorkingCopy(baseline.repoRoot);
-      }
-
       const changedFiles = (await runJj(
         ["diff", "--revisions", "@", "--summary"],
         baseline.repoRoot,
@@ -641,18 +683,25 @@ export default function (pi: ExtensionAPI) {
         .filter(Boolean);
 
       if (changedFiles.length === 0) {
-        // Describing at prompt start creates an empty change when no files were
-        // touched. Abandon it so no-op messages still disappear from the graph.
+        // No tool left a repository change, so this prompt gets no description
+        // or mapped commit.
         await runJj(["abandon", "@"], baseline.repoRoot);
         activePrompt = undefined;
         return true;
+      }
+
+      // Normally tool_result already described the change. This fallback covers
+      // custom tools whose filesystem writes become visible only at settlement.
+      await describePromptIfNonEmpty(ctx);
+      const committed = await readWorkingCopy(baseline.repoRoot);
+      if (committed.empty || !committed.described) {
+        throw new Error("the non-empty jj change was not described");
       }
 
       const files = limitFileSummary(changedFiles);
       const conversationEntryId = ctx.sessionManager.getLeafId();
       const promptEntry = latestUserEntry(ctx);
       const prompt = promptEntry?.text || baseline.prompt;
-      const committed = await readWorkingCopy(baseline.repoRoot);
       const title = promptDescription(conciseText(prompt));
 
       const data: CommitData = {
@@ -669,7 +718,7 @@ export default function (pi: ExtensionAPI) {
       activePrompt = undefined;
       statusError = undefined;
       showStatus(ctx);
-      ctx.ui.notify(`JIT recorded ${committed.changeId.slice(0, 8)}: ${title}`, "info");
+      ctx.ui.notify(`JJ recorded ${committed.changeId.slice(0, 8)}: ${title}`, "info");
       return true;
     } catch (error) {
       reportError(ctx, error instanceof Error ? error.message : String(error));
@@ -689,7 +738,7 @@ export default function (pi: ExtensionAPI) {
     return target.id;
   };
 
-  pi.registerCommand("jit", {
+  pi.registerCommand("jj", {
     description: "Toggle per-user-message Jujutsu commits",
     async handler(_args, ctx) {
       const current = resolveState(ctx);
@@ -706,7 +755,7 @@ export default function (pi: ExtensionAPI) {
           baseParentCommitIds: [],
           allowEmptyChild: false,
         });
-        ctx.ui.notify("JIT disabled", "info");
+        ctx.ui.notify("JJ tracking disabled", "info");
         return;
       }
 
@@ -732,7 +781,7 @@ export default function (pi: ExtensionAPI) {
           headChangeId: data.headChangeId,
           allowEmptyChild: false,
         });
-        ctx.ui.notify(`JIT enabled for ${repoRoot}`, "info");
+        ctx.ui.notify(`JJ tracking enabled for ${repoRoot}`, "info");
       } catch (error) {
         reportError(ctx, error instanceof Error ? error.message : String(error));
       }
@@ -740,6 +789,7 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("session_start", async (_event, ctx) => {
+    ctx.ui.setStatus(LEGACY_STATUS_ID, undefined);
     activePrompt = undefined;
     awaitingInitialUserMessage = false;
     pendingTreeRestore = undefined;
@@ -771,13 +821,7 @@ export default function (pi: ExtensionAPI) {
 
     if (awaitingInitialUserMessage) {
       awaitingInitialUserMessage = false;
-      if (activePrompt && prompt.trim() && prompt !== activePrompt.prompt) {
-        activePrompt.prompt = prompt;
-        await runJj(
-          ["describe", "--message", promptDescription(prompt)],
-          activePrompt.repoRoot,
-        );
-      }
+      if (activePrompt && prompt.trim()) activePrompt.prompt = prompt;
       return;
     }
 
@@ -785,6 +829,10 @@ export default function (pi: ExtensionAPI) {
     // without another before_agent_start event. They are still commit boundaries.
     if (activePrompt && !(await finalizePrompt(ctx))) return;
     await beginPrompt(ctx, prompt);
+  });
+
+  pi.on("tool_result", async (_event, ctx) => {
+    await queueDescribeIfNonEmpty(ctx);
   });
 
   pi.on("agent_settled", async (_event, ctx) => {

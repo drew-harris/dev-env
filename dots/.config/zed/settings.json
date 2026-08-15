@@ -255,7 +255,7 @@
   "vertical_scroll_margin": 3,
   "theme": {
     "mode": "dark",
-    "dark": "Sonokai",
+    "dark": "Catppuccin Espresso (Blur) [Light]",
     "light": "One Light",
   },
   "base_keymap": "VSCode",
@@ -281,7 +281,7 @@
   },
   "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show": false,
+    "show": true,
   },
   "scrollbar": {
     "axes": {
