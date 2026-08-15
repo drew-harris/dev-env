@@ -194,4 +194,5 @@ label("node",
 "node immutable" = { fg = "bright cyan" }
 "node others" = { fg = "#ffa07a" }
 "node wip" = { fg = "yellow" }
+"node pi" = { fg = "#969696" }
 "node normal" = { bold = false }
