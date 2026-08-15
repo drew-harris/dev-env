@@ -284,7 +284,7 @@
   },
   {
     "label": "pi",
-    "command": "pi",
+    "command": "pi --tui-mode fullscreen",
     "reveal_target": "center",
     "shell": {
       "program": "/bin/sh",
