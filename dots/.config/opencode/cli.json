@@ -3,13 +3,14 @@
     "name": "sonokai"
   },
   "diffs": {
-    "wrap": "word"
+    "wrap": "word",
+    "tree": true
   },
   "terminal": {
     "title": true
   },
   "session": {
-    "sidebar": "auto",
+    "sidebar": "hide",
     "scrollbar": false,
     "thinking": "show"
   },
@@ -19,6 +20,9 @@
   "animations": false,
   "tabs": {
     "enabled": true,
-    "vertical": false
+    "vertical": false,
+    "indicators": "status",
+    "layout": "horizontal",
+    "scope": "cwd"
   }
 }

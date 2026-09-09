@@ -1,14 +1,13 @@
 {
   "layer": "top",
   "position": "top",
-  "modules-left": ["custom/keychron-battery"],
+  "modules-left": ["custom/keychron-battery", "custom/controller-battery"],
 
   "modules-center": ["clock", "custom/weather", "custom/music"],
 
   "modules-right": [
     "custom/airpods",
     "pulseaudio",
-    "battery",
     // "network",
     // "cpu",
     // "memory",
@@ -97,11 +96,10 @@
   },
 
   "custom/weather": {
-    "format": "{}",
-    "tooltip": true,
-    "interval": 1800,
-    "exec": "$(pwd)/scripts/weather-stats/weather-stats 2>/dev/null | grep . || echo '{\"text\":\"\",\"tooltip\":\"\"}'",
-    "return-type": "json",
+    "format": "·  {}",
+    "tooltip": false,
+    "interval": 900,
+    "exec": "curl -fsS --max-time 10 'https://wttr.in/San+Francisco?u&format=%f' | tr -d '+'",
   },
 
   "custom/airpods": {
@@ -116,6 +114,15 @@
     "format": "{}",
     "exec": "$HOME/dev-env/scripts/keychron-battery",
     "exec-if": "$HOME/dev-env/scripts/keychron-battery --connected",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true,
+  },
+  "custom/controller-battery": {
+    "format": "{}",
+    "exec": "$HOME/dev-env/scripts/controller-battery",
+    "exec-if": "$HOME/dev-env/scripts/controller-battery --connected",
+    "on-click": "$HOME/dev-env/scripts/controller-battery --disconnect",
     "interval": 5,
     "return-type": "json",
     "tooltip": true,

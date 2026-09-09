@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# PlayStation controllers expose their battery through the kernel power_supply
+# interface. Read it directly so Waybar does not try to watch a device path
+# that disappears when a wireless controller sleeps or disconnects.
+
+shopt -s nullglob
+batteries=(/sys/class/power_supply/ps-controller-battery-*)
+
+if [[ $1 == "--disconnect" ]]; then
+    ((${#batteries[@]} > 0)) || exit 0
+    address=${batteries[0]##*-battery-}
+    bluetoothctl disconnect "$address" >/dev/null 2>&1
+    exit
+fi
+
+if [[ $1 == "--connected" ]]; then
+    ((${#batteries[@]} > 0)) && [[ -r ${batteries[0]}/capacity ]]
+    exit
+fi
+
+((${#batteries[@]} > 0)) || exit 1
+battery=${batteries[0]}
+
+read -r capacity < "$battery/capacity" || exit 1
+[[ $capacity =~ ^[0-9]+$ ]] || exit 1
+
+status="Unknown"
+if [[ -r $battery/status ]]; then
+    read -r status < "$battery/status" || status="Unknown"
+fi
+
+case $capacity in
+    0|[1-9]|1[0-5]) class="critical" ;;
+    1[6-9]|2[0-9]|30) class="warning" ;;
+    *) class="good" ;;
+esac
+
+if [[ $status == "Charging" ]]; then
+    class="charging"
+fi
+
+address=${battery##*-battery-}
+printf '{"text":"  %d%%","tooltip":"PlayStation controller: %d%% (%s)\\n%s\\nClick to disconnect","class":"%s","percentage":%d}\n' \
+    "$capacity" "$capacity" "$status" "$address" "$class" "$capacity"

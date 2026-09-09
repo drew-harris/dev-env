@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Gamescope must own Steam from startup. Only request a shutdown when a Steam
+# client is actually running; otherwise `steam -shutdown` starts a throwaway
+# client and runs its Proton GPU probes before exiting.
+if /usr/bin/pgrep -x steam >/dev/null 2>&1; then
+    /usr/bin/steam -shutdown
+    while /usr/bin/pgrep -x steam >/dev/null 2>&1; do
+        /usr/bin/sleep 0.1
+    done
+fi
+
+exec /usr/bin/gamescope \
+    -e -f -b -g \
+    -W 1920 -H 1080 \
+    -w 1920 -h 1080 \
+    -r 60 \
+    --force-windows-fullscreen \
+    --force-grab-cursor \
+    --hide-cursor-delay 1000 \
+    -- /home/drew/.local/bin/steam-bigpicture-session

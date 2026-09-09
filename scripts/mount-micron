@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+uuid="1cc8b12f-075d-410d-a2d0-5ad75cfb57e0"
+device="/dev/disk/by-uuid/$uuid"
+mount_point="/mnt/micron"
+
+if mountpoint -q "$mount_point"; then
+    source=$(findmnt -rn -M "$mount_point" -o SOURCE)
+    echo "Micron SSD is already mounted at $mount_point ($source)"
+    exit 0
+fi
+
+if [[ ! -e $device ]]; then
+    echo "mount-micron: Micron SSD is not connected ($device was not found)" >&2
+    exit 1
+fi
+
+udisksctl mount -b "$device"
+
+if ! mountpoint -q "$mount_point"; then
+    echo "mount-micron: mount command completed, but $mount_point is not mounted" >&2
+    exit 1
+fi
+
+echo "Micron SSD is ready at $mount_point"

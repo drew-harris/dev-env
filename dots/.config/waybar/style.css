@@ -55,7 +55,6 @@ button {
 #tray,
 #backlight,
 #clock,
-#battery,
 #pulseaudio,
 #network,
 #cpu,
@@ -65,6 +64,7 @@ button {
 #custom-weather,
 #custom-uptime,
 #custom-keychron-battery,
+#custom-controller-battery,
 #custom-airpods,
 #custom-docker {
   margin: 5px 3px;
@@ -90,7 +90,8 @@ button {
 }
 
 #custom-weather {
-  color: @blue;
+  color: @cyan;
+  font-weight: 600;
 }
 
 #custom-airpods {
@@ -120,6 +121,18 @@ button {
   color: @red;
 }
 
+#custom-controller-battery {
+  color: @green;
+}
+
+#custom-controller-battery.warning {
+  color: @yellow;
+}
+
+#custom-controller-battery.critical {
+  color: @red;
+}
+
 #pulseaudio {
   color: @red;
   padding: 0 12px 0 10px;
@@ -127,15 +140,6 @@ button {
 
 #pulseaudio.muted {
   color: rgba(198, 208, 245, 0.55);
-}
-
-#battery,
-#battery.charging {
-  color: @green;
-}
-
-#battery.warning:not(.charging) {
-  color: @red;
 }
 
 #backlight,

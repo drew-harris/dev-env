@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+    echo "Usage: $(basename "$0") SHARPNESS" >&2
+    echo "Set Gamescope FSR sharpness from 0 (sharpest) to 20 (least sharp)." >&2
+    exit 2
+}
+
+[[ $# -eq 1 ]] || usage
+sharpness=$1
+
+if [[ ! $sharpness =~ ^[0-9]+$ ]] || (( sharpness < 0 || sharpness > 20 )); then
+    echo "Error: sharpness must be an integer from 0 to 20." >&2
+    exit 2
+fi
+
+if ! command -v xprop >/dev/null 2>&1; then
+    echo "Error: xprop is required." >&2
+    exit 1
+fi
+
+displays=()
+
+# GAMESCOPE_DISPLAY can be used when more than one Gamescope instance is running.
+if [[ -n ${GAMESCOPE_DISPLAY:-} ]]; then
+    displays+=("$GAMESCOPE_DISPLAY")
+else
+    for socket in /tmp/.X11-unix/X*; do
+        [[ -S $socket ]] || continue
+        display=":${socket##*X}"
+
+        if DISPLAY="$display" xprop -root GAMESCOPE_FSR_FEEDBACK 2>/dev/null \
+            | grep -q '^GAMESCOPE_FSR_FEEDBACK'; then
+            displays+=("$display")
+        fi
+    done
+fi
+
+if (( ${#displays[@]} == 0 )); then
+    echo "Error: could not find a running Gamescope Xwayland display." >&2
+    echo "You can specify one with GAMESCOPE_DISPLAY=:1 $(basename "$0") $sharpness" >&2
+    exit 1
+fi
+
+for display in "${displays[@]}"; do
+    DISPLAY="$display" xprop -root \
+        -f GAMESCOPE_FSR_SHARPNESS 32c \
+        -set GAMESCOPE_FSR_SHARPNESS "$sharpness" >/dev/null
+    echo "Set Gamescope FSR sharpness to $sharpness on $display."
+done

@@ -327,6 +327,8 @@ recent-windows {
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
 spawn-at-startup "waybar"
+// PolicyKit agent for graphical administrator authentication (e.g. GNOME Disks).
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 // spawn-at-startup "wlsunset"
 spawn-sh-at-startup "playerctld daemon"
 spawn-at-startup "mpris-proxy"
@@ -393,14 +395,14 @@ window-rule {
     default-column-width { proportion 1.0; }
 }
 window-rule {
-    match app-id="spotify"
+    match app-id="Spotify"
     open-on-workspace "aux"
     default-column-width { proportion 1.0; }
 }
 
-// Open the Firefox picture-in-picture player as floating by default.
+// Keep browser picture-in-picture players floating.
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match title=r#"(?i)^Picture[- ]in[- ]picture$"#
     open-floating true
 }
 
@@ -667,7 +669,7 @@ binds {
     //
     // The allow-inhibiting=false property can be applied to other binds as well,
     // which ensures niri always processes them, even when an inhibitor is active.
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Mod+I allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E { quit; }

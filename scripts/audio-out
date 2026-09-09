@@ -1,0 +1,116 @@
+#!/bin/bash
+
+# audio-out — pick an audio output and actually move everything to it.
+#
+# Setting the default sink alone is not enough: PipeWire only consults the
+# default when a stream is *created*, so already-running apps stay glued to
+# whatever they were linked to. This sets the default *and* relocates every
+# live stream, then verifies (some apps re-assert their old target once and
+# need a second nudge).
+#
+#   audio-out            fuzzel menu
+#   audio-out airpods    switch by substring match on name/description
+#   audio-out --list     print sinks, current default marked
+
+airpods_sink="bluez_output.BC_80_4E_88_79_08.1"
+
+die() {
+    echo "audio-out: $1" >&2
+    notify-send -u critical "Audio output" "$1" 2>/dev/null
+    exit 1
+}
+
+sink_exists() {
+    pactl -f json list sinks | jq -e --arg n "$1" 'any(.[]; .name == $n)' >/dev/null
+}
+
+# Bring the AirPods up via the existing toggle script, then wait for BlueZ to
+# hand PipeWire the sink — it lags the "Connected" property by a beat.
+connect_airpods() {
+    notify-send -t 2000 "Audio output" "Connecting AirPods…" 2>/dev/null
+    airpods --toggle
+    for _ in $(seq 1 40); do
+        sink_exists "$airpods_sink" && return 0
+        sleep 0.25
+    done
+    return 1
+}
+
+# Point the default at $1 and drag every running stream along with it.
+switch_to() {
+    local sink=$1 index stray id
+
+    pactl set-default-sink "$sink" || die "could not set default sink"
+
+    index=$(pactl list short sinks | awk -v n="$sink" '$2 == n { print $1 }')
+    [[ -n $index ]] || die "sink '$sink' vanished"
+
+    for _ in 1 2 3; do
+        stray=$(pactl list short sink-inputs | awk -v s="$index" '$2 != s { print $1 }')
+        [[ -z $stray ]] && break
+        for id in $stray; do
+            pactl move-sink-input "$id" "$sink" 2>/dev/null
+        done
+        sleep 0.3
+    done
+
+    local label
+    label=$(pactl -f json list sinks | jq -r --arg n "$sink" '.[] | select(.name == $n) | .description')
+    notify-send -t 2500 "Audio output" "→ $label" 2>/dev/null
+    echo "$label"
+}
+
+current=$(pactl get-default-sink 2>/dev/null)
+
+case "$1" in
+--list)
+    pactl -f json list sinks |
+        jq -r --arg cur "$current" '.[] | (if .name == $cur then "* " else "  " end) + .description + "\t" + .name'
+    exit 0
+    ;;
+esac
+
+# Non-interactive: match the argument against description or node name.
+if [[ -n $1 ]]; then
+    if [[ $1 == airpods || $1 == a ]] && ! sink_exists "$airpods_sink"; then
+        connect_airpods || die "AirPods did not come up"
+        switch_to "$airpods_sink"
+        exit 0
+    fi
+
+    match=$(pactl -f json list sinks |
+        jq -r --arg q "${1,,}" 'first(.[] | select((.description | ascii_downcase | contains($q)) or (.name | ascii_downcase | contains($q))) | .name) // empty')
+    [[ -n $match ]] || die "no output matching '$1'"
+    switch_to "$match"
+    exit 0
+fi
+
+# Interactive: build "label -> sink name", current default marked.
+declare -A choices
+menu=""
+while IFS=$'\t' read -r name description; do
+    label="  $description"
+    [[ $name == "$current" ]] && label="● $description"
+    choices[$label]=$name
+    menu+="$label"$'\n'
+done < <(pactl -f json list sinks | jq -r '.[] | "\(.name)\t\(.description)"')
+
+# AirPods aren't a sink while disconnected, so they can't appear above — offer
+# them anyway and connect on demand.
+airpods_entry="󰂯 AirPods (connect)"
+if ! sink_exists "$airpods_sink"; then
+    menu+="$airpods_entry"$'\n'
+fi
+
+choice=$(printf '%s' "$menu" | fuzzel --dmenu --prompt "Output: ")
+[[ -n $choice ]] || exit 0
+
+if [[ $choice == "$airpods_entry" ]]; then
+    connect_airpods || die "AirPods did not come up"
+    switch_to "$airpods_sink"
+    exit 0
+fi
+
+target=${choices[$choice]}
+[[ -n $target ]] || die "unknown selection"
+switch_to "$target"
