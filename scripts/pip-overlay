@@ -1,0 +1,456 @@
+#!/usr/bin/python
+"""Play YouTube on a click-through overlay above true fullscreen games.
+
+Usage: pip-overlay [toggle|enable|disable|play-pause|open|status] [YOUTUBE_URL]
+The desktop launcher toggles playback using a copied YouTube link, or asks for
+one. yt-dlp downloads the video; libmpv plays the cached file directly.
+"""
+
+import argparse
+import json
+import logging
+from logging.handlers import RotatingFileHandler
+import os
+from pathlib import Path
+import re
+import signal
+import socket
+import subprocess
+import sys
+from urllib.parse import parse_qs, urlparse
+
+import cairo
+from dbus.mainloop.glib import DBusGMainLoop
+import gi
+
+gi.require_version("Gtk", "3.0")
+gi.require_version("Gdk", "3.0")
+gi.require_version("GtkLayerShell", "0.1")
+from gi.repository import Gdk, Gio, GLib, GLibUnix, Gtk, GtkLayerShell
+
+sys.dont_write_bytecode = True
+
+from pip_overlay_player import Player
+from pip_overlay_mpris import MediaPlayer
+from pip_overlay_download import Download
+
+APP_ID = "dev.drew.PipOverlay"
+LOG = logging.getLogger("pip-overlay")
+STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "pip-overlay"
+
+
+def niri(request):
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
+        client.settimeout(1)
+        client.connect(os.environ["NIRI_SOCKET"])
+        client.sendall(json.dumps(request).encode() + b"\n")
+        with client.makefile("rb") as stream:
+            reply = json.loads(stream.readline())
+    if "Err" in reply:
+        raise RuntimeError(reply["Err"])
+    return reply["Ok"][request]
+
+
+def recent(window):
+    timestamp = window.get("focus_timestamp") or {}
+    return timestamp.get("secs", 0), timestamp.get("nanos", 0)
+
+
+def select_output(windows, workspaces):
+    games = [w for w in windows if w.get("app_id") in ("gamescope", "steam_app_252950")
+             or (w.get("app_id") == "steam" and "big picture" in (w.get("title") or "").lower())]
+    game = max(games, key=lambda w: (w["is_focused"], recent(w)), default=None)
+    if game:
+        workspace = next((w for w in workspaces if w["id"] == game["workspace_id"]), None)
+        if workspace and workspace.get("output"):
+            return workspace["output"]
+    return next((w["output"] for w in workspaces if w["is_focused"]), None)
+
+
+def youtube_url(text):
+    """Accept only individual YouTube video links, never arbitrary mpv inputs."""
+    text = text.strip()
+    parsed = urlparse(text)
+    if parsed.scheme not in ("http", "https") or parsed.username or parsed.password or parsed.port:
+        raise ValueError("Paste a YouTube video URL.")
+    host = parsed.hostname
+    if host in ("youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com"):
+        if parsed.path == "/watch":
+            video = parse_qs(parsed.query).get("v", [""])[0]
+        else:
+            match = re.fullmatch(r"/(?:shorts|live|embed)/([\w-]{11})/?", parsed.path)
+            video = match[1] if match else ""
+    elif host == "youtu.be":
+        video = parsed.path.strip("/")
+    else:
+        video = ""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{11}", video):
+        raise ValueError("Paste an individual YouTube video URL (youtube.com or youtu.be).")
+    params = parse_qs(parsed.query)
+    stamp = params.get("t", params.get("start", parse_qs(parsed.fragment).get("t", ["0"])))[0]
+    if stamp.isdigit():
+        start = int(stamp)
+    else:
+        match = re.fullmatch(r"(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?", stamp)
+        start = sum(int(value or 0) * factor for value, factor in zip(match.groups(), (3600, 60, 1))) if match else 0
+    return "https://www.youtube.com/watch?v=" + video, start
+
+
+def clipboard_url():
+    try:
+        result = subprocess.run(["wl-paste", "--no-newline"], capture_output=True, text=True, timeout=1)
+        return youtube_url(result.stdout) if result.returncode == 0 else None
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        return None
+
+
+def saved_video():
+    try:
+        saved = json.loads((STATE / "resume.json").read_text())
+        url, _ = youtube_url(saved["url"])
+        position = float(saved["position"])
+        if 0 <= position <= 1e8:
+            return url, position
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None
+
+
+def browser_player():
+    """Identify Helium's media player, without affecting Spotify or game audio."""
+    try:
+        windows = niri("Windows")
+        browser_pids = {w["pid"] for w in windows if w.get("app_id") == "helium"}
+        for window in windows:
+            if (window.get("pid") in browser_pids
+                    and re.fullmatch(r"(?i)Picture[- ]in[- ]picture", window.get("title") or "")):
+                return f"chromium.instance{window['pid']}"
+        browsers = [w for w in windows if w.get("app_id") == "helium" and w.get("pid")]
+        if browsers:
+            return f"chromium.instance{max(browsers, key=recent)['pid']}"
+    except (OSError, KeyError, ValueError, RuntimeError):
+        LOG.debug("Cannot identify browser player", exc_info=True)
+    return None
+
+
+class Overlay(Gtk.Application):
+    def __init__(self):
+        super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        self.enabled = False
+        self.player = None
+        self.download = None
+        self.media = None
+        self.title = None
+        self.output = None
+        self.window = None
+        self.dialog = None
+        self.loading = None
+        self.url = None
+        self.start = 0
+        self.last_error = None
+        self.timer = None
+        self.width = 320
+        self.position = "bottom-right"
+        self.requested_output = None
+        self.browser = None
+        self.mpris = None
+
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            GLibUnix.signal_add(GLib.PRIORITY_DEFAULT, sig, self.terminate)
+
+    def do_command_line(self, command_line):
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument("action", nargs="?", default="toggle",
+                            choices=("toggle", "enable", "disable", "play-pause", "open", "status"))
+        parser.add_argument("url", nargs="?")
+        parser.add_argument("--width", type=int, help="overlay width in logical pixels (160–1280)")
+        parser.add_argument("--position", choices=("top-left", "top-right", "bottom-left", "bottom-right"))
+        parser.add_argument("--output", help="output connector; default follows Gamescope/Steam")
+        parser.add_argument("--start", type=float, help="start position in seconds; otherwise use the link's timestamp")
+        try:
+            args = parser.parse_args(command_line.get_arguments()[1:])
+            if args.width is not None and not 160 <= args.width <= 1280:
+                raise ValueError("Width must be between 160 and 1280.")
+            if args.start is not None and (not 0 <= args.start <= 1e8):
+                raise ValueError("Start position must be a nonnegative number of seconds.")
+            source = youtube_url(args.url) if args.url else None
+        except SystemExit as error:
+            return int(error.code)
+        except ValueError as error:
+            command_line.printerr_literal(str(error) + "\n")
+            self.notify("Invalid input", str(error))
+            return 2
+        if args.action == "status":
+            player = self.player
+            command_line.print_literal(json.dumps({
+                "enabled": self.enabled, "backend": "libmpv", "url": self.url,
+                "downloading": self.download is not None and self.media is None,
+                "output": self.output, "frames": player.frames if player else 0,
+                "position_seconds": player.props.get("time-pos") if player else None,
+                "paused": player.props.get("pause") == "yes" if player else False,
+                "last_frame_age_seconds": round((GLib.get_monotonic_time() - player.last_frame_at) / 1e6, 2)
+                if player and player.last_frame_at else None, "error": self.last_error,
+            }) + "\n")
+            return 0
+        if args.action == "play-pause":
+            if self.player:
+                self.player.command("cycle", "pause")
+            return 0
+        if args.action == "disable" or (args.action == "toggle" and self.enabled):
+            self.disable()
+            self.notify("Disabled", "Video playback stopped.")
+            return 0
+        for option in ("width", "position"):
+            value = getattr(args, option)
+            if value is not None:
+                setattr(self, option, value)
+        if args.output:
+            self.requested_output = args.output
+        if args.action == "open":
+            self.ask_url()
+        elif not self.enabled or source:
+            if source is None:
+                source = clipboard_url()
+                saved = saved_video()
+                if saved and (not source or (source[0] == saved[0] and source[1] == 0)):
+                    source = saved
+            if source:
+                return self.enable(source[0], args.start if args.start is not None else source[1])
+            self.ask_url()
+        elif self.window:
+            self.place_window()
+            self.resize()
+        return 0
+
+    def ask_url(self):
+        if self.dialog:
+            self.dialog.present()
+            return
+        dialog = Gtk.Dialog(title="YouTube PiP Overlay", application=self)
+        self.dialog = dialog
+        dialog.add_buttons("Cancel", Gtk.ResponseType.CANCEL, "Play above games", Gtk.ResponseType.OK)
+        dialog.set_default_response(Gtk.ResponseType.OK)
+        dialog.set_default_size(540, -1)
+        grid = Gtk.Grid(column_spacing=12, row_spacing=12, margin=18)
+        grid.attach(Gtk.Label(label="YouTube video URL", xalign=0), 0, 0, 2, 1)
+        entry = Gtk.Entry(placeholder_text="https://www.youtube.com/watch?v=…", activates_default=True)
+        entry.set_hexpand(True)
+        grid.attach(entry, 0, 1, 2, 1)
+        grid.attach(Gtk.Label(label="Start at (seconds)", xalign=0), 0, 2, 1, 1)
+        start = Gtk.SpinButton.new_with_range(0, 100_000_000, 1)
+        grid.attach(start, 1, 2, 1, 1)
+        source = clipboard_url()
+        if source:
+            entry.set_text(source[0])
+            start.set_value(source[1])
+        hint = Gtk.Label(label="Tip: copy a YouTube link before launching this app to skip this dialog.", wrap=True, xalign=0)
+        grid.attach(hint, 0, 3, 2, 1)
+        dialog.get_content_area().add(grid)
+
+        def response(widget, result):
+            if result == Gtk.ResponseType.OK:
+                try:
+                    url, stamp = youtube_url(entry.get_text())
+                except ValueError as error:
+                    hint.set_text(str(error))
+                    return
+                self.dialog = None
+                self.enable(url, start.get_value() or stamp)
+            self.dialog = None
+            widget.destroy()
+
+        dialog.connect("response", response)
+        dialog.show_all()
+        entry.grab_focus()
+
+    def notify(self, title, body):
+        notification = Gio.Notification.new("YouTube PiP Overlay — " + title)
+        notification.set_body(body)
+        notification.set_icon(Gio.ThemedIcon.new("video-display"))
+        self.send_notification("state", notification)
+
+    def enable(self, url, start):
+        if not os.environ.get("NIRI_SOCKET") or not GtkLayerShell.is_supported():
+            self.notify("Unavailable", "Run this application in your Niri desktop session.")
+            return 1
+        self.disable()
+        self.enabled = True
+        self.hold()
+        self.url, self.start = url, start
+        self.last_error = None
+        self.browser = browser_player()
+        try:
+            self.player = Player(self.changed, self.failed, self.finished)
+            self.mpris = MediaPlayer(self)
+            self.create_window()
+            self.player.ready_callback = self.load
+            self.window.show_all()
+            self.timer = GLib.timeout_add(750, self.refresh)
+            self.download = Download(url, self.downloaded, self.failed)
+            LOG.info("Loading %s at %s seconds", url, start)
+            self.notify("Loading YouTube", "Downloading/cache lookup. Launch again to stop; Mod+Ctrl+Space pauses/resumes.")
+        except Exception as error:
+            self.failed(str(error))
+            return 1
+        return 0
+
+    def load(self):
+        if self.player and self.player.context and self.media:
+            self.player.command("set", "force-media-title", self.title)
+            self.player.command("loadfile", self.media, "replace", -1, f"start={self.start}")
+
+    def downloaded(self, path, title):
+        self.media, self.title = path, title
+        self.load()
+
+    def changed(self, prop):
+        if prop == "file-loaded":
+            if self.loading:
+                self.loading.hide()
+            if self.browser:
+                try:
+                    subprocess.run(["playerctl", "-p", self.browser, "pause"], capture_output=True, timeout=1)
+                except (OSError, subprocess.TimeoutExpired):
+                    LOG.warning("Could not pause the browser player")
+                self.browser = None
+            LOG.info("Playing: %s", self.player.props.get("media-title", self.url))
+        if prop in ("dwidth", "dheight"):
+            self.resize()
+        if self.mpris and prop in ("pause", "duration", "media-title", "file-loaded", "volume"):
+            self.mpris.changed()
+
+    def failed(self, message):
+        LOG.error("Playback failed: %s", message)
+        self.last_error = message
+        self.disable()
+        self.notify("Playback failed", message + ". See ~/.local/state/pip-overlay/overlay.log and player.log")
+        return GLib.SOURCE_REMOVE
+
+    def finished(self):
+        self.disable()
+        self.notify("Finished", "The YouTube video has ended.")
+        return GLib.SOURCE_REMOVE
+
+    def disable(self):
+        if self.dialog:
+            self.dialog.destroy()
+            self.dialog = None
+        if not self.enabled:
+            return
+        self.enabled = False
+        if self.player and self.media and self.player.props.get("time-pos"):
+            try:
+                position = float(self.player.props["time-pos"])
+                duration = float(self.player.props.get("duration") or 0)
+                if duration and position >= duration - 3:
+                    position = 0
+                temporary = STATE / "resume.json.tmp"
+                temporary.write_text(json.dumps({"url": self.url, "position": position}) + "\n")
+                temporary.replace(STATE / "resume.json")
+            except (OSError, ValueError):
+                LOG.warning("Cannot save playback position", exc_info=True)
+        if self.download:
+            self.download.close()
+            self.download = None
+        self.media = None
+        if self.timer:
+            GLib.source_remove(self.timer)
+            self.timer = None
+        if self.mpris:
+            self.mpris.close()
+            self.mpris = None
+        if self.player:
+            self.player.close()
+            self.player = None
+        if self.window:
+            self.window.destroy()
+            self.window = self.loading = None
+        self.output = None
+        self.release()
+        LOG.info("Disabled")
+
+    def terminate(self):
+        self.disable()
+        self.quit()
+        return GLib.SOURCE_REMOVE
+
+    def do_shutdown(self):
+        self.disable()
+        Gtk.Application.do_shutdown(self)
+
+    def refresh(self):
+        try:
+            self.place_window()
+        except (OSError, ValueError, KeyError, RuntimeError) as error:
+            LOG.warning("Cannot place overlay: %s", error)
+        return GLib.SOURCE_CONTINUE
+
+    def create_window(self):
+        self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+        self.window.set_title("YouTube PiP Overlay")
+        self.window.set_decorated(False)
+        self.window.set_accept_focus(False)
+        self.window.set_focus_on_map(False)
+        self.window.set_resizable(False)
+        GtkLayerShell.init_for_window(self.window)
+        GtkLayerShell.set_namespace(self.window, "youtube-pip-overlay")
+        GtkLayerShell.set_layer(self.window, GtkLayerShell.Layer.OVERLAY)
+        GtkLayerShell.set_keyboard_mode(self.window, GtkLayerShell.KeyboardMode.NONE)
+        GtkLayerShell.set_exclusive_zone(self.window, -1)
+        self.window.connect("realize", lambda window: window.get_window().input_shape_combine_region(cairo.Region(), 0, 0))
+        stack = Gtk.Overlay()
+        stack.add(self.player.area)
+        self.loading = Gtk.Label(label="Loading YouTube…")
+        stack.add_overlay(self.loading)
+        self.window.add(stack)
+        self.resize()
+        self.place_window()
+
+    def resize(self):
+        if not self.player:
+            return
+        width = float(self.player.props.get("dwidth") or 16)
+        height = float(self.player.props.get("dheight") or 9)
+        height = max(90, min(800, round(self.width * height / max(1, width))))
+        self.player.area.set_size_request(self.width, height)
+        self.window.resize(self.width, height)
+
+    def place_window(self):
+        output = self.requested_output or select_output(niri("Windows"), niri("Workspaces"))
+        outputs = niri("Outputs")
+        logical = (outputs.get(output) or {}).get("logical")
+        if not logical:
+            raise RuntimeError(f"Output unavailable: {output}")
+        display = Gdk.Display.get_default()
+        monitor = next((display.get_monitor(i) for i in range(display.get_n_monitors())
+                        if (display.get_monitor(i).get_geometry().x,
+                            display.get_monitor(i).get_geometry().y) == (logical["x"], logical["y"])), None)
+        if monitor is None:
+            raise RuntimeError(f"GTK cannot find output: {output}")
+        if self.output != output:
+            GtkLayerShell.set_monitor(self.window, monitor)
+            self.output = output
+            LOG.info("Overlay output: %s", output)
+        vertical, horizontal = self.position.split("-")
+        for edge, anchored in ((GtkLayerShell.Edge.TOP, vertical == "top"),
+                               (GtkLayerShell.Edge.BOTTOM, vertical == "bottom"),
+                               (GtkLayerShell.Edge.LEFT, horizontal == "left"),
+                               (GtkLayerShell.Edge.RIGHT, horizontal == "right")):
+            GtkLayerShell.set_anchor(self.window, edge, anchored)
+            GtkLayerShell.set_margin(self.window, edge, 16)
+
+
+def main():
+    STATE.mkdir(parents=True, exist_ok=True)
+    handler = RotatingFileHandler(STATE / "overlay.log", maxBytes=1_000_000, backupCount=1)
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    LOG.addHandler(handler)
+    LOG.setLevel(logging.INFO)
+    DBusGMainLoop(set_as_default=True)
+    return Overlay().run(sys.argv)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

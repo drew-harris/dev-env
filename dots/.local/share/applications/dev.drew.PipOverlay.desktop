@@ -1,0 +1,27 @@
+[Desktop Entry]
+Type=Application
+Name=YouTube PiP Overlay
+Comment=Play a copied YouTube link above fullscreen games; launch again to stop
+Exec=/home/drew/dev-env/scripts/pip-overlay toggle
+Icon=video-display
+Terminal=false
+StartupNotify=false
+Categories=AudioVideo;Video;
+Keywords=YouTube;Helium;PiP;Picture-in-Picture;Gaming;Overlay;
+Actions=Enable;Disable;PlayPause;Open;
+
+[Desktop Action Enable]
+Name=Enable PiP Overlay
+Exec=/home/drew/dev-env/scripts/pip-overlay enable
+
+[Desktop Action Disable]
+Name=Disable PiP Overlay
+Exec=/home/drew/dev-env/scripts/pip-overlay disable
+
+[Desktop Action PlayPause]
+Name=Pause / Resume
+Exec=/home/drew/dev-env/scripts/pip-overlay play-pause
+
+[Desktop Action Open]
+Name=Open another YouTube video
+Exec=/home/drew/dev-env/scripts/pip-overlay open

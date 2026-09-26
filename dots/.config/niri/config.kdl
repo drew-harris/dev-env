@@ -657,6 +657,14 @@ binds {
     // Mod+W { spawn-sh "notify-send $(niri msg --json pick-window | jq .app_id)"; }
     Mod+P { spawn-sh "wl-copy $(hyprpicker)"; }
 
+    // Play a copied YouTube link above true fullscreen games; press again to stop.
+    Mod+Ctrl+P repeat=false allow-inhibiting=false hotkey-overlay-title="Toggle YouTube PiP Overlay" {
+        spawn "/home/drew/dev-env/scripts/pip-overlay" "toggle";
+    }
+    Mod+Ctrl+Space repeat=false allow-inhibiting=false hotkey-overlay-title="Pause/resume YouTube PiP Overlay" {
+        spawn "/home/drew/dev-env/scripts/pip-overlay" "play-pause";
+    }
+
     Mod+Shift+4 { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
@@ -684,7 +692,7 @@ binds {
     Alt+A { spawn-sh "/home/drew/dev-env/scripts/fol helium helium-browser"; }
     Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed /home/drew/.local/bin/zed"; }
     Alt+G { spawn-sh "/home/drew/dev-env/scripts/fol com.mitchellh.ghostty ghostty"; }
-    Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol vesktop vesktop"; }
+    Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol discord discord"; }
 
     Mod+Space { spawn-sh "makoctl dismiss -a";}
 

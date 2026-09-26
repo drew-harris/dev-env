@@ -77,7 +77,7 @@
   },
   "agent": {
     "expand_terminal_card": true,
-    "dock": "right",
+    "dock": "left",
     "inline_assistant_model": {
       "provider": "opencode",
       "model": "go/kimi-k2.6",
