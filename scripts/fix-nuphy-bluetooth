@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+readonly USB_VENDOR="0bda"
+readonly USB_PRODUCT="a728"
+readonly DONGLE_ADDRESS="8C:68:8B:C2:CA:B3"
+readonly BUILTIN_ADDRESS="EC:4C:8C:50:BD:1E"
+readonly KEYBOARD_ADDRESS="C0:00:64:AF:3C:E4"
+readonly MODPROBE_FILE="/etc/modprobe.d/99-btusb-no-autosuspend.conf"
+readonly UDEV_FILE="/etc/udev/rules.d/99-realtek-bluetooth-no-autosuspend.rules"
+
+if ((EUID != 0)); then
+    exec sudo -- "$0" "$@"
+fi
+
+adapter_path_for_address() {
+    local target_address=$1
+    local adapter_path address_line address
+
+    while IFS= read -r adapter_path; do
+        [[ $adapter_path =~ ^/org/bluez/hci[0-9]+$ ]] || continue
+
+        address_line=$(busctl get-property \
+            org.bluez "$adapter_path" org.bluez.Adapter1 Address 2>/dev/null) || continue
+        read -r _ address <<< "$address_line"
+        address=${address//\"/}
+
+        if [[ ${address^^} == "$target_address" ]]; then
+            printf '%s\n' "$adapter_path"
+            return 0
+        fi
+    done < <(busctl tree org.bluez --list 2>/dev/null)
+
+    return 1
+}
+
+cat > "$MODPROBE_FILE" <<'EOF'
+# Keep USB Bluetooth controllers awake. The Realtek 0bda:a728 dongle hangs
+# its BLE background scan after runtime suspend, preventing HID reconnection.
+options btusb enable_autosuspend=0
+EOF
+
+cat > "$UDEV_FILE" <<'EOF'
+# Realtek Bluetooth 5.4 dongle (0bda:a728): preserve BLE scanning across idle periods.
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", ATTR{idProduct}=="a728", TEST=="power/control", ATTR{power/control}="on"
+EOF
+
+udevadm control --reload-rules
+
+# Apply the power-management fix without restarting Bluetooth.
+if [[ -w /sys/module/btusb/parameters/enable_autosuspend ]]; then
+    printf 'N' > /sys/module/btusb/parameters/enable_autosuspend
+fi
+
+dongle_found=false
+for device in /sys/bus/usb/devices/*; do
+    [[ -f $device/idVendor && -f $device/idProduct ]] || continue
+    [[ $(<"$device/idVendor") == "$USB_VENDOR" ]] || continue
+    [[ $(<"$device/idProduct") == "$USB_PRODUCT" ]] || continue
+
+    printf 'on' > "$device/power/control"
+    dongle_found=true
+    printf 'Kept USB dongle active at %s.\n' "$device"
+done
+
+if [[ $dongle_found != true ]]; then
+    printf 'Error: Realtek Bluetooth dongle %s:%s was not found.\n' \
+        "$USB_VENDOR" "$USB_PRODUCT" >&2
+    exit 1
+fi
+
+if ! systemctl is-active --quiet bluetooth.service; then
+    systemctl start bluetooth.service
+fi
+
+if builtin_path=$(adapter_path_for_address "$BUILTIN_ADDRESS"); then
+    busctl set-property \
+        org.bluez "$builtin_path" org.bluez.Adapter1 Powered b false
+    printf 'Powered off built-in Bluetooth adapter %s.\n' "$BUILTIN_ADDRESS"
+fi
+
+if ! dongle_path=$(adapter_path_for_address "$DONGLE_ADDRESS"); then
+    printf 'Error: dongle controller %s is not available in BlueZ.\n' \
+        "$DONGLE_ADDRESS" >&2
+    exit 1
+fi
+
+busctl set-property org.bluez "$dongle_path" org.bluez.Adapter1 Powered b true
+printf 'Powered on dongle controller %s.\n' "$DONGLE_ADDRESS"
+
+keyboard_path="$dongle_path/dev_${KEYBOARD_ADDRESS//:/_}"
+if busctl introspect org.bluez "$keyboard_path" org.bluez.Device1 >/dev/null 2>&1; then
+    busctl set-property org.bluez "$keyboard_path" org.bluez.Device1 Trusted b true
+    printf 'Verified that the NuPhy is trusted on the dongle.\n'
+else
+    printf 'Warning: the NuPhy is not currently paired with the dongle.\n' >&2
+fi
+
+printf '\nPermanent dongle fix installed. The keyboard can still use its own sleep mode.\n'

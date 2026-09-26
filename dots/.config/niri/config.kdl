@@ -693,6 +693,7 @@ binds {
     Alt+I { spawn-sh "/home/drew/dev-env/scripts/fol dev.zed.Zed /home/drew/.local/bin/zed"; }
     Alt+G { spawn-sh "/home/drew/dev-env/scripts/fol com.mitchellh.ghostty ghostty"; }
     Alt+Q { spawn-sh "/home/drew/dev-env/scripts/fol discord discord"; }
+    Alt+F { spawn-sh "/home/drew/dev-env/scripts/fol ai.opencode.desktop /usr/bin/opencode-desktop"; }
 
     Mod+Space { spawn-sh "makoctl dismiss -a";}
 
