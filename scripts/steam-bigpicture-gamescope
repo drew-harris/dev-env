@@ -11,11 +11,10 @@ if /usr/bin/pgrep -x steam >/dev/null 2>&1; then
 fi
 
 exec /usr/bin/gamescope \
-    -e -f -b -g \
+    -e -f \
     -W 1920 -H 1080 \
     -w 1920 -h 1080 \
     -r 60 \
     --force-windows-fullscreen \
-    --force-grab-cursor \
     --hide-cursor-delay 1000 \
-    -- /home/drew/.local/bin/steam-bigpicture-session
+    -- "$(dirname "$0")/steam-bigpicture-session" "$@"

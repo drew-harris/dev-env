@@ -1,0 +1,2 @@
+# Realtek Bluetooth 5.4 dongle (0bda:a728): preserve BLE scanning across idle periods.
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0bda", ATTR{idProduct}=="a728", TEST=="power/control", ATTR{power/control}="on"

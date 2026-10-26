@@ -1,0 +1,9 @@
+#!/bin/sh
+
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/steam-bigpicture"
+mkdir -p "$state_dir"
+"$HOME/.local/bin/gamescope-rocket-league-fix" >>"$state_dir/window-fix.log" 2>&1 &
+fixer_pid=$!
+trap '/usr/bin/kill "$fixer_pid" 2>/dev/null' EXIT INT TERM
+
+/usr/bin/steam -gamepadui "$@"

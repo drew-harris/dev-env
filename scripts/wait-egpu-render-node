@@ -1,0 +1,21 @@
+#!/bin/sh
+# Wait for the USB4 eGPU (RX 9060 XT) render node before starting niri.
+# The PCIe tunnel is torn down and re-established during boot when the
+# kernel's USB4 connection manager takes over from firmware, so the node
+# appears, vanishes, and comes back. Require it to be present for 3
+# consecutive seconds before proceeding; give up after ~45s so the
+# session still starts if the eGPU is unplugged.
+node=${EGPU_RENDER_NODE:-/dev/dri/by-path/pci-0000:08:00.0-render}
+stable=0
+i=0
+while [ "$i" -lt 90 ]; do
+    if [ -e "$node" ]; then
+        stable=$((stable + 1))
+    else
+        stable=0
+    fi
+    [ "$stable" -ge 6 ] && exit 0
+    sleep 0.5
+    i=$((i + 1))
+done
+exit 0

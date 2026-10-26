@@ -1,6 +1,21 @@
 #!/usr/bin/env zsh
 
-# Copy to zshrc
+# Source this file from ~/.zshrc; do not source ~/.zshrc from here.
+export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
+export BUN_INSTALL="$HOME/.bun"
+export FNOX_AGE_KEY_FILE="${FNOX_AGE_KEY_FILE:-$HOME/.ssh/id_ed25519}"
+
+typeset -U path
+path=(
+  "$HOME/.local/bin"
+  "$BUN_INSTALL/bin"
+  "$HOME/.opencode/bin"
+  "$PNPM_HOME"
+  "$HOME/.cargo/bin"
+  "$HOME/bin"
+  $path
+)
+
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -12,6 +27,9 @@ path+=($HOME/go/bin)
 plugins=(zsh-vi-mode zsh-autosuggestions zsh-syntax-highlighting mise)
 
 source $ZSH/oh-my-zsh.sh
+
+# Bun's completion script is installed separately from the dotfiles.
+[[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
 
 
 function zvm_after_init() {

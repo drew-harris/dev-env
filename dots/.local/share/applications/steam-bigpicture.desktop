@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Steam Big Picture
+Comment=Launch Steam Big Picture inside Gamescope
+Exec=/home/drew/dev-env/scripts/steam-bigpicture-gamescope
+Icon=steam
+Terminal=false
+Type=Application
+Categories=Game;
